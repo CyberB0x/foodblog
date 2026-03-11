@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Latest Recipes</h2>
+
+{% for recipe in recipes %}
+<div class="recipe-card">
+  <img src="{{ recipe.image.url }}">
+
+  <h3>
+    <a href="/recipe/{{ recipe.id}}">
+      {{ recipe.title }}
+    </a>
+  </h3>
+
+  <p>
+    {{ recipe.description }}
+  </p>
+</div>
+{% endfor %}
+
+{% endblock %}

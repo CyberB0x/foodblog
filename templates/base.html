@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Blog</title>
+
+    <style>
+
+         body{
+           font-family:Arial;
+           background:#fafafa;
+           margin:0;
+         }
+
+         header {
+         background:#ff6b6b;
+         color:white;
+         padding:20px;
+         text-align:center;
+         }
+
+        .container{
+          width:1000px;
+          margin:auto;
+          padding:20px;
+        }
+
+        .recipe-card{
+          background:white;
+          padding:15px;
+          margin-bottom:20px;
+          border-radius:10px;
+          box-shadow:0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        img{
+          max-width:100%;
+          border-radius:10px;
+        }
+
+    </style>
+</head>
+
+<body>
+<header>
+<h1>My Food Blog</h1>
+</header>
+
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

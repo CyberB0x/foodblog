@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>{{ recipe.title }}</h2>
+
+<img src="{{ recipe.image.url }}">
+
+<h3>Ingredients</h3>
+<p>{{ recipe.insturction }}</p>
+
+{% if recipe.video_url %}
+
+<h3>Video</h3>
+<a href="{{ recipe.video_url }}">Watch video</a>
+
+{% endif %}
+{% endblock %}
