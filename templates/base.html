@@ -46,6 +46,16 @@
 <h1>My Food Blog</h1>
 </header>
 
+<input type="text" name="q" placeholder="Search recipes..."
+value="{{ request.GET.q }}"
+style="padding:10px; width:300px; border-radius:5px; border:1px solid #ccc;">
+
+<div style="text-align:center; margin:20px;">
+    <a href="/category/desserts/">Desserts</a> |
+    <a href="/category/cakes/">Cakes</a> |
+    <a href="/category/cupcakes/">Cup cakes</a>
+</div>
+
 <div class="container">
     {% block content %}
     {% endblock %}

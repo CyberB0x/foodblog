@@ -1,22 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% if query %}
+<p>Results for: "{{ query }}"</p>
+{% endif %}
+
+{% if category %}
+<h2>{{ category.name }}</h2>
+{% else %}
 <h2>Latest Recipes</h2>
+{% endif %}
 
-{% for recipe in recipes %}
-<div class="recipe-card">
-  <img src="{{ recipe.image.url }}">
+{% if recipes %}
 
-  <h3>
-    <a href="/recipe/{{ recipe.id}}">
-      {{ recipe.title }}
-    </a>
-  </h3>
+  {% for recipe in recipes %}
+    <div class="recipe-card">
 
-  <p>
-    {{ recipe.description }}
-  </p>
-</div>
-{% endfor %}
+      <img src="{{ recipe.image.url }}">
+
+      <h3>
+        <a href="/recipe/{{ recipe.id }}/">
+          {{ recipe.title }}
+        </a>
+      </h3>
+
+      <p>{{ recipe.description }}</p>
+
+    </div>
+  {% endfor %}
+
+{% else %}
+
+  <h3>No recipes found 😢</h3>
+
+{% endif %}
 
 {% endblock %}
