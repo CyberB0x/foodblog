@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
-from .models import Recipe, Category
+from .models import Recipe, Category, Comment
 
 
 def home(request):
@@ -22,7 +22,24 @@ def home(request):
 
 def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
-    return render(request, "recipe_detail.html", {"recipe": recipe})
+
+    if request.method == "POST":
+        name = request.POST.get("name")
+        text = request.POST.get("text")
+
+        if name and text:
+            Comment.objects.create(
+                recipe=recipe,
+                name=name,
+                text=text
+            )
+
+    comments = recipe.comments.all().order_by("-created_at")
+
+    return render(request, "recipe_detail.html",{
+        "recipe": recipe,
+        "comments": comments
+    })
 
 
 def category_view(request, slug):

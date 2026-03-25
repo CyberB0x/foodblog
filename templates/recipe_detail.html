@@ -13,5 +13,40 @@
 <h3>Video</h3>
 <a href="{{ recipe.video_url }}">Watch video</a>
 
+
+<h3>Add Comment</h3>
+
+<form method="POST">
+    {% csrf_token %}
+
+    <input type="text" name="name" placeholder="Your name" required
+     style="padding:10px; width:300px display:block; margin-bottom:10px;">
+
+    <textarea name="text" placeholder="Your comment" required
+     style="padding:10px; width:300px; height:10px; display:block; margin-bottom:10px;">
+    </textarea>
+
+    <button type="submit"
+    style="padding:10px; background:#ff6b6b; color:white; border:none; border-radius:5px;">
+    Submit
+    </button>
+
+</form>
+
+
+
+<h3>Comments</h3>
+{% for comment in comments %}
+
+<div class="recipe-card">
+    <strong>{{ comment.name }}</strong>
+    <p>{{ comment.text }}</p>
+    <small>{{ comment.created_at }}</small>
+</div>
+
+{% empty %}
+<p>No comments yet</p>
+{% endfor %}
+
 {% endif %}
 {% endblock %}

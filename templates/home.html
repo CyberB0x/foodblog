@@ -13,25 +13,34 @@
 
 {% if recipes %}
 
+<div class="grid">
+
   {% for recipe in recipes %}
-    <div class="recipe-card">
 
-      <img src="{{ recipe.image.url }}">
+  <div class="recipe-card">
 
-      <h3>
-        <a href="/recipe/{{ recipe.id }}/">
-          {{ recipe.title }}
-        </a>
-      </h3>
+  <img src="{{ recipe.image.url }}">
 
-      <p>{{ recipe.description }}</p>
+  <div class="recipe-content">
 
-    </div>
+  <div class="recipe-title">
+
+  <a href="/recipe/{{ recipe.id }}/">
+   {{ recipe.title }}
+  </a>
+  </div>
+
+  <div class="recipe-desc">
+   {{ recipe.description|truncatewords:15 }}
+  </div>
+
+  </div>
+  </div>
   {% endfor %}
+  </div>
+  {% else %}
 
-{% else %}
-
-  <h3>No recipes found 😢</h3>
+<h3>No recipes found 😢</h3>
 
 {% endif %}
 
