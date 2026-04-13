@@ -33,65 +33,113 @@
         gap:20px;
         }
 
-        /* CARD */
+        /* 🔥 PREMIUM CARD */
         .recipe-card{
-        background:white;
-        border-radius:12px;
-        overflow:hidden;
-        box-shadow:0 4px 10px rgba(0,0,0,0.1);
-        transition:0.3s;
+            position:relative;
+            background:white;
+            border-radius:16px;
+            overflow:hidden;
+            box-shadow:0 6px 20px rgba(0,0,0,0.1);
+            transition:0.3s ease;
+
+            opacity:0;
+            transform:translateY(20px);
+            animation:fadeInUp 0.5s ease forwards;
         }
 
+        .recipe-card:nth-child(1){ animation-delay:0.1s; }
+        .recipe-card:nth-child(2){ animation-delay:0.2s; }
+        .recipe-card:nth-child(3){ animation-delay:0.3s; }
+        .recipe-card:nth-child(4){ animation-delay:0.4s; }
+
         .recipe-card:hover{
-        transform:translateY(-5px);
+            transform:translateY(-8px) scale(1.02);
         }
 
         .recipe-card img{
-        width:100%;
-        height:200px;
-        object-fit:cover;
+            width:100%;
+            height:220px;
+            object-fit:cover;
+            transition:0.3s;
         }
 
+        .recipe-card:hover img{
+            transform:scale(1.1);
+        }
+
+        /* OVERLAY */
+        .overlay{
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            opacity:0;
+            transition:0.3s;
+        }
+
+        .recipe-card:hover .overlay{
+            opacity:1;
+        }
+
+        .view-btn{
+            padding:12px 20px;
+            background:#ff6b6b;
+            color:white;
+            border-radius:8px;
+            text-decoration:none;
+            font-weight:bold;
+        }
+
+        .view-btn:hover{
+            background:#ff5252;
+        }
+
+        /* CONTENT */
         .recipe-content{
-        padding:15px;
+            padding:15px;
         }
 
         .recipe-title{
-        font-size:18px;
-        font-weight:bold;
-        margin-bottom:10px;
-        }
-
-        .recipe-title a{
-        text-decoration:none;
-        color:black;
-        }
-
-        .recipe-title a:hover{
-        color:#ff6b6b;
+            font-size:18px;
+            font-weight:bold;
+            margin-bottom:8px;
         }
 
         .recipe-desc{
-        color:#555;
-        font-size:14px;
+            color:#666;
+            font-size:14px;
         }
 
+        .recipe-meta{
+            font-size:12px;
+            color:#999;
+            margin-bottom:8px;
+        }
+
+        .back-btn{
+            display:inline-block;
+            margin-bottom:15px;
+            text-decoration:none;
+            color:#ff6b6b;
+            font-weight:bold;
+        }
+
+        /* SEARCH */
         .search-bar{
-        display:flex;
-        justify-content:center;
-        gap:10px;
-        margin:20px;
+            display:flex;
+            justify-content:center;
+            gap:10px;
+            margin:20px;
         }
 
         .search-bar input{
             padding:12px;
             width:300px;
-            border-radius:8px;
-            border:1px solid #ddd;
-        }
-
-        .search-bar select{
-            padding:12px;
             border-radius:8px;
             border:1px solid #ddd;
         }
@@ -145,17 +193,71 @@
             background:#f5f5f5;
         }
 
-</style>
+        /* ANIMATION */
+        @keyframes fadeInUp{
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        .like-btn{
+            margin-top:10px;
+            padding:6px 12px;
+            border:none;
+            background:#ff6b6b;
+            color:white;
+            border-radius:6px;
+            cursor:pointer;
+        }
+
+        .like-btn:hover{
+            background:#ff5252;
+        }
+
+
+        .recipe-detail{
+            background:white;
+            padding:20px;
+            border-radius:12px;
+            box-shadow:0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .detail-img{
+            width:100%;
+            height:300px;
+            object-fit:cover;
+            border-radius:10px;
+        }
+
+        .detail-meta{
+            color:#999;
+            margin-bottom:15px;
+        }
+
+        .detail-desc{
+            font-size:16px;
+            margin-bottom:20px;
+        }
+
+        .comment{
+            background:#f9f9f9;
+            padding:10px;
+            margin-bottom:10px;
+            border-radius:8px;
+        }
+
+    </style>
 </head>
 
 <body>
-<header>
 
+<header>
 <h1>🍰 My Food Blog</h1>
 <p>Delicious recipes every day</p>
-
 </header>
 
+<!-- SEARCH -->
 <div class="search-wrapper">
 <form method="GET" action="/" class="search-bar">
 
@@ -169,23 +271,21 @@
     <button>Search</button>
 
 </form>
+
 <div id="search-results"></div>
 </div>
 
-
+<!-- CATEGORIES -->
 <div style="text-align:center; margin:20px;">
-
 <a href="/category/desserts/" style="margin:5px; padding:8px 12px; background:#eee; border-radius:5px;">Desserts</a>
 <a href="/category/drinks/" style="margin:5px; padding:8px 12px; background:#eee; border-radius:5px;">Drinks</a>
 <a href="/category/cakes/" style="margin:5px; padding:8px 12px; background:#eee; border-radius:5px;">Cakes</a>
-
 </div>
 
 <div class="container">
     {% block content %}
     {% endblock %}
 </div>
-
 
 <script>
 let timeout = null;
@@ -211,7 +311,6 @@ input.addEventListener("keyup", function() {
 
                 resultsBox.innerHTML = "";
 
-                // No results (внутри fetch!)
                 if (data.results.length === 0) {
                     resultsBox.innerHTML = "<div style='padding:10px;'>No results 😢</div>";
                     resultsBox.style.display = "block";
@@ -240,13 +339,22 @@ input.addEventListener("keyup", function() {
     }, 300);
 });
 
-
-// Закрытие при клике вне поиска (отдельный listener)
+// CLICK OUTSIDE
 document.addEventListener("click", (e) => {
     if (!document.querySelector(".search-wrapper").contains(e.target)) {
         resultsBox.style.display = "none";
     }
 });
+
+
+function likeRecipe(id){
+    fetch(`/like/${id}/`)
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById(`likes-${id}`).innerText = data.likes;
+    });
+}
 </script>
+
 </body>
 </html>

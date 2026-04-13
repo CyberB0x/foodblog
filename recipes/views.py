@@ -78,3 +78,12 @@ def live_search(request):
             })
 
     return JsonResponse({"results": data})
+
+
+def like_recipe(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+
+    recipe.likes += 1
+    recipe.save()
+
+    return JsonResponse({"likes": recipe.likes})

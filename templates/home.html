@@ -1,12 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 
+{% if category %}
+<a href="/" class="back-btn">← Back to all recipes</a>
+{% endif %}
+
 {% if query %}
 <p>Results for: "{{ query }}"</p>
 {% endif %}
 
 {% if category %}
 <h2>{{ category.name }}</h2>
+<a href="/" class="back-btn">← Back to all recipes</a>
 {% else %}
 <h2>Latest Recipes</h2>
 {% endif %}
@@ -19,27 +24,48 @@
 
   <div class="recipe-card">
 
-  <img src="{{ recipe.image.url }}">
+    <img src="{{ recipe.image.url }}">
 
-  <div class="recipe-content">
+    <!-- overlay -->
+    <div class="overlay">
+        <a href="/recipe/{{ recipe.id }}/" class="view-btn">
+            View Recipe
+        </a>
+    </div>
 
-  <div class="recipe-title">
+    <div class="recipe-content">
 
-  <a href="/recipe/{{ recipe.id }}/">
-   {{ recipe.title }}
-  </a>
+      <div class="recipe-title">
+        {{ recipe.title }}
+      </div>
+
+      <!-- meta -->
+      <div class="recipe-meta">
+        ⏱ {{ recipe.created_at|date:"M d" }} • 💬 {{ recipe.comments.count }}
+      </div>
+
+      <div class="recipe-desc">
+        {{ recipe.description|truncatewords:12 }}
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="recipe-desc">
-   {{ recipe.description|truncatewords:15 }}
+  <div class="recipe-meta">
+      ❤️ <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span>
   </div>
 
-  </div>
-  </div>
+  <button onclick="likeRecipe({{ recipe.id }})" class="like-btn">
+      ❤️ Like
+  </button>
+
   {% endfor %}
-  </div>
-  {% else %}
 
+</div>
+
+{% else %}
+<h3>No recipes found 😢</h3>
 {% endif %}
 
 {% endblock %}

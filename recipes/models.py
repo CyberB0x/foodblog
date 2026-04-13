@@ -17,7 +17,9 @@ class Recipe(models.Model):
     image = models.ImageField(upload_to='recipes/images/')
     video_url = models.URLField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    likes = models.PositiveSmallIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+
 
     def __str__(self):
         return self.title
