@@ -1,51 +1,103 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="recipe-detail">
+<div class="max-w-4xl mx-auto">
 
-    <img src="{{ recipe.image.url }}" class="detail-img">
+    <!-- IMAGE -->
+    <div class="relative rounded-2xl overflow-hidden shadow-lg">
+        <img src="{{ recipe.image.url }}"
+             class="w-full h-80 object-cover">
 
-    <h1>{{ recipe.title }}</h1>
-
-    <div class="detail-meta">
-    ❤️ <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span> • 💬 {{ comments.count }}
+        <!-- overlay info -->
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+            <h1 class="text-3xl font-bold">{{ recipe.title }}</h1>
+            <div class="text-gray-300 text-sm mt-1">
+                ❤️ <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span> • 💬 {{ comments.count }}
+            </div>
+        </div>
     </div>
 
-    <button onclick="likeRecipe({{ recipe.id }})" class="like-btn">
-        ❤️ Like
-    </button>
+    <!-- ACTIONS -->
+    <div class="flex gap-4 mt-4">
 
-    <button onclick="toggleFavorite({{ recipe.id }})" class="fav-btn" id="fav-{{ recipe.id }}">
-        ⭐ Favorite
-    </button>
+        <!-- LIKE -->
+        <button onclick="likeRecipe({{ recipe.id }})"
+        class="flex items-center gap-2 relative">
+            <i id="heart-{{ recipe.id }}"
+               class="fa-regular fa-heart text-xl text-red-500 transition duration-200">
+            </i>
+            <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span>
+        </button>
 
-    <p class="detail-desc">
-        {{ recipe.description }}
-    </p>
+        <!-- FAVORITE -->
+        <button
+            onclick="toggleFavorite({{ recipe.id }})"
+            id="fav-{{ recipe.id }}"
+            class="px-4 py-2 rounded-xl transition
+            {% if recipe.id in favorites %}
+                bg-yellow-400 text-black
+            {% else %}
+                bg-secondary text-white
+            {% endif %}">
 
-    <h3>Ingredients</h3>
-    <p>{{ recipe.ingredients }}</p>
+            {% if recipe.id in favorites %}
+                ⭐ Saved
+            {% else %}
+                ⭐ Favorite
+            {% endif %}
+        </button>
+
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="mt-6">
+        <h2 class="text-xl font-semibold mb-2">Description</h2>
+        <p class="text-gray-300 leading-relaxed">
+            {{ recipe.description }}
+        </p>
+    </div>
+
+    <!-- INGREDIENTS -->
+    <div class="mt-6">
+        <h2 class="text-xl font-semibold mb-2">Ingredients</h2>
+        <p class="text-gray-300 whitespace-pre-line">
+            {{ recipe.ingredients }}
+        </p>
+    </div>
+
+    <hr class="my-8 border-gray-700">
+
+    <!-- COMMENTS -->
+    <h3 class="text-2xl font-bold mb-4">Comments 💬</h3>
+
+    <div class="space-y-4">
+        {% for comment in comments %}
+        <div class="bg-secondary p-4 rounded-xl shadow">
+            <strong class="text-accent">{{ comment.name }}</strong>
+            <p class="text-gray-300 mt-1">{{ comment.text }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ADD COMMENT -->
+    <div class="mt-6">
+        <h3 class="text-xl font-semibold mb-3">Add Comment</h3>
+
+        <form method="POST" class="space-y-3">
+            {% csrf_token %}
+
+            <input type="text" name="name" placeholder="Your name"
+                   class="w-full p-3 rounded-xl bg-secondary text-white outline-none">
+
+            <textarea name="text" placeholder="Your comment"
+                      class="w-full p-3 rounded-xl bg-secondary text-white outline-none"></textarea>
+
+            <button class="bg-accent text-black px-4 py-2 rounded-xl hover:opacity-80 transition">
+                Add Comment
+            </button>
+        </form>
+    </div>
 
 </div>
-
-<hr>
-
-<!-- COMMENTS -->
-<h3>Comments</h3>
-
-{% for comment in comments %}
-<div class="comment">
-    <strong>{{ comment.name }}</strong>
-    <p>{{ comment.text }}</p>
-</div>
-{% endfor %}
-
-<!-- ADD COMMENT -->
-<form method="POST">
-    {% csrf_token %}
-    <input type="text" name="name" placeholder="Your name">
-    <textarea name="text" placeholder="Your comment"></textarea>
-    <button>Add Comment</button>
-</form>
 
 {% endblock %}

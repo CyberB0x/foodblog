@@ -2,68 +2,80 @@
 {% block content %}
 
 {% if query %}
-<p>Results for: "{{ query }}"</p>
+<p class="text-gray-400 mb-4">Results for: "{{ query }}"</p>
 {% endif %}
 
 {% if category %}
-<h2>{{ category.name }}</h2>
-<a href="/" class="back-btn">← Back to all recipes</a>
+<h2 class="text-2xl font-bold mb-4">{{ category.name }}</h2>
+<a href="/" class="text-accent hover:underline mb-6 inline-block">
+  ← Back to all recipes
+</a>
 {% else %}
-<h2>Latest Recipes</h2>
+<h2 class="text-3xl font-bold mb-6">Latest Recipes 🍰</h2>
 {% endif %}
 
 {% if recipes %}
 
-<div class="grid">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
   {% for recipe in recipes %}
 
-  <div class="recipe-card">
+  <div class="bg-secondary rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition duration-300">
 
+    <!-- IMAGE -->
+    <div class="relative group">
+      <img src="{{ recipe.image.url }}"
+           class="w-full h-56 object-cover">
 
-    <img src="{{ recipe.image.url }}">
-
-    <!-- overlay -->
-    <div class="overlay">
-        <a href="/recipe/{{ recipe.id }}/" class="view-btn">
-            View Recipe
+      <!-- overlay -->
+      <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+        <a href="/recipe/{{ recipe.id }}/"
+           class="bg-accent text-black px-4 py-2 rounded-xl font-semibold">
+          View Recipe
         </a>
+      </div>
     </div>
 
-    <div class="recipe-content">
+    <!-- CONTENT -->
+    <div class="p-4">
 
-        <div class="recipe-title">
-            {{ recipe.title }}
+      <!-- TITLE -->
+      <h3 class="text-lg font-bold">{{ recipe.title }}</h3>
+
+      <!-- META -->
+      <div class="text-gray-400 text-sm mt-1">
+        ⏱ {{ recipe.created_at|date:"M d" }} • 💬 {{ recipe.comments.count }}
+      </div>
+
+      <!-- DESC -->
+      <p class="text-gray-300 text-sm mt-2">
+        {{ recipe.description|truncatewords:12 }}
+      </p>
+
+      <!-- LIKES -->
+      <div class="flex items-center justify-between mt-4">
+
+        <div class="text-sm text-gray-400">
+          ❤️ <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span>
         </div>
 
-        <!-- meta -->
-        <div class="recipe-meta">
-            ⏱ {{ recipe.created_at|date:"M d" }} • 💬 {{ recipe.comments.count }}
-        </div>
-
-        <div class="recipe-desc">
-            {{ recipe.description|truncatewords:12 }}
-        </div>
-
-        <!-- ❤️ LIKE -->
-        <div class="recipe-meta">
-            ❤️ <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span>
-        </div>
-
-        <button onclick="likeRecipe({{ recipe.id }})" class="like-btn">
-            ❤️ Like
+        <button onclick="likeRecipe({{ recipe.id }})"
+                class="bg-accent text-black px-3 py-1 rounded-lg text-sm hover:opacity-80 transition">
+          ❤️ Like
         </button>
 
+      </div>
+
     </div>
 
-</div>
+  </div>
 
   {% endfor %}
 
 </div>
 
 {% else %}
-<h3>No recipes found 😢</h3>
+<h3 class="text-gray-400">No recipes found 😢</h3>
 {% endif %}
 
 {% endblock %}

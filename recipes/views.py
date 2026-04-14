@@ -47,11 +47,13 @@ def recipe_detail(request, id):
             )
             return redirect("recipe_detail", id=recipe.id)
 
+    favorites = request.session.get("favorites", [])
     comments = recipe.comments.all().order_by("-created_at")
 
     return render(request, "recipe_detail.html",{
         "recipe": recipe,
-        "comments": comments
+        "comments": comments,
+        "favorites": favorites
     })
 
 
