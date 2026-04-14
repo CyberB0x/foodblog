@@ -8,8 +8,16 @@
     <h1>{{ recipe.title }}</h1>
 
     <div class="detail-meta">
-        ❤️ {{ recipe.likes }} • 💬 {{ comments.count }}
+    ❤️ <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span> • 💬 {{ comments.count }}
     </div>
+
+    <button onclick="likeRecipe({{ recipe.id }})" class="like-btn">
+        ❤️ Like
+    </button>
+
+    <button onclick="toggleFavorite({{ recipe.id }})" class="fav-btn" id="fav-{{ recipe.id }}">
+        ⭐ Favorite
+    </button>
 
     <p class="detail-desc">
         {{ recipe.description }}

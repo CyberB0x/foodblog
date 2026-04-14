@@ -1,7 +1,13 @@
+from math import trunc
+
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
+from sqlalchemy import true
+
 from .models import Recipe, Category, Comment
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect
 
 
 def home(request):
@@ -39,6 +45,7 @@ def recipe_detail(request, id):
                 name=name,
                 text=text
             )
+            return redirect("recipe_detail", id=recipe.id)
 
     comments = recipe.comments.all().order_by("-created_at")
 
@@ -80,10 +87,39 @@ def live_search(request):
     return JsonResponse({"results": data})
 
 
+@csrf_exempt
 def like_recipe(request, id):
-    recipe = get_object_or_404(Recipe, id=id)
+    if request.method == "POST":
+        recipe = get_object_or_404(Recipe, id=id)
 
-    recipe.likes += 1
-    recipe.save()
+        liked = request.session.get("liked_recipes", [])
 
-    return JsonResponse({"likes": recipe.likes})
+        if id not in liked:
+            recipe.likes += 1
+            recipe.save()
+
+            liked.append(id)
+            request.session["liked_recipes"] = liked
+
+        return JsonResponse({
+            "likes": recipe.likes,
+            "liked": True
+        })
+
+    return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+def toggle_favorite(request, id):
+    if request.method == "POST":
+        favorites = request.session.get("favorites", [])
+
+        if id in favorites:
+            favorites.remove(id)
+            status = "removed"
+        else:
+            favorites.append(id)
+            status = "added"
+
+        request.session["favorites"] = favorites
+
+        return JsonResponse({"status": status})
