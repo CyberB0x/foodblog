@@ -96,12 +96,15 @@ def like_recipe(request, id):
 
         liked = request.session.get("liked_recipes", [])
 
+        liked = [int(x) for x in liked]  # FIX 1
+
         if id not in liked:
             recipe.likes += 1
             recipe.save()
 
             liked.append(id)
             request.session["liked_recipes"] = liked
+            request.session.modified = True  # FIX 2
 
         return JsonResponse({
             "likes": recipe.likes,

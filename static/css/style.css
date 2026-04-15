@@ -260,3 +260,9 @@ header{
 .overlay{
     z-index:1;
 }
+
+.video-container {
+    margin-top: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+}
