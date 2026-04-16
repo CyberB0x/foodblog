@@ -6,7 +6,8 @@
 {% endif %}
 
 {% if category %}
-<h2 class="text-2xl font-bold mb-4">{{ category.name }}</h2>
+<h2 class="text-2xl font-bold mb-4">Category: {{ category }}</h2>
+
 <a href="/" class="text-accent hover:underline mb-6 inline-block">
   ← Back to all recipes
 </a>
@@ -14,20 +15,18 @@
 <h2 class="text-3xl font-bold mb-6">Latest Recipes 🍰</h2>
 {% endif %}
 
-{% if recipes %}
+{% if page_obj %}
 
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
 
-  {% for recipe in recipes %}
+  {% for recipe in page_obj %}
 
   <div class="bg-secondary rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition duration-300">
 
     <!-- IMAGE -->
     <div class="relative group">
-      <img src="{{ recipe.image.url }}"
-           class="w-full h-56 object-cover">
+      <img src="{{ recipe.image.url }}" class="w-full h-56 object-cover">
 
-      <!-- overlay -->
       <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
         <a href="/recipe/{{ recipe.id }}/"
            class="bg-accent text-black px-4 py-2 rounded-xl font-semibold">
@@ -39,35 +38,30 @@
     <!-- CONTENT -->
     <div class="p-4">
 
-      <!-- TITLE -->
       <h3 class="text-lg font-bold">{{ recipe.title }}</h3>
 
-      <!-- META -->
       <div class="text-gray-400 text-sm mt-1">
-        ⏱ {{ recipe.created_at|date:"M d" }} • 💬 {{ recipe.comments.count }}
+        <i class="fa-regular fa-clock" style="color: rgb(250, 146, 0);"></i>
+        {{ recipe.created_at|date:"M d" }}
       </div>
 
-      <!-- DESC -->
       <p class="text-gray-300 text-sm mt-2">
         {{ recipe.description|truncatewords:12 }}
       </p>
 
-      <!-- LIKES -->
-      <div class="flex items-center justify-between mt-4">
+      <div class="flex items-center justify-between mt-4 text-gray-400">
 
-        <div class="text-sm text-gray-400">
-          ❤️ <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span>
+        <div class="text-base">
+          <i class="fa-solid fa-heart" style="color: rgb(255, 140, 0);"></i>
+          <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span>
+
+          <i class="fa-solid fa-comment ml-3" style="color: rgb(255, 140, 0);"></i>
+          <span>{{ recipe.comments.count }}</span>
         </div>
-
-        <button onclick="likeRecipe({{ recipe.id }})"
-                class="bg-accent text-black px-3 py-1 rounded-lg text-sm hover:opacity-80 transition">
-          ❤️ Like
-        </button>
 
       </div>
 
     </div>
-
   </div>
 
   {% endfor %}
@@ -77,5 +71,39 @@
 {% else %}
 <h3 class="text-gray-400">No recipes found 😢</h3>
 {% endif %}
+
+<!-- PAGINATION (FIXED) -->
+<div class="flex justify-center mt-10 mb-10 space-x-2">
+
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
+       class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
+      Prev
+    </a>
+  {% endif %}
+
+  {% for num in page_obj.paginator.page_range %}
+
+    {% if num == page_obj.number %}
+      <span class="px-4 py-2 bg-red-500 text-white rounded">
+        {{ num }}
+      </span>
+    {% else %}
+      <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
+         class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
+        {{ num }}
+      </a>
+    {% endif %}
+
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
+       class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
+      Next
+    </a>
+  {% endif %}
+
+</div>
 
 {% endblock %}

@@ -1,5 +1,4 @@
 from math import trunc
-
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from sqlalchemy import true
@@ -8,12 +7,13 @@ from .models import Recipe, Category, Comment
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import redirect
+from django.core.paginator import Paginator
 
 
 def home(request):
     query = request.GET.get("q")
     category_slug = request.GET.get("category")
-
+    recipes_list = Recipe.objects.all().order_by('-id')
     recipes = Recipe.objects.all().order_by("-created_at")
 
     if category_slug:
@@ -26,10 +26,15 @@ def home(request):
             Q(ingredients__icontains=query)
         ).distinct()
 
+    paginator = Paginator(recipes_list, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "home.html", {
         "recipes": recipes,
         "query": query,
-        "selected_category": category_slug
+        "selected_category": category_slug,
+        "page_obj": page_obj
     })
 
 def recipe_detail(request, id):

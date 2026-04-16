@@ -14,16 +14,32 @@
 
 <body class="bg-primary text-white font-sans">
 
-  <!-- Navbar -->
-  <nav class="bg-secondary p-4 shadow-lg flex justify-between items-center">
+ <!-- Navbar -->
+<nav class="bg-secondary p-4 shadow-lg flex justify-between items-center">
+
     <h1 class="text-xl font-bold">🍰 FoodBlog</h1>
 
-    <div class="space-x-4">
-      <a href="/" class="hover:text-accent">Home</a>
-      <a href="/recipes" class="hover:text-accent">Recipes</a>
-      <a href="/about" class="hover:text-accent">About</a>
+    <div class="flex items-center gap-4">
+        <a href="/" class="hover:text-accent">Home</a>
+        <a href="/recipes" class="hover:text-accent">Recipes</a>
+        <a href="/about" class="hover:text-accent">About</a>
+
+        <!-- 🔎 SEARCH -->
+        <div class="relative">
+            <input
+                id="search-input"
+                type="text"
+                placeholder="Search desserts..."
+                class="px-4 py-2 rounded-xl bg-gray-800 text-white w-64 border border-gray-700 focus:outline-none focus:border-accent transition">
+
+            <div
+                id="search-results"
+                class="absolute top-full right-0 mt-2 w-72 bg-secondary/95 backdrop-blur-md border border-gray-700 rounded-2xl hidden z-50 shadow-2xl overflow-hidden">
+            </div>
+        </div>
+
     </div>
-  </nav>
+</nav>
 
   <!-- Content -->
   <div class="container mx-auto p-6">

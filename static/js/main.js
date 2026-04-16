@@ -15,7 +15,7 @@ tailwind.config = {
 
 
 // =========================
-// ❤️ LIKE SYSTEM (FIXED)
+// ❤️ LIKE SYSTEM
 // =========================
 function likeRecipe(id) {
     const heart = document.getElementById(`heart-${id}`);
@@ -38,6 +38,11 @@ function likeRecipe(id) {
 
         heart.classList.add("like-pop");
         setTimeout(() => heart.classList.remove("like-pop"), 300);
+
+        // сохраняем в localStorage
+        let likedRecipes = JSON.parse(localStorage.getItem("likedRecipes")) || {};
+        likedRecipes[id] = true;
+        localStorage.setItem("likedRecipes", JSON.stringify(likedRecipes));
     });
 }
 
@@ -57,13 +62,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // =========================
-// 🔎 LIVE SEARCH (SAFE)
+// 🔎 LIVE SEARCH (FINAL)
 // =========================
 let timeout = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("search-input");
     const resultsBox = document.getElementById("search-results");
+    const wrapper = document.querySelector(".search-wrapper");
 
     if (!input || !resultsBox) return;
 
@@ -74,9 +80,13 @@ document.addEventListener("DOMContentLoaded", () => {
             const query = input.value.trim();
 
             if (query.length < 2) {
-                resultsBox.style.display = "none";
+                resultsBox.classList.add("hidden");
                 return;
             }
+
+            // loader
+            resultsBox.innerHTML = "<div class='p-2 text-gray-400'>Searching...</div>";
+            resultsBox.classList.remove("hidden");
 
             fetch(`/live-search/?q=${query}`)
                 .then(res => res.json())
@@ -84,17 +94,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     resultsBox.innerHTML = "";
 
                     if (!data.results || data.results.length === 0) {
-                        resultsBox.innerHTML = "<div style='padding:10px;'>No results 😢</div>";
-                        resultsBox.style.display = "block";
+                        resultsBox.innerHTML = "<div class='p-2 text-gray-400'>No results 😢</div>";
+                        resultsBox.classList.remove("hidden");
                         return;
                     }
 
                     data.results.forEach(item => {
                         const div = document.createElement("div");
-                        div.classList.add("search-item");
+                        div.className = "flex items-center gap-2 p-2 hover:bg-gray-700 cursor-pointer transition";
 
                         div.innerHTML = `
-                            <img src="${item.image}">
+                            <img src="${item.image}" class="w-10 h-10 object-cover rounded">
                             <span>${item.title}</span>
                         `;
 
@@ -105,19 +115,21 @@ document.addEventListener("DOMContentLoaded", () => {
                         resultsBox.appendChild(div);
                     });
 
-                    resultsBox.style.display = "block";
+                    resultsBox.classList.remove("hidden");
                 })
-                .catch(err => console.error("Search error:", err));
+                .catch(err => {
+                    console.error("Search error:", err);
+                    resultsBox.innerHTML = "<div class='p-2 text-red-400'>Error 😢</div>";
+                });
 
-        }, 300);
+        }, 300); // debounce
     });
 
 
-    // CLICK OUTSIDE
+    // закрытие при клике вне
     document.addEventListener("click", (e) => {
-        const wrapper = document.querySelector(".search-wrapper");
         if (wrapper && !wrapper.contains(e.target)) {
-            resultsBox.style.display = "none";
+            resultsBox.classList.add("hidden");
         }
     });
 });
