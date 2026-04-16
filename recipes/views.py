@@ -13,12 +13,14 @@ from django.core.paginator import Paginator
 def home(request):
     query = request.GET.get("q")
     category_slug = request.GET.get("category")
-    recipes_list = Recipe.objects.all().order_by('-id')
+
     recipes = Recipe.objects.all().order_by("-created_at")
 
+    # category filter
     if category_slug:
         recipes = recipes.filter(category__slug=category_slug)
 
+    # search filter
     if query:
         recipes = recipes.filter(
             Q(title__icontains=query) |
@@ -26,16 +28,38 @@ def home(request):
             Q(ingredients__icontains=query)
         ).distinct()
 
-    paginator = Paginator(recipes_list, 6)
+    # pagination (ВАЖНО: после фильтров)
+    paginator = Paginator(recipes, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     return render(request, "home.html", {
-        "recipes": recipes,
+        "page_obj": page_obj,
         "query": query,
         "selected_category": category_slug,
-        "page_obj": page_obj
     })
+
+
+def recipes(request):
+    category = request.GET.get("category")
+    recipes = Recipe.objects.all().order_by("-created_at")
+
+    # Filter
+    if category:
+        recipes = recipes.filter(category__slug=category)
+
+
+    # pagination (ВАЖНО: после фильтров)
+    paginator = Paginator(recipes, 6)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, "recipes.html", {
+        "page_obj": page_obj,
+        "recipes": recipes,
+        "selected_category": category
+    })
+
 
 def recipe_detail(request, id):
     recipe = get_object_or_404(Recipe, id=id)
@@ -55,7 +79,7 @@ def recipe_detail(request, id):
     favorites = request.session.get("favorites", [])
     comments = recipe.comments.all().order_by("-created_at")
 
-    return render(request, "recipe_detail.html",{
+    return render(request, "recipe_detail.html", {
         "recipe": recipe,
         "comments": comments,
         "favorites": favorites
@@ -63,7 +87,6 @@ def recipe_detail(request, id):
 
 
 def category_view(request, slug):
-
     category = get_object_or_404(Category, slug=slug)
     recipes = Recipe.objects.filter(category=category)
 

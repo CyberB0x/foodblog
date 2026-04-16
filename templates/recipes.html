@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 class="text-3xl font-bold mb-6">🍰 Recipes</h1>
+
+<!-- CATEGORY MENU -->
+<div class="flex space-x-3 mb-6">
+
+    <a href="{% url 'recipes' %}"
+       class="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600">
+        All
+    </a>
+
+    <a href="?category=salad"
+       class="px-3 py-1 rounded {% if selected_category == 'salad' %}bg-green-500 text-black{% else %}bg-gray-700{% endif %}">
+        Salad
+    </a>
+
+    <a href="?category=cake"
+       class="px-3 py-1 rounded {% if selected_category == 'cake' %}bg-pink-500 text-black{% else %}bg-gray-700{% endif %}">
+        Cake
+    </a>
+
+    <a href="?category=dinner"
+       class="px-3 py-1 rounded {% if selected_category == 'dinner' %}bg-orange-500 text-black{% else %}bg-gray-700{% endif %}">
+        Dinner
+    </a>
+
+    <a href="?category=lunch"
+       class="px-3 py-1 rounded {% if selected_category == 'lunch' %}bg-yellow-500 text-black{% else %}bg-gray-700{% endif %}">
+        Lunch
+    </a>
+
+</div>
+
+<!-- RECIPES GRID -->
+<div class="grid grid-cols-3 gap-4">
+
+    {% for recipe in recipes %}
+        <div class="bg-gray-800 p-4 rounded-lg hover:scale-105 transition">
+
+            {% if recipe.image %}
+                <img src="{{ recipe.image.url }}" class="rounded mb-3">
+            {% endif %}
+
+            <h2 class="text-xl font-bold">{{ recipe.title }}</h2>
+
+            <p class="text-gray-400 text-sm mt-2">
+                {{ recipe.description|truncatechars:100 }}
+            </p>
+
+        </div>
+    {% empty %}
+        <p class="text-gray-400">No recipes found 😢</p>
+    {% endfor %}
+
+</div>
+
+
+<!-- PAGINATION (FIXED) -->
+<div class="flex justify-center mt-10 mb-10 space-x-2">
+
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
+       class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
+      Prev
+    </a>
+  {% endif %}
+
+  {% for num in page_obj.paginator.page_range %}
+
+    {% if num == page_obj.number %}
+      <span class="px-4 py-2 bg-red-500 text-white rounded">
+        {{ num }}
+      </span>
+    {% else %}
+      <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
+         class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
+        {{ num }}
+      </a>
+    {% endif %}
+
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
+       class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
+      Next
+    </a>
+  {% endif %}
+
+</div>
+
+{% endblock %}
