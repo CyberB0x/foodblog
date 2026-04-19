@@ -15,7 +15,18 @@ tailwind.config = {
 
 
 // =========================
-// ❤️ LIKE SYSTEM
+// CSRF HELPER
+// =========================
+function getCSRFToken() {
+    return document.cookie
+        .split("; ")
+        .find(row => row.startsWith("csrftoken="))
+        ?.split("=")[1];
+}
+
+
+// =========================
+// LIKE SYSTEM (FIXED)
 // =========================
 function likeRecipe(id) {
     const heart = document.getElementById(`heart-${id}`);
@@ -23,13 +34,22 @@ function likeRecipe(id) {
 
     if (!heart || !likesEl) return;
 
+    let likedRecipes = JSON.parse(localStorage.getItem("likedRecipes")) || {};
+
+    //уже лайкнул — стоп
+    if (likedRecipes[id]) return;
+
     fetch(`/like/${id}/`, {
         method: "POST",
         headers: {
+            "X-CSRFToken": getCSRFToken(),
             "X-Requested-With": "XMLHttpRequest"
         }
     })
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) throw new Error("Server error");
+        return res.json();
+    })
     .then(data => {
         likesEl.innerText = data.likes;
 
@@ -39,15 +59,18 @@ function likeRecipe(id) {
         heart.classList.add("like-pop");
         setTimeout(() => heart.classList.remove("like-pop"), 300);
 
-        // сохраняем в localStorage
-        let likedRecipes = JSON.parse(localStorage.getItem("likedRecipes")) || {};
         likedRecipes[id] = true;
         localStorage.setItem("likedRecipes", JSON.stringify(likedRecipes));
+    })
+    .catch(err => {
+        console.error("Like error:", err);
     });
 }
 
 
-// восстановление лайков после перезагрузки
+// =========================
+// RESTORE LIKES
+// =========================
 document.addEventListener("DOMContentLoaded", () => {
     let likedRecipes = JSON.parse(localStorage.getItem("likedRecipes")) || {};
 
@@ -62,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // =========================
-// 🔎 LIVE SEARCH (FINAL)
+// LIVE SEARCH (IMPROVED)
 // =========================
 let timeout = null;
 
@@ -84,18 +107,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            // loader
             resultsBox.innerHTML = "<div class='p-2 text-gray-400'>Searching...</div>";
             resultsBox.classList.remove("hidden");
 
-            fetch(`/live-search/?q=${query}`)
-                .then(res => res.json())
+            fetch(`/live-search/?q=${encodeURIComponent(query)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Search error");
+                    return res.json();
+                })
                 .then(data => {
                     resultsBox.innerHTML = "";
 
-                    if (!data.results || data.results.length === 0) {
+                    if (!data.results?.length) {
                         resultsBox.innerHTML = "<div class='p-2 text-gray-400'>No results 😢</div>";
-                        resultsBox.classList.remove("hidden");
                         return;
                     }
 
@@ -114,19 +138,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         resultsBox.appendChild(div);
                     });
-
-                    resultsBox.classList.remove("hidden");
                 })
                 .catch(err => {
-                    console.error("Search error:", err);
+                    console.error(err);
                     resultsBox.innerHTML = "<div class='p-2 text-red-400'>Error 😢</div>";
                 });
 
-        }, 300); // debounce
+        }, 300);
     });
 
-
-    // закрытие при клике вне
+    // закрытие
     document.addEventListener("click", (e) => {
         if (wrapper && !wrapper.contains(e.target)) {
             resultsBox.classList.add("hidden");
@@ -136,16 +157,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // =========================
-// ⭐ FAVORITE SYSTEM
+// FAVORITE SYSTEM (FIXED)
 // =========================
 function toggleFavorite(id) {
     fetch(`/favorite/${id}/`, {
         method: "POST",
         headers: {
+            "X-CSRFToken": getCSRFToken(),
             "X-Requested-With": "XMLHttpRequest"
         }
     })
-    .then(res => res.json())
+    .then(res => {
+        if (!res.ok) throw new Error("Favorite error");
+        return res.json();
+    })
     .then(data => {
         const btn = document.getElementById(`fav-${id}`);
         if (!btn) return;
@@ -158,5 +183,5 @@ function toggleFavorite(id) {
             btn.innerText = "⭐ Favorite";
         }
     })
-    .catch(err => console.error("Favorite error:", err));
+    .catch(err => console.error(err));
 }

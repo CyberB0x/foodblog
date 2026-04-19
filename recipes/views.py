@@ -40,23 +40,27 @@ def home(request):
     })
 
 
+from django.core.paginator import Paginator
+from django.shortcuts import render
+
 def recipes(request):
     category = request.GET.get("category")
-    recipes = Recipe.objects.all().order_by("-created_at")
 
-    # Filter
-    if category:
-        recipes = recipes.filter(category__slug=category)
+    recipes_list = Recipe.objects.all().order_by("-created_at")
 
+    # ФИЛЬТР
+    if category and category != "all":
+        recipes_list = recipes_list.filter(category__slug=category)
 
-    # pagination (ВАЖНО: после фильтров)
-    paginator = Paginator(recipes, 6)
+    # PAGINATION (после фильтра!)
+    paginator = Paginator(recipes_list, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
     return render(request, "recipes.html", {
         "page_obj": page_obj,
-        "recipes": recipes,
+        "recipes": page_obj,  # ВАЖНО
+        "categories": Category.objects.all(),  # для меню
         "selected_category": category
     })
 
@@ -111,7 +115,7 @@ def live_search(request):
             data.append({
                 "id": r.id,
                 "title": r.title,
-                "image": r.image.url
+                "image": r.image.url if r.image else "/static/img/no-image.png"
             })
 
     return JsonResponse({"results": data})

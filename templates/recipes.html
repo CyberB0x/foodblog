@@ -4,43 +4,44 @@
 <h1 class="text-3xl font-bold mb-6">🍰 Recipes</h1>
 
 <!-- CATEGORY MENU -->
-<div class="flex space-x-3 mb-6">
+<div class="overflow-x-auto whitespace-nowrap py-4 px-2 bg-secondary rounded-xl scroll-smooth">
+  <div class="flex gap-3">
 
-    <a href="{% url 'recipes' %}"
-       class="px-3 py-1 rounded bg-gray-700 hover:bg-gray-600">
-        All
+    <!-- ALL -->
+    <a href="?category=all"
+       class="px-4 py-2 rounded-full font-medium snap-start
+       {% if request.GET.category == 'all' or not request.GET.category %}
+          bg-accent text-white
+       {% else %}
+          bg-gray-800 text-gray-300 hover:bg-accent hover:text-white
+       {% endif %}">
+       All
     </a>
 
-    <a href="?category=salad"
-       class="px-3 py-1 rounded {% if selected_category == 'salad' %}bg-green-500 text-black{% else %}bg-gray-700{% endif %}">
-        Salad
+    <!-- DYNAMIC CATEGORIES -->
+    {% for cat in categories %}
+    <a href="?category={{ cat.slug }}"
+       class="px-4 py-2 rounded-full font-medium snap-start
+       {% if request.GET.category == cat.slug %}
+          bg-accent text-white
+       {% else %}
+          bg-gray-800 text-gray-300 hover:bg-accent hover:text-white
+       {% endif %}">
+       {{ cat.name }}
     </a>
+    {% endfor %}
 
-    <a href="?category=cake"
-       class="px-3 py-1 rounded {% if selected_category == 'cake' %}bg-pink-500 text-black{% else %}bg-gray-700{% endif %}">
-        Cake
-    </a>
-
-    <a href="?category=dinner"
-       class="px-3 py-1 rounded {% if selected_category == 'dinner' %}bg-orange-500 text-black{% else %}bg-gray-700{% endif %}">
-        Dinner
-    </a>
-
-    <a href="?category=lunch"
-       class="px-3 py-1 rounded {% if selected_category == 'lunch' %}bg-yellow-500 text-black{% else %}bg-gray-700{% endif %}">
-        Lunch
-    </a>
-
+  </div>
 </div>
 
 <!-- RECIPES GRID -->
-<div class="grid grid-cols-3 gap-4">
+<div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
 
     {% for recipe in recipes %}
-        <div class="bg-gray-800 p-4 rounded-lg hover:scale-105 transition">
+        <div class="bg-gray-800 p-4 rounded-lg hover:scale-105 transition duration-300">
 
             {% if recipe.image %}
-                <img src="{{ recipe.image.url }}" class="rounded mb-3">
+                <img src="{{ recipe.image.url }}" class="rounded mb-3 w-full h-48 object-cover">
             {% endif %}
 
             <h2 class="text-xl font-bold">{{ recipe.title }}</h2>
@@ -49,6 +50,11 @@
                 {{ recipe.description|truncatechars:100 }}
             </p>
 
+            <a href="{% url 'recipe_detail' recipe.id %}"
+               class="inline-block mt-3 text-accent hover:underline">
+               View Recipe →
+            </a>
+
         </div>
     {% empty %}
         <p class="text-gray-400">No recipes found 😢</p>
@@ -56,12 +62,11 @@
 
 </div>
 
-
-<!-- PAGINATION (FIXED) -->
-<div class="flex justify-center mt-10 mb-10 space-x-2">
+<!-- PAGINATION -->
+<div class="flex justify-center mt-10 mb-10 space-x-2 flex-wrap">
 
   {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
+    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}"
        class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
       Prev
     </a>
@@ -70,11 +75,11 @@
   {% for num in page_obj.paginator.page_range %}
 
     {% if num == page_obj.number %}
-      <span class="px-4 py-2 bg-red-500 text-white rounded">
+      <span class="px-4 py-2 bg-accent text-white rounded">
         {{ num }}
       </span>
     {% else %}
-      <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
+      <a href="?page={{ num }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}"
          class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
         {{ num }}
       </a>
@@ -83,7 +88,7 @@
   {% endfor %}
 
   {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
+    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}"
        class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
       Next
     </a>

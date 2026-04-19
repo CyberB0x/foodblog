@@ -266,3 +266,8 @@ header{
     border-radius: 12px;
     overflow: hidden;
 }
+
+/* scroll category */
+::-webkit-scrollbar {
+  display: none;
+}
