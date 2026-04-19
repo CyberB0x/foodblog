@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from django.core.paginator import Paginator
 
 
+# home page
 def home(request):
     query = request.GET.get("q")
     category_slug = request.GET.get("category")
@@ -40,9 +41,7 @@ def home(request):
     })
 
 
-from django.core.paginator import Paginator
-from django.shortcuts import render
-
+# recipe page
 def recipes(request):
     category = request.GET.get("category")
 
@@ -63,6 +62,10 @@ def recipes(request):
         "categories": Category.objects.all(),  # для меню
         "selected_category": category
     })
+
+# about page
+def about(request):
+    return render(request, "about.html")
 
 
 def recipe_detail(request, id):
