@@ -1,13 +1,16 @@
 from math import trunc
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from sqlalchemy import true
 
 from .models import Recipe, Category, Comment
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import redirect
 from django.core.paginator import Paginator
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import RegisterForm
+from django.contrib.auth.decorators import login_required
 
 
 # home page
@@ -39,6 +42,34 @@ def home(request):
         "query": query,
         "selected_category": category_slug,
     })
+
+
+# Register and Login form
+def register_view(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user) # auto login
+            return redirect("/")
+    else:
+        form = RegisterForm()
+    return render(request, "auth/register.html", {"form": form})
+
+def login_view(request):
+    form = AuthenticationForm(data=request.POST or None)
+
+    if request.method == "POST":
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect("/")
+    return render(request, "auth/login.html", {"form": form})
+
+def logout_view(request):
+    logout(request)
+    return redirect("/")
+
 
 
 # recipe page
@@ -124,6 +155,7 @@ def live_search(request):
     return JsonResponse({"results": data})
 
 
+@login_required
 @csrf_exempt
 def like_recipe(request, id):
     if request.method == "POST":

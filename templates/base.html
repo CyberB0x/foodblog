@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/like_animation.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 
 </head>
@@ -37,6 +38,15 @@
                 class="absolute top-full right-0 mt-2 w-72 bg-secondary/95 backdrop-blur-md border border-gray-700 rounded-2xl hidden z-50 shadow-2xl overflow-hidden">
             </div>
         </div>
+
+        <!--Login-->
+        {% if user.is_authenticated %}
+          <span>Hi, {{ user.username }}</span>
+          <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register' %}">Register</a>
+        {% endif %}
 
     </div>
 </nav>
