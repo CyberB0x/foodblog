@@ -185,3 +185,24 @@ function toggleFavorite(id) {
     })
     .catch(err => console.error(err));
 }
+
+
+function togglePassword(id, el) {
+    const input = document.getElementById(id);
+
+    if (!input) {
+        console.log("NOT FOUND:", id);
+        return;
+    }
+
+    if (input.type === "password") {
+        input.type = "text";
+        el.textContent = "👁️";
+    } else {
+        input.type = "password";
+        el.textContent = "🙈";
+    }
+}
+
+
+console.log("MAIN JS LOADED 🔥");
