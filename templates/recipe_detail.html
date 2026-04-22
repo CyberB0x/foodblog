@@ -30,21 +30,17 @@
         <button
             onclick="toggleFavorite({{ recipe.id }})"
             id="fav-{{ recipe.id }}"
-            class="px-4 py-2 rounded-xl transition
-            {% if recipe.id in favorites %}
-                bg-yellow-400 text-black
-            {% else %}
-                bg-secondary text-white
-            {% endif %}">
+            class="favorite-btn flex items-center gap-2 px-4 py-2 rounded-xl transition
+            {% if recipe.id in favorites %}active{% endif %}">
 
-            {% if recipe.id in favorites %}
-               <!--Favorite icon-->
-                <i class="fa-solid fa-star" style="color: rgb(255, 212, 59);"></i>
-                Saved
-            {% else %}
-                <i class="fa-regular fa-star" style="color: rgb(255, 212, 59);"></i>
-                Favorite
-            {% endif %}
+            <span class="icon"></span>
+            <span class="text">
+                {% if recipe.id in favorites %}
+                    Saved
+                {% else %}
+                    Favorite
+                {% endif %}
+            </span>
         </button>
 
     </div>
@@ -60,9 +56,11 @@
     <!-- VIDEO -->
     {% if recipe.get_youtube_embed_url %}
     <div class="mt-4">
-
-        <iframe class="aspect-video ..." src="{{ recipe.get_youtube_embed_url }}"></iframe>
-
+        <iframe
+            class="w-full rounded-xl aspect-video mt-4"
+            src="{{ recipe.get_youtube_embed_url }}"
+            allowfullscreen>
+        </iframe>
     </div>
     {% endif %}
 

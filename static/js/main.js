@@ -160,30 +160,28 @@ document.addEventListener("DOMContentLoaded", () => {
 // FAVORITE SYSTEM (FIXED)
 // =========================
 function toggleFavorite(id) {
+    const btn = document.getElementById(`fav-${id}`);
+
     fetch(`/favorite/${id}/`, {
         method: "POST",
         headers: {
-            "X-CSRFToken": getCSRFToken(),
-            "X-Requested-With": "XMLHttpRequest"
+            "X-CSRFToken": getCSRFToken()
         }
     })
-    .then(res => {
-        if (!res.ok) throw new Error("Favorite error");
-        return res.json();
-    })
+    .then(res => res.json())
     .then(data => {
-        const btn = document.getElementById(`fav-${id}`);
-        if (!btn) return;
+
+        const text = btn.querySelector(".text");
 
         if (data.status === "added") {
             btn.classList.add("active");
-            btn.innerText = "⭐ Saved";
+            text.innerText = "Saved";
         } else {
             btn.classList.remove("active");
-            btn.innerText = "⭐ Favorite";
+            text.innerText = "Favorite";
         }
-    })
-    .catch(err => console.error(err));
+
+    });
 }
 
 
@@ -204,5 +202,18 @@ function togglePassword(id, el) {
     }
 }
 
+//Save btn
+function saveRecipe(id) {
+  fetch(`/save/${id}/`, {
+    method: "POST",
+    headers: {
+      "X-CSRFToken": csrftoken
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log(data.saved)
+  })
+}
 
 console.log("MAIN JS LOADED 🔥");

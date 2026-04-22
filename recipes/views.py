@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from sqlalchemy import true
 
-from .models import Recipe, Category, Comment
+from .models import Recipe, Category, Comment, SavedRecipe
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
@@ -57,19 +57,66 @@ def register_view(request):
     return render(request, "auth/register.html", {"form": form})
 
 def login_view(request):
-    form = AuthenticationForm(data=request.POST or None)
+    form = AuthenticationForm(request, data=request.POST or None)
 
     if request.method == "POST":
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             return redirect("/")
+
     return render(request, "auth/login.html", {"form": form})
+
 
 def logout_view(request):
     logout(request)
     return redirect("/")
 
+
+# User Dashboard
+@login_required
+def dashboard(request):
+    category = request.GET.get("category")
+
+    saved = (
+        SavedRecipe.objects
+        .filter(user=request.user)
+        .select_related("recipe", "recipe__category")
+        .order_by("-created_at")
+    )
+
+    if category:
+        saved = saved.filter(recipe__category__slug=category)
+
+    categories = Category.objects.all()
+
+    paginator = Paginator(saved, 6)
+    page = request.GET.get("page")
+    saved_recipes = paginator.get_page(page)
+
+    return render(request, "dashboard.html", {
+        "saved_recipes": saved_recipes,
+        "categories": categories,
+        "current_category": category,
+        "total_saved": saved.count()  #  для UI
+    })
+
+# Save btn
+@login_required
+def save_recipe(request, id):
+    recipe = get_object_or_404(Recipe, id=id)
+
+    obj, created = SavedRecipe.objects.get_or_create(
+        user=request.user,
+        recipe=recipe
+    )
+
+    if not created:
+        obj.delete()
+        saved = False
+    else:
+        saved = True
+    return JsonResponse({"saved": saved})
 
 
 # recipe page
@@ -181,8 +228,11 @@ def like_recipe(request, id):
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 
+@login_required
 def toggle_favorite(request, id):
     if request.method == "POST":
+        recipe = get_object_or_404(Recipe, id=id)
+
         favorites = request.session.get("favorites", [])
 
         if id in favorites:
@@ -193,5 +243,9 @@ def toggle_favorite(request, id):
             status = "added"
 
         request.session["favorites"] = favorites
+        request.session.modified = True  # ВАЖНО
 
-        return JsonResponse({"status": status})
+        return JsonResponse({
+            "status": status,
+            "favorites_count": len(favorites)
+        })

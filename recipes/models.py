@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Category(models.Model):
@@ -40,6 +41,18 @@ class Recipe(models.Model):
         video_id = video_id.split("?")[0]
 
         return f"https://www.youtube.com/embed/{video_id}"
+
+# User profile
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to="avatars/", blank=True)
+    bio = models.TextField(blank=True)
+
+# Save Recipe
+class SavedRecipe(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Comment(models.Model):

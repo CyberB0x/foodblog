@@ -271,3 +271,29 @@ header{
 ::-webkit-scrollbar {
   display: none;
 }
+
+.favorite-btn {
+    background: #2a2a2a;
+}
+
+.favorite-btn.active {
+    background: #facc15;
+    color: black;
+}
+
+.favorite-btn .icon::before {
+    content: "☆";
+    font-size: 18px;
+}
+
+.favorite-btn.active .icon::before {
+    content: "★";
+}
+
+.favorite-btn .icon {
+    transition: transform 0.3s;
+}
+
+.favorite-btn.active .icon {
+    transform: scale(1.2);
+}
