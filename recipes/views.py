@@ -63,7 +63,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect("/")
+            return redirect("dashboard")
 
     return render(request, "auth/login.html", {"form": form})
 
@@ -71,6 +71,11 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("/")
+
+# Profile
+@login_required
+def profile(request):
+    return render(request, "profile.html")
 
 
 # User Dashboard

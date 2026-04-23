@@ -4,22 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Food Blog</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/like_animation.css' %}">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-
-
 </head>
 
 <body class="bg-primary text-white font-sans">
 
- <!-- Navbar -->
+<!-- Navbar -->
 <nav class="bg-secondary p-4 shadow-lg flex justify-between items-center">
 
     <h1 class="text-xl font-bold">🍰 FoodBlog</h1>
 
     <div class="flex items-center gap-4">
+
         <a href="/" class="hover:text-accent">Home</a>
         <a href="/recipes" class="hover:text-accent">Recipes</a>
         <a href="/about" class="hover:text-accent">About</a>
@@ -38,25 +39,32 @@
             </div>
         </div>
 
-        <!--Login-->
+        <!-- 👤 PROFILE ICON -->
         {% if user.is_authenticated %}
-          <span>Hi, {{ user.username }}</span>
-          <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'dashboard' %}" class="flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="w-8 h-8 text-white hover:text-gray-300 transition"
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5.121 17.804A9 9 0 1118.88 17.8M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+        </a>
+
         {% else %}
-          <a href="{% url 'login' %}">Login</a>
-          <a href="{% url 'register' %}">Register</a>
+        <a href="{% url 'login' %}" class="hover:text-accent">Login</a>
+        <a href="{% url 'register' %}" class="hover:text-accent">Register</a>
         {% endif %}
 
     </div>
 </nav>
 
-  <!-- Content -->
-  <div class="container mx-auto p-6">
+<!-- Content -->
+<div class="container mx-auto p-6">
     {% block content %}
     {% endblock %}
-  </div>
-
+</div>
 
 <script src="{% static 'js/main.js' %}"></script>
+
 </body>
 </html>

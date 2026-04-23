@@ -216,4 +216,21 @@ function saveRecipe(id) {
   })
 }
 
+// Profile menu
+const profileBtn = document.getElementById("profileBtn");
+const profileMenu = document.getElementById("profileMenu");
+
+if (profileBtn) {
+  profileBtn.addEventListener("click", () => {
+    profileMenu.classList.toggle("hidden");
+  });
+
+  // Закрытие при клике вне
+  document.addEventListener("click", (e) => {
+    if (!profileBtn.contains(e.target) && !profileMenu.contains(e.target)) {
+      profileMenu.classList.add("hidden");
+    }
+  });
+}
+
 console.log("MAIN JS LOADED 🔥");
