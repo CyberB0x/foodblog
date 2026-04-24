@@ -48,6 +48,12 @@ class Profile(models.Model):
     avatar = models.ImageField(upload_to="avatars/", blank=True)
     bio = models.TextField(blank=True)
 
+# Favorite
+class FavoriteRecipe(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
 # Save Recipe
 class SavedRecipe(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

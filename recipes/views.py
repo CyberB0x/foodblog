@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from sqlalchemy import true
 
-from .models import Recipe, Category, Comment, SavedRecipe
+from .models import Recipe, Category, Comment, SavedRecipe, FavoriteRecipe
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
@@ -99,29 +99,63 @@ def dashboard(request):
     page = request.GET.get("page")
     saved_recipes = paginator.get_page(page)
 
+    favorite_count = FavoriteRecipe.objects.filter(
+        user=request.user
+    ).count()
+
     return render(request, "dashboard.html", {
         "saved_recipes": saved_recipes,
         "categories": categories,
         "current_category": category,
-        "total_saved": saved.count()  #  для UI
+        "total_saved": saved.count(),
+        "favorite_count": favorite_count,
     })
+
 
 # Save btn
 @login_required
 def save_recipe(request, id):
-    recipe = get_object_or_404(Recipe, id=id)
+    recipe = Recipe.objects.get(id=id)
 
-    obj, created = SavedRecipe.objects.get_or_create(
+    saved = SavedRecipe.objects.filter(
         user=request.user,
         recipe=recipe
-    )
+    ).first()
 
-    if not created:
-        obj.delete()
-        saved = False
+    if saved:
+        saved.delete()
+        status = False
     else:
-        saved = True
-    return JsonResponse({"saved": saved})
+        SavedRecipe.objects.create(
+            user=request.user,
+            recipe=recipe
+        )
+        status = True
+
+    return JsonResponse({"saved": status})
+
+
+# Favorite
+@login_required
+def toggle_favorite(request, id):
+    recipe = Recipe.objects.get(id=id)
+
+    fav = FavoriteRecipe.objects.filter(
+        user=request.user,
+        recipe=recipe
+    ).filter()
+
+    if fav:
+        fav.delete()
+        status = "removed"
+    else:
+        FavoriteRecipe.objects.create(
+            user=request.user,
+            recipe=recipe
+        )
+        status = "added"
+
+    return JsonResponse({"status": status})
 
 
 # recipe page

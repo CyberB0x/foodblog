@@ -20,5 +20,6 @@ urlpatterns = [
     path("category/<slug:slug>/", views.category_view, name="category"),
     path("like/<int:id>/", views.like_recipe, name="like_recipe"),
     path("favorite/<int:id>/", views.toggle_favorite, name="favorite"),
+    path("saved/<int:id>", views.save_recipe, name="save"),
     path("live-search/", views.live_search, name="live_search"),
 ]

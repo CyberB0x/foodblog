@@ -74,11 +74,10 @@
                         </a>
 
                         <!-- REMOVE FAVORITE -->
-                        <button onclick="toggleFavorite({{ item.recipe.id }})"
-                                id="fav-{{ item.recipe.id }}"
-                                class="favorite-btn active text-sm">
-
-                            <span class="icon"></span>
+                        <button onclick="saveRecipe({{ item.recipe.id }})"
+                                id="save-{{ item.recipe.id }}"
+                                class="text-sm bg-red-500 px-3 py-1 rounded-lg">
+                            Remove
                         </button>
 
                     </div>

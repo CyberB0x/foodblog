@@ -161,29 +161,31 @@ document.addEventListener("DOMContentLoaded", () => {
 // =========================
 function toggleFavorite(id) {
     const btn = document.getElementById(`fav-${id}`);
+    const text = btn.querySelector(".text");
 
     fetch(`/favorite/${id}/`, {
         method: "POST",
         headers: {
-            "X-CSRFToken": getCSRFToken()
+            "X-CSRFToken": getCSRFToken(),
+            "X-Requested-With": "XMLHttpRequest"
         }
     })
     .then(res => res.json())
     .then(data => {
-
-        const text = btn.querySelector(".text");
+        console.log(data);
 
         if (data.status === "added") {
-            btn.classList.add("active");
-            text.innerText = "Saved";
+            btn.classList.remove("bg-red-500");
+            btn.classList.add("bg-green-500");
+            text.innerText = "Favorited ✓";
         } else {
-            btn.classList.remove("active");
+            btn.classList.remove("bg-green-500");
+            btn.classList.add("bg-red-500");
             text.innerText = "Favorite";
         }
-
-    });
+    })
+    .catch(err => console.log(err));
 }
-
 
 function togglePassword(id, el) {
     const input = document.getElementById(id);
@@ -204,16 +206,28 @@ function togglePassword(id, el) {
 
 //Save btn
 function saveRecipe(id) {
-  fetch(`/save/${id}/`, {
-    method: "POST",
-    headers: {
-      "X-CSRFToken": csrftoken
-    }
-  })
-  .then(res => res.json())
-  .then(data => {
-    console.log(data.saved)
-  })
+    const btn = document.getElementById(`save-${id}`);
+
+    fetch(`/save/${id}/`, {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": getCSRFToken(),
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+
+        if (data.saved) {
+            btn.innerText = "Saved ✓";
+            btn.classList.add("bg-green-500");
+        } else {
+            btn.innerText = "Save";
+            btn.classList.remove("bg-green-500");
+        }
+
+    })
+    .catch(err => console.log(err));
 }
 
 // Profile menu

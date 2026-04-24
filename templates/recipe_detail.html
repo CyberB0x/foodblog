@@ -27,20 +27,18 @@
         </button>
 
         <!-- FAVORITE -->
-        <button
-            onclick="toggleFavorite({{ recipe.id }})"
-            id="fav-{{ recipe.id }}"
-            class="favorite-btn flex items-center gap-2 px-4 py-2 rounded-xl transition
-            {% if recipe.id in favorites %}active{% endif %}">
+        <button id="fav-{{ recipe.id }}"
+        onclick="toggleFavorite({{ recipe.id }})"
+        class="px-4 py-2 bg-red-500 text-white rounded-xl">
 
-            <span class="icon"></span>
-            <span class="text">
-                {% if recipe.id in favorites %}
-                    Saved
-                {% else %}
-                    Favorite
-                {% endif %}
-            </span>
+            <span class="text">Favorite</span>
+
+        </button>
+
+        <button id="save-{{ recipe.id }}"
+        onclick="saveRecipe({{ recipe.id }})"
+        class="px-4 py-2 bg-blue-500 text-white rounded-xl">
+            Save
         </button>
 
     </div>
