@@ -19,27 +19,60 @@
 
         <!-- LIKE -->
         <button onclick="likeRecipe({{ recipe.id }})"
-        class="flex items-center gap-2 relative">
+                class="flex items-center gap-2">
+
             <i id="heart-{{ recipe.id }}"
-               class="fa-regular fa-heart text-xl text-red-500 transition duration-200">
-            </i>
-            <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span>
+               class="fa-regular fa-heart text-xl text-red-500"></i>
+
+            <span id="likes-{{ recipe.id }}">
+                {{ recipe.likes }}
+            </span>
+
         </button>
 
         <!-- FAVORITE -->
         <button id="fav-{{ recipe.id }}"
-        onclick="toggleFavorite({{ recipe.id }})"
-        class="px-4 py-2 bg-red-500 text-white rounded-xl">
+                onclick="toggleFavorite({{ recipe.id }})"
+                class="px-4 py-2 rounded-xl flex items-center gap-2
+                {% if recipe.id in favorite_recipes_ids %}
+                    bg-red-600
+                {% else %}
+                    bg-red-500
+                {% endif %} text-white transition">
 
-            <span class="text">Favorite</span>
+            <i class="fa-solid fa-heart"></i>
 
-        </button>
+            <span>
+                {% if recipe.id in favorite_recipes_ids %}
+                    Favorited
+                {% else %}
+                    Favorite
+                {% endif %}
+            </span>
 
-        <button id="save-{{ recipe.id }}"
-        onclick="saveRecipe({{ recipe.id }})"
-        class="px-4 py-2 bg-blue-500 text-white rounded-xl">
-            Save
-        </button>
+        <form action="{% url 'save_recipe' recipe.id %}" method="POST">
+            {% csrf_token %}
+
+            <button type="submit"
+                class="px-4 py-2 rounded-xl flex items-center gap-2 transition
+                {% if recipe.id in saved_recipes %}
+                    bg-yellow-500 text-black
+                {% else %}
+                    bg-blue-500 text-white
+                {% endif %}">
+
+                <i class="fa-solid fa-bookmark"></i>
+
+                <span>
+                    {% if recipe.id in saved_recipes %}
+                        Saved
+                    {% else %}
+                        Save
+                    {% endif %}
+                </span>
+
+            </button>
+        </form>
 
     </div>
 

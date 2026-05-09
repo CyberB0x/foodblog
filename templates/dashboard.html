@@ -5,113 +5,295 @@
 
     <!-- ================= LEFT SIDEBAR ================= -->
     <aside class="bg-secondary p-6 rounded-2xl shadow h-fit">
-        <h2 class="text-xl font-bold mb-6">🍰 FoodBlog</h2>
+
+        <h2 class="text-xl font-bold mb-6 text-accent">
+            🍰 FoodBlog
+        </h2>
 
         <ul class="space-y-4 text-gray-300">
-            <li class="text-accent font-semibold">🏠 Dashboard</li>
-            <li class="hover:text-accent cursor-pointer">📖 Recipes</li>
-            <li class="hover:text-accent cursor-pointer">⭐ Saved</li>
-            <li class="hover:text-accent cursor-pointer">⚙️ Settings</li>
+
+            <!-- DASHBOARD -->
+            <li>
+                <a href="{% url 'dashboard' %}"
+                   class="hover:text-accent transition">
+                    🏠 Dashboard
+                </a>
+            </li>
+
+            <!-- RECIPES -->
+            <li>
+                <a href="{% url 'recipes' %}"
+                   class="hover:text-accent transition">
+                    📖 Recipes
+                </a>
+            </li>
+
+            <!-- SAVED -->
+            <li>
+                <a href="#saved"
+                   class="flex justify-between items-center
+                   {% if total_saved > 0 %}
+                        text-accent font-semibold
+                   {% else %}
+                        hover:text-accent
+                   {% endif %}">
+
+                    <span>🔖 Saved Recipes</span>
+
+                    <span class="bg-accent text-black px-2 py-0.5 rounded-full text-xs">
+                        {{ total_saved }}
+                    </span>
+                </a>
+            </li>
+
+            <!-- FAVORITES -->
+            <li>
+                <a href="#favorites"
+                   class="flex justify-between items-center
+                   {% if favorite_count > 0 %}
+                        text-red-400 font-semibold
+                   {% else %}
+                        hover:text-accent
+                   {% endif %}">
+
+                    <span>❤️ Favorites</span>
+
+                    <span class="bg-red-500 text-white px-2 py-0.5 rounded-full text-xs">
+                        {{ favorite_count }}
+                    </span>
+                </a>
+            </li>
+
+            <!-- SETTINGS -->
+            <li class="hover:text-accent cursor-pointer">
+                ⚙️ Settings
+            </li>
+
         </ul>
+
     </aside>
 
     <!-- ================= MAIN CONTENT ================= -->
     <main class="col-span-2">
 
-        <!-- TITLE -->
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">
-                Saved Recipes ({{ total_saved }})
-            </h1>
-        </div>
+        <!-- ================= SAVED ================= -->
+        <section id="saved">
 
-        <!-- ================= CATEGORY FILTER ================= -->
-        <div class="flex gap-3 mb-6 flex-wrap">
+            <div class="flex justify-between items-center mb-6">
 
-            <a href="?"
-               class="px-4 py-2 rounded-full border transition
-               {% if not current_category %}bg-accent text-black{% endif %}">
-               All
-            </a>
+                <h1 class="text-2xl font-bold">
+                    🔖 Saved Recipes ({{ total_saved }})
+                </h1>
 
-            {% for cat in categories %}
-                <a href="?category={{ cat.slug }}"
+            </div>
+
+            <!-- CATEGORY FILTER -->
+            <div class="flex gap-3 mb-6 flex-wrap">
+
+                <a href="?"
                    class="px-4 py-2 rounded-full border transition
-                   {% if current_category == cat.slug %}bg-accent text-black{% endif %}">
-                    {{ cat.name }}
+                   {% if not current_category %}
+                        bg-accent text-black
+                   {% endif %}">
+                    All
                 </a>
-            {% endfor %}
 
-        </div>
+                {% for cat in categories %}
 
-        <!-- ================= RECIPES GRID ================= -->
-        {% if saved_recipes %}
-        <div class="grid grid-cols-2 gap-6">
+                    <a href="?category={{ cat.slug }}"
+                       class="px-4 py-2 rounded-full border transition
+                       {% if current_category == cat.slug %}
+                            bg-accent text-black
+                       {% endif %}">
 
-            {% for item in saved_recipes %}
-            <div class="recipe-card bg-secondary rounded-2xl shadow hover:scale-105 transition overflow-hidden">
+                        {{ cat.name }}
 
-                <img src="{{ item.recipe.image.url }}"
-                     class="h-40 w-full object-cover">
+                    </a>
 
-                <div class="p-4">
+                {% endfor %}
 
-                    <h3 class="font-semibold text-lg">
-                        {{ item.recipe.title }}
-                    </h3>
+            </div>
 
-                    <p class="text-sm text-gray-400 mt-1">
-                        {{ item.recipe.category.name }}
-                    </p>
+            <!-- SAVED RECIPES -->
+            {% if saved_recipes %}
 
-                    <!-- ACTIONS -->
-                    <div class="flex justify-between items-center mt-4">
+            <div class="grid grid-cols-2 gap-6">
 
-                        <!-- OPEN -->
-                        <a href="{% url 'recipe_detail' item.recipe.id %}"
-                           class="text-accent text-sm hover:underline">
-                            View →
-                        </a>
+                {% for item in saved_recipes %}
 
-                        <!-- REMOVE FAVORITE -->
-                        <button onclick="saveRecipe({{ item.recipe.id }})"
-                                id="save-{{ item.recipe.id }}"
-                                class="text-sm bg-red-500 px-3 py-1 rounded-lg">
-                            Remove
-                        </button>
+                <div class="recipe-card bg-secondary rounded-2xl shadow hover:scale-105 transition overflow-hidden">
+
+                    <!-- IMAGE -->
+                    <div class="relative">
+
+                        <img src="{{ item.recipe.image.url }}"
+                             class="h-40 w-full object-cover">
+
+                        <!-- SAVED BADGE -->
+                        <div class="absolute top-3 right-3 bg-black/70 px-2 py-1 rounded-full text-xs">
+                            🔖 Saved
+                        </div>
+
+                    </div>
+
+                    <!-- CONTENT -->
+                    <div class="p-4">
+
+                        <h3 class="font-semibold text-lg">
+                            {{ item.recipe.title }}
+                        </h3>
+
+                        <p class="text-sm text-gray-400 mt-1">
+                            {{ item.recipe.category.name }}
+                        </p>
+
+                        <!-- ACTIONS -->
+                        <div class="flex justify-between items-center mt-4">
+
+                            <a href="{% url 'recipe_detail' item.recipe.id %}"
+                               class="text-accent text-sm hover:underline">
+                                View →
+                            </a>
+
+                            <form action="{% url 'save_recipe' item.recipe.id %}"
+                                  method="POST">
+
+                                {% csrf_token %}
+
+                                <button type="submit"
+                                        class="text-sm bg-red-500 hover:bg-red-600 transition px-3 py-1 rounded-lg text-white">
+
+                                    Remove
+
+                                </button>
+
+                            </form>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-            </div>
-            {% endfor %}
+                {% endfor %}
 
-        </div>
-        {% else %}
+            </div>
+
+            {% else %}
+
             <p class="text-gray-400 mt-10 text-center">
                 You have no saved recipes yet 😢
             </p>
-        {% endif %}
 
-        <!-- ================= PAGINATION ================= -->
-        <div class="mt-8 flex justify-center gap-2">
-
-            {% if saved_recipes.has_previous %}
-                <a href="?page={{ saved_recipes.previous_page_number }}"
-                   class="px-3 py-1 bg-secondary rounded">Prev</a>
             {% endif %}
 
-            <span class="px-3 py-1 bg-accent text-black rounded">
-                {{ saved_recipes.number }}
-            </span>
+            <!-- PAGINATION -->
+            <div class="mt-8 flex justify-center gap-2">
 
-            {% if saved_recipes.has_next %}
-                <a href="?page={{ saved_recipes.next_page_number }}"
-                   class="px-3 py-1 bg-secondary rounded">Next</a>
+                {% if saved_recipes.has_previous %}
+
+                    <a href="?page={{ saved_recipes.previous_page_number }}"
+                       class="px-3 py-1 bg-secondary rounded hover:bg-accent hover:text-black transition">
+
+                        Prev
+
+                    </a>
+
+                {% endif %}
+
+                <span class="px-3 py-1 bg-accent text-black rounded">
+                    {{ saved_recipes.number }}
+                </span>
+
+                {% if saved_recipes.has_next %}
+
+                    <a href="?page={{ saved_recipes.next_page_number }}"
+                       class="px-3 py-1 bg-secondary rounded hover:bg-accent hover:text-black transition">
+
+                        Next
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+        <!-- ================= FAVORITES ================= -->
+        <section id="favorites" class="mt-16">
+
+            <h2 class="text-2xl font-bold mb-6">
+                ❤️ Favorite Recipes ({{ favorite_count }})
+            </h2>
+
+            {% if favorite_recipes %}
+
+            <div class="grid grid-cols-2 gap-6">
+
+                {% for item in favorite_recipes %}
+
+                <div class="recipe-card bg-secondary rounded-2xl shadow hover:scale-105 transition overflow-hidden">
+
+                    <!-- IMAGE -->
+                    <div class="relative">
+
+                        <img src="{{ item.recipe.image.url }}"
+                             class="h-40 w-full object-cover">
+
+                        <!-- FAVORITE BADGE -->
+                        <div class="absolute top-3 right-3 bg-red-500 px-2 py-1 rounded-full text-xs">
+                            ❤️ Favorite
+                        </div>
+
+                    </div>
+
+                    <!-- CONTENT -->
+                    <div class="p-4">
+
+                        <h3 class="font-semibold text-lg">
+                            {{ item.recipe.title }}
+                        </h3>
+
+                        <p class="text-sm text-gray-400 mt-1">
+                            {{ item.recipe.category.name }}
+                        </p>
+
+                        <!-- ACTIONS -->
+                        <div class="flex justify-between items-center mt-4">
+
+                            <a href="{% url 'recipe_detail' item.recipe.id %}"
+                               class="text-accent text-sm hover:underline">
+                                View →
+                            </a>
+
+                            <button onclick="toggleFavorite({{ item.recipe.id }})"
+                                    id="fav-{{ item.recipe.id }}"
+                                    class="text-sm bg-red-500 hover:bg-red-600 transition px-3 py-1 rounded-lg text-white">
+
+                                Remove
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+            {% else %}
+
+            <p class="text-gray-400 text-center mt-6">
+                No favorite recipes yet ❤️
+            </p>
+
             {% endif %}
 
-        </div>
+        </section>
 
     </main>
 
@@ -120,41 +302,82 @@
 
         <!-- USER -->
         <div class="flex items-center gap-3 mb-6">
-            <div class="w-12 h-12 bg-accent text-black rounded-full flex items-center justify-center font-bold">
+
+            <div class="w-12 h-12 bg-accent text-black rounded-full flex items-center justify-center font-bold text-lg">
                 {{ request.user.username|first|upper }}
             </div>
+
             <div>
-                <p class="font-semibold">{{ request.user.username }}</p>
-                <p class="text-sm text-gray-400">Food Lover</p>
+
+                <p class="font-semibold">
+                    {{ request.user.username }}
+                </p>
+
+                <p class="text-sm text-gray-400">
+                    Food Lover 🍴
+                </p>
+
             </div>
+
+        </div>
+
+        <!-- STATS -->
+        <div class="space-y-4 mb-8">
+
+            <div class="bg-primary p-4 rounded-xl flex justify-between">
+
+                <span>🔖 Saved</span>
+
+                <span class="font-bold">
+                    {{ total_saved }}
+                </span>
+
+            </div>
+
+            <div class="bg-primary p-4 rounded-xl flex justify-between">
+
+                <span>❤️ Favorites</span>
+
+                <span class="font-bold">
+                    {{ favorite_count }}
+                </span>
+
+            </div>
+
         </div>
 
         <!-- MENU -->
         <ul class="space-y-4 text-gray-300">
-            <li class="hover:text-accent cursor-pointer">⚙️ Settings</li>
-            <li class="hover:text-accent cursor-pointer">🔐 Security</li>
-            <li class="hover:text-accent cursor-pointer">📦 Orders</li>
-            <li class="hover:text-accent cursor-pointer">💬 Messages</li>
-            <li class="hover:text-accent cursor-pointer">❓ Support</li>
+
+            <li class="hover:text-accent cursor-pointer">
+                ⚙️ Settings
+            </li>
+
+            <li class="hover:text-accent cursor-pointer">
+                🔐 Security
+            </li>
+
+            <li class="hover:text-accent cursor-pointer">
+                💬 Messages
+            </li>
+
+            <li class="hover:text-accent cursor-pointer">
+                ❓ Support
+            </li>
 
             <li>
-                <a href="{% url 'logout' %}" class="text-red-400 font-semibold">
+                <a href="{% url 'logout' %}"
+                   class="text-red-400 font-semibold hover:text-red-500 transition">
+
                     🚪 Logout
+
                 </a>
             </li>
+
         </ul>
 
     </aside>
 
 </div>
-
-<!-- ================= STYLES ================= -->
-<style>
-.favorite-btn .icon::before {
-    content: "★";
-    color: #facc15;
-    font-size: 18px;
-}
-</style>
 
 {% endblock %}
