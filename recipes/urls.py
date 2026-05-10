@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views
 from .views import dashboard, profile
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # Pages
@@ -23,3 +25,8 @@ urlpatterns = [
     path("save/<int:recipe_id>/", views.save_recipe, name="save_recipe"),
     path("live-search/", views.live_search, name="live_search"),
 ]
+if settings.DEBUG:
+    urlpatterns += static(
+        settings.MEDIA_URL,
+        document_root=settings.MEDIA_ROOT
+    )
