@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from core.forms import ProfileForm
 
 from .models import (
     Recipe,
@@ -187,6 +188,38 @@ def save_recipe(request, recipe_id):
 
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+
+@login_required
+def settings_view(request):
+
+    profile = request.user.profile
+
+    if request.method == 'POST':
+
+        form = ProfileForm(
+            request.POST,
+            request.FILES,
+            instance=profile
+        )
+
+        if form.is_valid():
+            form.save()
+
+            return redirect('settings')
+
+    else:
+        form = ProfileForm(instance=profile)
+
+    context = {
+        'form': form,
+        'profile': profile,
+    }
+
+    return render(
+        request,
+        "settings.html",
+        context
+    )
 
 # FAVORITE TOGGLE
 @login_required

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-2xl shadow-xl">
+
+    <h1 class="text-3xl font-bold mb-8">
+        Settings ⚙️
+    </h1>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class="mb-6">
+
+            {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}"
+                    class="w-28 h-28 rounded-full object-cover mb-4">
+            {% endif %}
+
+            <label class="block font-semibold mb-2">
+                Avatar
+            </label>
+
+            {{ form.avatar }}
+
+        </div>
+
+        <div class="mb-6">
+
+            <label class="block font-semibold mb-2">
+                Bio
+            </label>
+
+            {{ form.bio }}
+
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            <div>
+                <label class="block font-semibold mb-2">
+                    GitHub
+                </label>
+
+                {{ form.github }}
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-2">
+                    LinkedIn
+                </label>
+
+                {{ form.linkedin }}
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-2">
+                    Instagram
+                </label>
+
+                {{ form.instagram }}
+            </div>
+
+            <div>
+                <label class="block font-semibold mb-2">
+                    YouTube
+                </label>
+
+                {{ form.youtube }}
+            </div>
+
+        </div>
+
+        <div class="mt-6">
+
+            <label class="block font-semibold mb-2">
+                Favorite Cuisine 🍔
+            </label>
+
+            {{ form.favorite_cuisine }}
+
+        </div>
+
+        <button type="submit"
+            class="mt-8 bg-black text-white px-6 py-3 rounded-xl hover:bg-gray-800 transition">
+            Save Changes
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}
