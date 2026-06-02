@@ -7,6 +7,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from core.forms import ProfileForm
+from recipes.models import Profile
 
 from .models import (
     Recipe,
@@ -121,7 +122,20 @@ def logout_view(request):
 # PROFILE
 @login_required
 def profile(request):
-    return render(request, "profile.html")
+
+    profile, created = Profile.objects.get_or_create(
+        user=request.user
+    )
+
+    context = {
+        "profile": profile
+    }
+
+    return render(
+        request,
+        "profile.html",
+        context
+    )
 
 
 # DASHBOARD
@@ -192,7 +206,9 @@ def save_recipe(request, recipe_id):
 @login_required
 def settings_view(request):
 
-    profile = request.user.profile
+    profile, created = Profile.objects.get_or_create(
+        user = request.user
+    )
 
     if request.method == 'POST':
 

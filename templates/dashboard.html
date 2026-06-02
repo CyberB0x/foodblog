@@ -12,13 +12,6 @@
 
         <ul class="space-y-4 text-gray-300">
 
-            <!-- DASHBOARD -->
-            <li>
-                <a href="{% url 'dashboard' %}"
-                   class="hover:text-accent transition">
-                    🏠 Dashboard
-                </a>
-            </li>
 
             <!-- RECIPES -->
             <li>
@@ -62,11 +55,6 @@
                         {{ favorite_count }}
                     </span>
                 </a>
-            </li>
-
-            <!-- SETTINGS -->
-            <li class="hover:text-accent cursor-pointer">
-                ⚙️ Settings
             </li>
 
         </ul>
@@ -348,6 +336,14 @@
 
         <!-- MENU -->
         <ul class="space-y-4 text-gray-300">
+
+            <!-- PROFILE -->
+            <li>
+                <a href="{% url 'profile' %}"
+                   class="hover:text-accent transition">
+                    🏠 Profile
+                </a>
+            </li>
 
             <li class="hover:text-accent cursor-pointer">
                 <a href="{% url 'settings' %}">

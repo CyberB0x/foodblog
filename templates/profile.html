@@ -1,11 +1,94 @@
-<!-- templates/profile.html -->
 {% extends "base.html" %}
 
 {% block content %}
-<div class="max-w-3xl mx-auto mt-10 text-white">
-    <h1 class="text-3xl font-bold mb-4">👤 Profile</h1>
 
-    <p>Username: {{ request.user.username }}</p>
-    <p>Email: {{ request.user.email }}</p>
+<div class="max-w-4xl mx-auto mt-10 bg-white text-black p-8 rounded-2xl shadow-xl">
+
+    <div class="flex items-center gap-6">
+
+        {% if profile.avatar %}
+            <img src="{{ profile.avatar.url }}"
+                 class="w-32 h-32 rounded-full object-cover">
+        {% else %}
+            <div class="w-32 h-32 rounded-full bg-gray-300"></div>
+        {% endif %}
+
+        <div>
+
+            <h1 class="text-3xl font-bold">
+                {{ request.user.username }}
+            </h1>
+
+            <p class="text-gray-600 mt-3">
+                {{ profile.bio }}
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="mt-10">
+
+        <h2 class="text-2xl font-bold mb-4">
+            Social Links
+        </h2>
+
+        <div class="space-y-3">
+
+            {% if profile.github %}
+                <a href="{{ profile.github }}"
+                   target="_blank"
+                   class="block text-blue-600 hover:underline">
+                    GitHub
+                </a>
+            {% endif %}
+
+            {% if profile.linkedin %}
+                <a href="{{ profile.linkedin }}"
+                   target="_blank"
+                   class="block text-blue-600 hover:underline">
+                    LinkedIn
+                </a>
+            {% endif %}
+
+            {% if profile.instagram %}
+                <a href="{{ profile.instagram }}"
+                   target="_blank"
+                   class="block text-pink-600 hover:underline">
+                    Instagram
+                </a>
+            {% endif %}
+
+            {% if profile.youtube %}
+                <a href="{{ profile.youtube }}"
+                   target="_blank"
+                   class="block text-red-600 hover:underline">
+                    YouTube
+                </a>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <div class="mt-10">
+
+        <h2 class="text-2xl font-bold mb-2">
+            Favorite Cuisine 🍔
+        </h2>
+
+        <p class="text-lg">
+            {{ profile.favorite_cuisine }}
+        </p>
+        </br>
+
+        <a href="{% url 'dashboard' %}"
+           class="bg-black text-white px-5 py-2 rounded-xl hover:bg-gray-800 transition">
+            ← Dashboard
+        </a>
+
+    </div>
+
 </div>
+
 {% endblock %}
