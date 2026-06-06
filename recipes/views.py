@@ -63,6 +63,8 @@ def home(request):
         "query": query,
         "selected_category": category_slug,
 
+        "categories": Category.objects.all(),
+
         "saved_recipes": saved_recipes,
         "favorite_recipes_ids": favorite_recipes_ids,
     })
@@ -370,11 +372,16 @@ def category_view(request, slug):
 
     recipes = Recipe.objects.filter(
         category=category
-    )
+    ).order_by("-created_at")
+
+    paginator = Paginator(recipes, 12)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
     return render(request, "home.html", {
-
-        "recipes": recipes,
+        "page_obj": page_obj,
+        "categories": Category.objects.all(),
+        "selected_category": slug,
         "category": category,
     })
 

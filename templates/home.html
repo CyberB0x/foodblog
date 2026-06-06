@@ -1,108 +1,253 @@
 {% extends "base.html" %}
+
 {% block content %}
 
-{% if query %}
-<p class="text-gray-400 mb-4">Results for: "{{ query }}"</p>
-{% endif %}
+<div class="flex min-h-screen bg-black text-white">
 
-{% if category %}
-<h2 class="text-2xl font-bold mb-4">Category: {{ category }}</h2>
 
-<a href="/" class="text-accent hover:underline mb-6 inline-block">
-  ← Back to all recipes
-</a>
-{% else %}
-<h2 class="text-3xl font-bold mb-6">Latest Recipes 🍰</h2>
-{% endif %}
+<!-- SIDEBAR -->
+<aside class="hidden lg:flex w-24 flex-col items-center border-r border-zinc-800 fixed h-screen bg-black">
 
-{% if page_obj %}
+    <div class="mt-8">
+        <h1 class="text-4xl font-black text-orange-500">
+            🍴
+        </h1>
+    </div>
 
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <nav class="mt-12 flex flex-col gap-8 text-zinc-400">
 
-  {% for recipe in page_obj %}
-
-  <div class="bg-secondary rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition duration-300">
-
-    <!-- IMAGE -->
-    <div class="relative group">
-      <img src="{{ recipe.image.url }}" class="w-full h-56 object-cover">
-
-      <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
-        <a href="/recipe/{{ recipe.id }}/"
-           class="bg-accent text-black px-4 py-2 rounded-xl font-semibold">
-          View Recipe
+        <a href="/" class="hover:text-orange-500 transition">
+            <i class="fa-solid fa-house text-xl"></i>
         </a>
-      </div>
-    </div>
 
-    <!-- CONTENT -->
-    <div class="p-4">
+        <a href="#" class="hover:text-orange-500 transition">
+            <i class="fa-solid fa-magnifying-glass text-xl"></i>
+        </a>
 
-      <h3 class="text-lg font-bold">{{ recipe.title }}</h3>
+        <a href="#" class="hover:text-orange-500 transition">
+            <i class="fa-solid fa-heart text-xl"></i>
+        </a>
 
-      <div class="text-gray-400 text-sm mt-1">
-        <i class="fa-regular fa-clock" style="color: rgb(250, 146, 0);"></i>
-        {{ recipe.created_at|date:"M d" }}
-      </div>
+        <a href="/dashboard" class="hover:text-orange-500 transition">
+            <i class="fa-solid fa-user text-xl"></i>
+        </a>
 
-      <p class="text-gray-300 text-sm mt-2">
-        {{ recipe.description|truncatewords:12 }}
-      </p>
+    </nav>
 
-      <div class="flex items-center justify-between mt-4 text-gray-400">
+</aside>
 
-        <div class="text-base">
-          <i class="fa-solid fa-heart" style="color: rgb(255, 140, 0);"></i>
-          <span id="likes-{{ recipe.id }}">{{ recipe.likes }}</span>
+<!-- MAIN -->
+<main class="flex-1 lg:ml-24 p-6 lg:p-10">
 
-          <i class="fa-solid fa-comment ml-3" style="color: rgb(255, 140, 0);"></i>
-          <span>{{ recipe.comments.count }}</span>
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-
-  {% endfor %}
+    <!-- SEARCH -->
+<div class="mb-8">
 
 </div>
 
-{% else %}
-<h3 class="text-gray-400">No recipes found 😢</h3>
-{% endif %}
+<!-- CATEGORIES -->
+<div class="flex gap-4 overflow-x-auto mb-8 pb-2">
 
-<!-- PAGINATION (FIXED) -->
-<div class="flex justify-center mt-10 mb-10 space-x-2">
+    {% for cat in categories %}
 
-  {% if page_obj.has_previous %}
-    <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
-       class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
-      Prev
+    <a href="{% url 'category' cat.slug %}" class="flex-shrink-0">
+
+        <div class="w-16 h-16 rounded-full bg-zinc-900 border border-orange-500 flex items-center justify-center">
+
+            <span class="font-bold text-orange-500">
+                {{ cat.name|first }}
+            </span>
+
+        </div>
+
+        <p class="text-xs text-center mt-2">
+            {{ cat.name }}
+        </p>
+
     </a>
-  {% endif %}
 
-  {% for num in page_obj.paginator.page_range %}
+    {% endfor %}
 
-    {% if num == page_obj.number %}
-      <span class="px-4 py-2 bg-red-500 text-white rounded">
-        {{ num }}
-      </span>
-    {% else %}
-      <a href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
-         class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600">
-        {{ num }}
-      </a>
+</div>
+
+<!-- FEATURED RECIPE -->
+{% if page_obj and not query and not selected_category %}
+
+    {% with featured=page_obj.0 %}
+
+    <a href="/recipe/{{ featured.id }}/">
+
+        <div class="relative h-[500px] rounded-3xl overflow-hidden mb-10 group">
+
+            <img
+                src="{{ featured.image.url }}"
+                class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
+            >
+
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+
+            <div class="absolute bottom-8 left-8">
+
+                <p class="uppercase tracking-widest text-orange-400 text-sm mb-2">
+                    Featured Recipe
+                </p>
+
+                <h1 class="text-4xl lg:text-6xl font-black">
+                    {{ featured.title }}
+                </h1>
+
+                <p class="text-zinc-300 mt-4 max-w-xl">
+                    {{ featured.description|truncatewords:20 }}
+                </p>
+
+                <div class="flex gap-6 mt-4 text-sm text-zinc-300">
+
+                    <span>
+                        ❤️ {{ featured.likes }}
+                    </span>
+
+                    <span>
+                        💬 {{ featured.comments.count }}
+                    </span>
+
+                    <span>
+                        {{ featured.created_at|date:"M d" }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </a>
+
+    {% endwith %}
+
     {% endif %}
 
-  {% endfor %}
+    <!-- RECIPES -->
+    {% if page_obj %}
 
-  {% if page_obj.has_next %}
-    <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}"
-       class="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700">
-      Next
-    </a>
-  {% endif %}
+    <div class="columns-1 md:columns-2 xl:columns-4 gap-6">
+
+        {% for recipe in page_obj %}
+
+        <div class="break-inside-avoid mb-6">
+
+            <div class="bg-zinc-900 rounded-3xl overflow-hidden shadow-xl hover:scale-[1.03] transition duration-300">
+
+                <div class="relative group">
+
+                    <img
+                        src="{{ recipe.image.url }}"
+                        class="w-full object-cover"
+                    >
+
+                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+
+                        <a
+                            href="/recipe/{{ recipe.id }}/"
+                            class="bg-orange-500 text-black px-5 py-2 rounded-xl font-bold">
+
+                            View Recipe
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+                <div class="p-5">
+
+                    <h3 class="font-bold text-xl">
+                        {{ recipe.title }}
+                    </h3>
+
+                    <p class="text-zinc-400 text-sm mt-3">
+                        {{ recipe.description|truncatewords:14 }}
+                    </p>
+
+                    <div class="flex justify-between mt-5 text-sm text-zinc-400">
+
+                        <span>
+                            ❤️ {{ recipe.likes }}
+                        </span>
+
+                        <span>
+                            💬 {{ recipe.comments.count }}
+                        </span>
+
+                        <span>
+                            {{ recipe.created_at|date:"M d" }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="text-center py-20">
+
+        <h3 class="text-zinc-400 text-xl">
+            No recipes found 😢
+        </h3>
+
+    </div>
+
+    {% endif %}
+
+    <!-- PAGINATION -->
+    <div class="flex justify-center mt-12 mb-10 gap-2 flex-wrap">
+
+        {% if page_obj.has_previous %}
+        <a
+            href="?page={{ page_obj.previous_page_number }}"
+            class="px-4 py-2 bg-zinc-800 rounded-xl hover:bg-zinc-700">
+            Prev
+        </a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+
+            {% if page_obj.number == num %}
+
+                <span class="px-4 py-2 bg-orange-500 text-black rounded-xl font-bold">
+                    {{ num }}
+                </span>
+
+            {% else %}
+
+                <a
+                    href="?page={{ num }}"
+                    class="px-4 py-2 bg-zinc-800 rounded-xl hover:bg-zinc-700">
+                    {{ num }}
+                </a>
+
+            {% endif %}
+
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a
+            href="?page={{ page_obj.next_page_number }}"
+            class="px-4 py-2 bg-zinc-800 rounded-xl hover:bg-zinc-700">
+            Next
+        </a>
+        {% endif %}
+
+    </div>
+
+</main>
+
 
 </div>
 
