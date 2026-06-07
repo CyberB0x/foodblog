@@ -1,0 +1,68 @@
+<footer class="bg-black text-gray-300 mt-8">
+    <div class="max-w-7xl mx-auto px-6 py-12">
+
+        <div class="grid md:grid-cols-3 gap-10">
+
+            <!-- Brand -->
+            <div>
+                <h2 class="text-2xl font-bold text-white mb-4">
+                    🍽️ FoodBlog
+                </h2>
+
+                <p class="text-gray-400">
+                    Discover delicious recipes, share your culinary creations,
+                    and connect with food lovers from around the world.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+                <h3 class="text-xl font-semibold text-white mb-4">
+                    Quick Links
+                </h3>
+
+                <ul class="space-y-2">
+                    <li>
+                        <a href="{% url 'home' %}"
+                           class="hover:text-white transition">
+                            Home
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'recipes' %}"
+                           class="hover:text-white transition">
+                            Recipes
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'about' %}"
+                           class="hover:text-white transition">
+                            About
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div>
+                <h3 class="text-xl font-semibold text-white mb-4">
+                    Connect
+                </h3>
+
+                <div class="space-y-2">
+                    <p>Email: hello@foodblog.com</p>
+                    <p>Instagram: @foodblog</p>
+                    <p>LinkedIn: FoodBlog</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-500">
+            © 2026 FoodBlog. All rights reserved.
+        </div>
+
+    </div>
+</footer>
