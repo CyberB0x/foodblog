@@ -301,13 +301,19 @@
 
                     <div class="flex flex-col items-center">
 
-                        <div class="w-24 h-24 rounded-full bg-accent
-                                    text-black flex items-center justify-center
-                                    text-4xl font-bold">
+                        {% if request.user.profile.avatar %}
+                            <img src="{{ request.user.profile.avatar.url }}"
+                                 alt="Avatar"
+                                 class="w-24 h-24 rounded-full object-cover border-4 border-accent">
+                        {% else %}
+                            <div class="w-24 h-24 rounded-full bg-accent
+                                        text-black flex items-center justify-center
+                                        text-4xl font-bold">
 
-                            {{ request.user.username|first|upper }}
+                                {{ request.user.username|first|upper }}
 
-                        </div>
+                            </div>
+                        {% endif %}
 
                         <h3 class="font-bold text-xl mt-4">
                             {{ request.user.username }}
