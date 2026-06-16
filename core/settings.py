@@ -12,12 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os
-
-from django.conf.global_settings import LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, AUTHENTICATION_BACKENDS, \
-    X_FRAME_OPTIONS, SECURE_CONTENT_TYPE_NOSNIFF, SECURE_SSL_REDIRECT, SESSION_COOKIE_SECURE, CSRF_COOKIE_SECURE
 from dotenv import load_dotenv
-
-from FoodMap.foodmap.settings import MIDDLEWARE
 
 load_dotenv()
 
@@ -29,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-grry*17x6%k%f^kf@*jz89$+m3jdo2s8-famy-=wx5f5c=*kn2'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = []
 
@@ -49,18 +44,20 @@ INSTALLED_APPS = [
     'axes',
 
     'recipes',
+
     'django.contrib.sites',
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-
     'allauth.socialaccount.providers.google',
 ]
 
 SITE_ID = 1
 
 MIDDLEWARE = [
+    'axes.middleware.AxesMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -69,24 +66,47 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'axes.middleware.AxesMiddleware',
-] + MIDDLEWARE
+]
 
 AUTHENTICATION_BACKENDS = [
     'axes.backends.AxesStandaloneBackend',
-    'jango.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = 1
+AXES_RESET_ON_SUCCESS = True
 
-SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = "DENY"
+
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+
+
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+
+# Email
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_UNIQUE_EMAIL = True
+
+# SMTP
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 ROOT_URLCONF = 'core.urls'
 

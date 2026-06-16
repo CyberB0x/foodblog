@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django_ratelimit.decorators import ratelimit
 
 from core.forms import ProfileForm
 from recipes.models import Profile
@@ -292,6 +293,7 @@ def about(request):
 # =========================
 # RECIPE DETAIL + COMMENTS
 # =========================
+@ratelimit(key='ip', rate='5/m')
 def recipe_detail(request, id):
 
     recipe = get_object_or_404(Recipe, id=id)
@@ -362,6 +364,7 @@ def category_view(request, slug):
 # =========================
 # LIVE SEARCH
 # =========================
+@ratelimit(key='ip', rate='30/m')
 def live_search(request):
 
     query = (request.GET.get("q") or "").strip()
@@ -393,6 +396,7 @@ def live_search(request):
 # LIKE RECIPE (SAFE + ATOMIC)
 # =========================
 @login_required
+@ratelimit(key='user', rate='20/m')
 def like_recipe(request, id):
 
     if request.method != "POST":
