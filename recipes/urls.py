@@ -12,7 +12,6 @@ urlpatterns = [
     path("about/", views.about, name="about"),
 
     #Login urls
-    path("register/", views.register_view, name="register"),
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
     path("profile/", profile, name="profile"),
