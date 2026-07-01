@@ -18,16 +18,40 @@ tailwind.config = {
 // CSRF HELPER
 // =========================
 function getCSRFToken() {
-    return document.cookie
-        .split("; ")
-        .find(row => row.startsWith("csrftoken="))
-        ?.split("=")[1];
+    let cookieValue = null;
+
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+
+            if (cookie.startsWith("csrftoken=")) {
+                cookieValue = decodeURIComponent(
+                    cookie.substring("csrftoken=".length)
+                );
+                break;
+            }
+        }
+    }
+
+    return cookieValue;
 }
 
 
 // =========================
 // LIKE SYSTEM (FIXED)
 // =========================
+console.log("Cookies:", document.cookie);
+console.log("CSRF:", getCSRFToken());
+fetch(`/like/${id}/`, {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+        "X-CSRFToken": getCSRFToken(),
+        "X-Requested-With": "XMLHttpRequest"
+    }
+})
 function likeRecipe(id) {
     const heart = document.getElementById(`heart-${id}`);
     const likesEl = document.getElementById(`likes-${id}`);

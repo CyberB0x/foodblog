@@ -50,29 +50,30 @@
                 {% endif %}
             </span>
 
-        <form action="{% url 'save_recipe' recipe.id %}" method="POST">
-            {% csrf_token %}
+            <form action="{% url 'save_recipe' recipe.id %}" method="POST">
+                {% csrf_token %}
 
-            <button type="submit"
-                class="px-4 py-2 rounded-xl flex items-center gap-2 transition
-                {% if recipe.id in saved_recipes %}
-                    bg-yellow-500 text-black
-                {% else %}
-                    bg-blue-500 text-white
-                {% endif %}">
-
-                <i class="fa-solid fa-bookmark"></i>
-
-                <span>
+                <button type="submit"
+                    class="px-4 py-2 rounded-xl flex items-center gap-2 transition
                     {% if recipe.id in saved_recipes %}
-                        Saved
+                        bg-yellow-500 text-black
                     {% else %}
-                        Save
-                    {% endif %}
-                </span>
+                        bg-blue-500 text-white
+                    {% endif %}">
 
-            </button>
-        </form>
+                    <i class="fa-solid fa-bookmark"></i>
+
+                    <span>
+                        {% if recipe.id in saved_recipes %}
+                            Saved
+                        {% else %}
+                            Save
+                        {% endif %}
+                    </span>
+
+                </button>
+            </form>
+        </button>
 
     </div>
 
