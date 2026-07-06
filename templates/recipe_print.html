@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe.title }} | Print Recipe</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            color: #333;
+            line-height: 1.7;
+            background: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+
+        .recipe-image {
+            width: 100%;
+            max-height: 450px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+
+        .info-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .info-card strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+            margin-top: 35px;
+        }
+
+        ul {
+            padding-left: 22px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        ol li {
+            margin-bottom: 14px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .print-btn {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 12px 24px;
+            border: none;
+            background: #28a745;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .print-btn:hover {
+            background: #218838;
+        }
+
+        @media print {
+
+            .print-btn {
+                display: none;
+            }
+
+            body {
+                margin: 0;
+                padding: 20px;
+            }
+
+            a {
+                color: black;
+                text-decoration: none;
+            }
+
+            .info-card {
+                break-inside: avoid;
+            }
+
+            img {
+                break-inside: avoid;
+            }
+
+            h2 {
+                break-after: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<button class="print-btn" onclick="window.print()">
+    🖨 Print Recipe
+</button>
+
+<div class="logo">
+    🍴 Food Blog
+</div>
+
+<h1>{{ recipe.title }}</h1>
+
+{% if recipe.image %}
+<img src="{{ recipe.image.url }}"
+     alt="{{ recipe.title }}"
+     class="recipe-image">
+{% endif %}
+
+<div class="info-grid">
+
+    <div class="info-card">
+        <strong>Prep Time</strong>
+        {{ recipe.prep_time }}
+    </div>
+
+    <div class="info-card">
+        <strong>Cook Time</strong>
+        {{ recipe.cook_time }}
+    </div>
+
+    <div class="info-card">
+        <strong>Servings</strong>
+        {{ recipe.servings }}
+    </div>
+
+    <div class="info-card">
+        <strong>Category</strong>
+        {{ recipe.category }}
+    </div>
+
+</div>
+
+<h2>Ingredients</h2>
+
+<div>
+    {{ recipe.ingredients|linebreaks }}
+</div>
+
+<h2>Instructions</h2>
+
+<div>
+    {{ recipe.instructions|linebreaks }}
+</div>
+
+<div class="footer">
+
+    <p>
+        Printed on:
+        {% now "F j, Y H:i" %}
+    </p>
+
+    <p>
+        Source:
+        {{ request.build_absolute_uri }}
+    </p>
+
+</div>
+
+</body>
+</html>
+
+{% endblock %}

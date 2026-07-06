@@ -146,6 +146,81 @@
 
     <hr class="my-8 border-gray-700">
 
+
+    <!--Share-->
+        <div class="share-section mt-5">
+
+            <h5 class="mb-3">
+                <i class="bi bi-share-fill"></i>
+                Share this recipe
+            </h5>
+
+            <div class="share-buttons">
+
+                <a class="share-btn facebook"
+                   href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+                   target="_blank">
+
+                    <i class="fa-brands fa-facebook fa-2xl" style="color: rgb(116, 192, 252);"></i>
+                </a>
+
+                <a class="share-btn twitter"
+                   href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ recipe.title }}"
+                   target="_blank">
+
+                    <i class="fa-brands fa-square-x-twitter fa-2xl" style="color: rgb(116, 192, 252);"></i>
+                </a>
+
+                <a class="share-btn linkedin"
+                   href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}"
+                   target="_blank">
+
+                    <i class="fa-brands fa-linkedin fa-2xl" style="color: rgb(29, 108, 231);"></i>
+                </a>
+
+                <a class="share-btn pinterest"
+                   href="https://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri }}"
+                   target="_blank">
+
+                    <i class="fa-brands fa-pinterest fa-2xl" style="color: rgb(231, 49, 29);"></i>
+                </a>
+
+                <a class="share-btn telegram"
+                   href="https://t.me/share/url?url={{ request.build_absolute_uri }}&text={{ recipe.title }}"
+                   target="_blank">
+
+                    <i class="fa-brands fa-telegram fa-2xl" style="color: rgb(116, 192, 252);"></i>
+                </a>
+
+                <a class="share-btn whatsapp"
+                   href="https://api.whatsapp.com/send?text={{ recipe.title }} {{ request.build_absolute_uri }}"
+                   target="_blank">
+
+                    <i class="fa-brands fa-whatsapp fa-2xl" style="color: rgb(7, 232, 70);"></i>
+                </a>
+
+                <button class="share-btn copy" onclick="copyRecipeLink()">
+
+                    <i class="fa-solid fa-link fa-2xl" style="color: rgb(255, 212, 59);"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </br>
+
+    <!--Print recipe -->
+    <div class="recipe-actions">
+        <button onclick="window.print()" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-print fa-2xl" style="color: rgb(99, 230, 190);"></i>
+        </button>
+
+    </div>
+
+    </br>
+
     <!-- COMMENTS -->
     <h3 class="text-2xl font-bold mb-4">
         Comments
@@ -184,6 +259,15 @@
 </div>
 
 <script>
+
+function copyRecipeLink() {
+
+    navigator.clipboard.writeText(window.location.href);
+
+    alert("Recipe link copied!");
+
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const stars = document.querySelectorAll(".star");

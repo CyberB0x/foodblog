@@ -444,3 +444,8 @@ def rate_recipe(request, pk):
         "your_rating": rating.stars,
     })
 
+# Print
+def recipe_print(request, pk):
+    recipe = get_object_or_404(Recipe, pk=pk)
+
+    return render(request, "recipe_print.html",{"recipe":recipe})
