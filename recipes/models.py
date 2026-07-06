@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from sqlalchemy import false
 from .validators import validate_avatar
+from django.db.models import Avg
 
 
 class Category(models.Model):
@@ -22,6 +23,17 @@ class Recipe(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     likes = models.PositiveSmallIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def average_rating(self):
+        avg = self.ratings.aggregate(
+            Avg("stars")
+        )["stars__avg"]
+        return round(avg or 0, 1)
+
+    @property
+    def rating_count(self):
+        return self.ratings.count()
 
     def __str__(self):
         return self.title
@@ -114,3 +126,22 @@ class Comment(models.Model):
 
 
 
+#Rate
+class Rating(models.Model):
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name="ratings"
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    stars = models.PositiveSmallIntegerField()
+
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together=("recipe", "user")

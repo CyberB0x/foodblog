@@ -52,6 +52,7 @@ fetch(`/like/${id}/`, {
         "X-Requested-With": "XMLHttpRequest"
     }
 })
+
 function likeRecipe(id) {
     const heart = document.getElementById(`heart-${id}`);
     const likesEl = document.getElementById(`likes-${id}`);
@@ -269,6 +270,23 @@ if (profileBtn) {
       profileMenu.classList.add("hidden");
     }
   });
+}
+
+
+function showRatingToast() {
+
+    const toast = document.getElementById("rating-toast");
+
+    toast.classList.remove("opacity-0", "pointer-events-none");
+    toast.classList.add("opacity-100");
+
+    setTimeout(() => {
+
+        toast.classList.remove("opacity-100");
+        toast.classList.add("opacity-0", "pointer-events-none");
+
+    }, 2500);
+
 }
 
 console.log("MAIN JS LOADED 🔥");
