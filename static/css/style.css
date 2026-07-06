@@ -22,3 +22,34 @@ html{
 .recipe-card:hover img{
     transform:scale(1.08);
 }
+
+.recipe-rating{
+    margin:25px 0;
+}
+
+.stars{
+    display:flex;
+    gap:6px;
+    margin-bottom:10px;
+}
+
+.star{
+    font-size:32px;
+    color:#555;
+    cursor:pointer;
+    transition:all .25s ease;
+    user-select:none;
+}
+
+.star:hover{
+    transform:scale(1.15);
+}
+
+.star.active{
+    color:#ffc107;
+}
+
+.rating-info{
+    color:#ddd;
+    font-size:15px;
+}

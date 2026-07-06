@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django_ratelimit.decorators import ratelimit
+from django.db.models import Avg
 
 from core.forms import ProfileForm
 from recipes.models import Profile
@@ -15,7 +16,8 @@ from .models import (
     Category,
     Comment,
     SavedRecipe,
-    FavoriteRecipe
+    FavoriteRecipe,
+    Rating
 )
 
 
@@ -404,3 +406,41 @@ def like_recipe(request, id):
         "likes": recipe.likes,
         "liked": True
     })
+
+# Rating
+@login_required
+def rate_recipe(request, pk):
+    if request.method != "POST":
+        return JsonResponse({"success": False}, status=400)
+
+    recipe = get_object_or_404(Recipe, pk=pk)
+
+    try:
+        stars = int(request.POST.get("stars"))
+    except (TypeError, ValueError):
+        return JsonResponse(
+            {"success": False, "message": "Invalid rating"},
+            status=400
+        )
+
+    if stars < 1 or stars > 5:
+        return JsonResponse(
+            {"success": False, "message": "Rating must be between 1 and 5"},
+            status=400
+        )
+
+    rating, created = Rating.objects.update_or_create(
+        recipe=recipe,
+        user=request.user,
+        defaults={"stars": stars},
+    )
+
+    average = recipe.ratings.aggregate(avg=Avg("stars"))["avg"] or 0
+
+    return JsonResponse({
+        "success": True,
+        "average": round(average, 1),
+        "count": recipe.ratings.count(),
+        "your_rating": rating.stars,
+    })
+

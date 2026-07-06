@@ -1,448 +1,256 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="max-w-6xl mx-auto px-6 py-8">
+<div class="max-w-4xl mx-auto">
 
-    <!-- HERO -->
-    <div class="relative overflow-hidden rounded-3xl shadow-2xl">
-
+    <!-- IMAGE -->
+    <div class="relative rounded-2xl overflow-hidden shadow-lg">
         <img src="{{ recipe.image.url }}"
-             class="w-full h-[420px] object-cover">
+             class="w-full h-80 object-cover">
 
-        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-
-        <div class="absolute bottom-8 left-8">
-
-            <h1 class="text-5xl font-extrabold text-white drop-shadow-lg">
-                {{ recipe.title }}
-            </h1>
-
+        <!-- overlay info -->
+        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+            <h1 class="text-3xl font-bold">{{ recipe.title }}</h1>
         </div>
-
     </div>
 
-    <!-- ACTION BAR -->
-    <div class="mt-6 bg-secondary rounded-2xl shadow-lg p-5">
-
-        <div class="flex flex-wrap items-center justify-between gap-6">
-
-            <!-- LEFT -->
-
-            <div class="flex items-center gap-8">
-
-                <!-- LIKE -->
-
-                <button
-                    onclick="likeRecipe({{ recipe.id }})"
-                    class="flex items-center gap-2 hover:scale-105 transition">
-
-                    <i
-                        id="heart-{{ recipe.id }}"
-                        class="fa-regular fa-heart text-red-500 text-2xl">
-                    </i>
-
-                    <span
-                        id="likes-{{ recipe.id }}"
-                        class="text-lg font-semibold">
-
-                        {{ recipe.likes }}
-
-                    </span>
-
-                    <span class="text-gray-400">
-
-                        Likes
-
-                    </span>
-
-                </button>
-
-                <!-- RATING -->
-
-                <div>
-
-                    <div class="text-yellow-400 text-xl tracking-wide">
-
-                        ★★★★★
-
-                    </div>
-
-                    <div class="flex items-center gap-2 mt-1">
-
-                        <span class="font-semibold">
-
-                            {{ recipe.average_rating }}/5
-
-                        </span>
-
-                        <span class="text-gray-400 text-sm">
-
-                            ({{ recipe.rating_count }} ratings)
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            <!-- RIGHT -->
-
-            <div class="flex items-center gap-3">
-
-                <!-- FAVORITE -->
-
-                <button
-                    id="fav-{{ recipe.id }}"
-                    onclick="toggleFavorite({{ recipe.id }})"
-
-                    class="px-5 py-2 rounded-xl flex items-center gap-2
-
-                    {% if recipe.id in favorite_recipes_ids %}
-                        bg-red-600
-                    {% else %}
-                        bg-red-500
-                    {% endif %}
-
-                    text-white hover:opacity-90 transition">
-
-                    <i class="fa-solid fa-heart"></i>
-
-                    <span>
-
-                        {% if recipe.id in favorite_recipes_ids %}
-                            Favorited
-                        {% else %}
-                            Favorite
-                        {% endif %}
-
-                    </span>
-
-                </button>
-
-                <!-- SAVE -->
-
-                <form
-                    action="{% url 'save_recipe' recipe.id %}"
-                    method="POST">
-
-                    {% csrf_token %}
-
-                    <button
-                        type="submit"
-
-                        class="px-5 py-2 rounded-xl flex items-center gap-2
-
-                        {% if recipe.id in saved_recipes %}
-                            bg-yellow-500 text-black
-                        {% else %}
-                            bg-blue-600 text-white
-                        {% endif %}
-
-                        hover:opacity-90 transition">
-
-                        <i class="fa-solid fa-bookmark"></i>
-
-                        <span>
-
-                            {% if recipe.id in saved_recipes %}
-                                Saved
-                            {% else %}
-                                Save
-                            {% endif %}
-
-                        </span>
-
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-
-    </div>
-
-        <!-- DESCRIPTION -->
-    <div class="bg-secondary rounded-3xl p-8 shadow-lg">
-
-        <div class="flex items-center gap-3 mb-5">
-
-            <i class="fa-solid fa-file-lines text-orange-400 text-2xl"></i>
-
-            <h2 class="text-3xl font-bold">
-                Description
-            </h2>
-
-        </div>
-
-        <p class="text-gray-300 leading-8 text-lg">
-            {{ recipe.description }}
-        </p>
-
-    </div>
-
-    <!-- INGREDIENTS -->
-
-    <div class="bg-secondary rounded-3xl p-8 shadow-lg">
-
-        <div class="flex items-center gap-3 mb-5">
-
-            <i class="fa-solid fa-bowl-food text-green-400 text-2xl"></i>
-
-            <h2 class="text-3xl font-bold">
-
-                Ingredients
-
-            </h2>
-
-        </div>
-
-        <div class="text-gray-300 leading-8 whitespace-pre-line">
-
-            {{ recipe.ingredients }}
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- INSTRUCTIONS -->
-
-<div class="bg-secondary rounded-3xl p-8 shadow-lg mt-6">
-
-    <div class="flex items-center gap-3 mb-6">
-
-        <i class="fa-solid fa-utensils text-yellow-400 text-2xl"></i>
-
-        <h2 class="text-3xl font-bold">
-
-            Instructions
-
-        </h2>
-
-    </div>
-
-    <div class="text-gray-300 leading-9 whitespace-pre-line text-lg">
-
-        {{ recipe.instructions }}
-
-    </div>
-
-</div>
-
-{% if recipe.get_youtube_embed_url %}
-
-<!-- VIDEO -->
-
-<div class="bg-secondary rounded-3xl p-8 shadow-lg mt-6">
-
-    <div class="flex items-center gap-3 mb-6">
-
-        <i class="fa-brands fa-youtube text-red-500 text-2xl"></i>
-
-        <h2 class="text-3xl font-bold">
-
-            Video Tutorial
-
-        </h2>
-
-    </div>
-
-    <div class="overflow-hidden rounded-2xl shadow-xl">
-
-        <iframe
-
-            class="w-full aspect-video"
-
-            src="{{ recipe.get_youtube_embed_url }}"
-
-            allowfullscreen>
-
-        </iframe>
-
-    </div>
-
-</div>
-
-<!-- COMMENTS -->
-<div class="bg-secondary rounded-3xl p-8 shadow-lg mt-8">
-
-    <div class="flex items-center justify-between mb-8">
-
-        <h2 class="text-3xl font-bold flex items-center gap-3">
-
-            <i class="fa-regular fa-comments text-orange-400"></i>
-
-            Comments
-
-        </h2>
-
-        <span class="bg-primary px-4 py-2 rounded-full text-sm text-gray-300">
-
-            {{ comments|length }} Comments
-
-        </span>
-
-    </div>
-
-    {% if comments %}
-
-        <div class="space-y-5">
-
-            {% for comment in comments %}
-
-            <div class="bg-primary rounded-2xl p-5">
-
-                <div class="flex items-center justify-between">
-
-                    <h4 class="font-bold text-accent">
-
-                        {{ comment.name }}
-
-                    </h4>
-
-                    <span class="text-xs text-gray-500">
-
-                        {{ comment.created_at|date:"M d, Y" }}
-
-                    </span>
-
-                </div>
-
-                <p class="text-gray-300 mt-3 leading-7">
-
-                    {{ comment.text }}
-
-                </p>
-
-            </div>
-
-            {% endfor %}
-
-        </div>
-
-    {% else %}
-
-        <div class="text-center py-12">
-
-            <i class="fa-regular fa-comment-dots text-6xl text-gray-600 mb-4"></i>
-
-            <h3 class="text-xl font-semibold">
-
-                No comments yet
-
-            </h3>
-
-            <p class="text-gray-400 mt-2">
-
-                Be the first to leave a comment.
-
-            </p>
-
-        </div>
-
-    {% endif %}
-
-</div>
-
-<!-- ADD COMMENT -->
-
-<div class="bg-secondary rounded-3xl p-8 shadow-lg mt-8">
-
-    <h2 class="text-3xl font-bold mb-6">
-
-        Leave a Comment
-
-    </h2>
-
-    <form method="POST" class="space-y-5">
-
-        {% csrf_token %}
-
-        <input
-            type="text"
-            name="name"
-            placeholder="Your name"
-            class="w-full bg-primary rounded-xl p-4 outline-none focus:ring-2 focus:ring-orange-400">
-
-        <textarea
-            name="text"
-            rows="5"
-            placeholder="Write your comment..."
-            class="w-full bg-primary rounded-xl p-4 outline-none focus:ring-2 focus:ring-orange-400"></textarea>
-
-        <button
-            class="bg-orange-500 hover:bg-orange-600 transition px-8 py-3 rounded-xl font-semibold">
-
-            <i class="fa-solid fa-paper-plane mr-2"></i>
-
-            Post Comment
+    <!-- ACTIONS -->
+    <div class="flex gap-4 mt-4">
+
+        <!-- LIKE -->
+        <button onclick="likeRecipe({{ recipe.id }})"
+                class="flex items-center gap-2">
+
+            <i id="heart-{{ recipe.id }}"
+               class="fa-regular fa-heart text-xl text-red-500"></i>
+
+            <span id="likes-{{ recipe.id }}">
+                {{ recipe.likes }}
+            </span>
 
         </button>
 
-    </form>
+        <!-- FAVORITE -->
+        <button id="fav-{{ recipe.id }}"
+                onclick="toggleFavorite({{ recipe.id }})"
+                class="px-4 py-2 rounded-xl flex items-center gap-2
+                {% if recipe.id in favorite_recipes_ids %}
+                    bg-red-600
+                {% else %}
+                    bg-red-500
+                {% endif %} text-white transition">
 
-</div>
+            <i class="fa-solid fa-heart"></i>
 
-<!-- RATE RECIPE -->
+            <span>
+                {% if recipe.id in favorite_recipes_ids %}
+                    Favorited
+                {% else %}
+                    Favorite
+                {% endif %}
+            </span>
 
-<div class="bg-secondary rounded-3xl p-8 shadow-lg mt-8">
+            <form action="{% url 'save_recipe' recipe.id %}" method="POST">
+                {% csrf_token %}
 
-    <h2 class="text-3xl font-bold mb-6">
+                <button type="submit"
+                    class="px-4 py-2 rounded-xl flex items-center gap-2 transition
+                    {% if recipe.id in saved_recipes %}
+                        bg-yellow-500 text-black
+                    {% else %}
+                        bg-blue-500 text-white
+                    {% endif %}">
 
-        ⭐ Rate this recipe
+                    <i class="fa-solid fa-bookmark"></i>
 
-    </h2>
+                    <span>
+                        {% if recipe.id in saved_recipes %}
+                            Saved
+                        {% else %}
+                            Save
+                        {% endif %}
+                    </span>
 
-    <div class="flex items-center gap-2 text-4xl text-yellow-400">
-
-        <i class="fa-regular fa-star cursor-pointer hover:scale-110 transition"></i>
-        <i class="fa-regular fa-star cursor-pointer hover:scale-110 transition"></i>
-        <i class="fa-regular fa-star cursor-pointer hover:scale-110 transition"></i>
-        <i class="fa-regular fa-star cursor-pointer hover:scale-110 transition"></i>
-        <i class="fa-regular fa-star cursor-pointer hover:scale-110 transition"></i>
-
-    </div>
-
-    <p class="text-gray-400 mt-4">
-
-        Average rating:
-        <span class="font-semibold text-white">
-
-            {{ recipe.average_rating }}/5
-
-        </span>
-
-        ({{ recipe.rating_count }} ratings)
-
-    </p>
-
-</div>
-
-<!-- TOAST -->
-
-<div id="rating-toast"
-     class="fixed bottom-6 right-6 bg-green-600 text-white px-6 py-4 rounded-2xl shadow-xl
-     opacity-0 pointer-events-none transition-all duration-300">
-
-    <div class="font-bold">
-
-        ⭐ Thank you!
+                </button>
+            </form>
+        </button>
 
     </div>
 
-    <div class="text-sm">
+    <!-- DESCRIPTION -->
+    <div class="mt-6">
+        <h2 class="text-xl font-semibold mb-2">Description</h2>
+        <p class="text-gray-300 leading-relaxed">
+            {{ recipe.description }}
+        </p>
+    </div>
 
-        Your rating has been saved successfully.
+    <!-- VIDEO -->
+    {% if recipe.get_youtube_embed_url %}
+    <div class="mt-8">
+        <h2 class="text-xl font-semibold mb-4">
+            <i class="fa-brands fa-youtube text-red-500 mr-2"></i>
+            Video Recipe
+        </h2>
 
+        <div class="rounded-2xl overflow-hidden shadow-xl border border-gray-700">
+            <iframe
+                class="w-full aspect-video"
+                src="{{ recipe.get_youtube_embed_url }}"
+                title="Recipe Video"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- INGREDIENTS -->
+    <div class="mt-6">
+        <h2 class="text-xl font-semibold mb-2">Ingredients</h2>
+        <p class="text-gray-300 whitespace-pre-line">
+            {{ recipe.ingredients }}
+        </p>
+    </div>
+
+    <!-- INSTRUCTIONS -->
+    <div class="mt-6">
+        <h2 class="text-xl font-semibold mb-2">Instructions</h2>
+        <p class="text-gray-300 whitespace-pre-line">
+            {{ recipe.instructions }}
+        </p>
+    </div>
+
+    </br>
+
+    <!-- ⭐ RATING -->
+    <div class="recipe-rating">
+
+        <div class="stars" data-recipe-id="{{ recipe.id }}">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
+
+        <div class="rating-info">
+            <strong id="average-rating">{{ recipe.average_rating }}</strong> / 5
+            <span id="rating-count">
+                ({{ recipe.ratings_count }} votes)
+            </span>
+        </div>
+
+    </div>
+
+    <hr class="my-8 border-gray-700">
+
+    <!-- COMMENTS -->
+    <h3 class="text-2xl font-bold mb-4">
+        Comments
+        <!--Comment icon-->
+        <i class="fa-regular fa-comment" style="color: rgb(255, 140, 0);"></i>
+    </h3>
+
+    <div class="space-y-4">
+        {% for comment in comments %}
+        <div class="bg-secondary p-4 rounded-xl shadow">
+            <strong class="text-accent">{{ comment.name }}</strong>
+            <p class="text-gray-300 mt-1">{{ comment.text }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ADD COMMENT -->
+    <div class="mt-6">
+        <h3 class="text-xl font-semibold mb-3">Add Comment</h3>
+
+        <form method="POST" class="space-y-3">
+            {% csrf_token %}
+
+            <input type="text" name="name" placeholder="Your name"
+                   class="w-full p-3 rounded-xl bg-secondary text-white outline-none">
+
+            <textarea name="text" placeholder="Your comment"
+                      class="w-full p-3 rounded-xl bg-secondary text-white outline-none"></textarea>
+
+            <button class="bg-accent text-black px-4 py-2 rounded-xl hover:opacity-80 transition">
+                Add Comment
+            </button>
+        </form>
     </div>
 
 </div>
 
-{% endif %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const stars = document.querySelectorAll(".star");
+    const starsContainer = document.querySelector(".stars");
+
+    if (!starsContainer) return;
+
+    let selectedRating = 0;
+
+    const recipeId = starsContainer.dataset.recipeId;
+
+    function paintStars(value) {
+        stars.forEach(star => {
+            if (parseInt(star.dataset.value) <= value) {
+                star.classList.add("active");
+            } else {
+                star.classList.remove("active");
+            }
+        });
+    }
+
+    stars.forEach(star => {
+
+        star.addEventListener("mouseenter", function () {
+            paintStars(parseInt(this.dataset.value));
+        });
+
+        star.addEventListener("mouseleave", function () {
+            paintStars(selectedRating);
+        });
+
+        star.addEventListener("click", function () {
+
+            fetch(`/recipe/${recipeId}/rate/`, {
+
+                method: "POST",
+
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+
+                body: `stars=${this.dataset.value}`
+
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.success) {
+
+                    selectedRating = data.your_rating;
+                    paintStars(selectedRating);
+
+                    document.getElementById("average-rating").innerText =
+                        data.average;
+
+                    document.getElementById("rating-count").innerText =
+                        `(${data.count} votes)`;
+                }
+
+            });
+
+        });
+
+    });
+
+});
+</script>
+
 {% endblock %}
-
-

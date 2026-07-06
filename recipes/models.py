@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from sqlalchemy import false
 from .validators import validate_avatar
 from django.db.models import Avg
+from urllib.parse import urlparse, parse_qs
 
 
 class Category(models.Model):
@@ -26,9 +27,7 @@ class Recipe(models.Model):
 
     @property
     def average_rating(self):
-        avg = self.ratings.aggregate(
-            Avg("stars")
-        )["stars__avg"]
+        avg = self.ratings.aggregate(avg=Avg("stars"))["avg"]
         return round(avg or 0, 1)
 
     @property
@@ -42,19 +41,30 @@ class Recipe(models.Model):
         if not self.video_url:
             return None
 
-        url = self.video_url
+        url = self.video_url.strip()
 
+        # Уже embed
+        if "/embed/" in url:
+            return url
+
+        # Обычная ссылка
+        if "youtube.com/watch" in url:
+            parsed = urlparse(url)
+            video_id = parse_qs(parsed.query).get("v", [None])[0]
+            if video_id:
+                return f"https://www.youtube.com/embed/{video_id}"
+
+        # Короткая ссылка
         if "youtu.be/" in url:
-            video_id = url.split("youtu.be/")[-1]
-        elif "watch?v=" in url:
-            video_id = url.split("watch?v=")[-1]
-        else:
-            return None
+            video_id = url.split("youtu.be/")[-1].split("?")[0]
+            return f"https://www.youtube.com/embed/{video_id}"
 
-        video_id = video_id.split("&")[0]
-        video_id = video_id.split("?")[0]
+        # Shorts
+        if "/shorts/" in url:
+            video_id = url.split("/shorts/")[-1].split("?")[0]
+            return f"https://www.youtube.com/embed/{video_id}"
 
-        return f"https://www.youtube.com/embed/{video_id}"
+        return None
 
 # User profile
 class Profile(models.Model):
@@ -145,3 +155,7 @@ class Rating(models.Model):
 
     class Meta:
         unique_together=("recipe", "user")
+
+
+    def __str__(self):
+        return f"{self.user} - {self.recipe} ({self.stars})"
