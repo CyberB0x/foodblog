@@ -7,6 +7,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django_ratelimit.decorators import ratelimit
 from django.db.models import Avg
+from django.db.models import F
 
 from core.forms import ProfileForm
 from recipes.models import Profile
@@ -312,6 +313,10 @@ def recipe_detail(request, id):
         favorite_recipes_ids = FavoriteRecipe.objects.filter(
             user=request.user
         ).values_list("recipe_id", flat=True)
+
+    recipe.views = F("views") + 1
+    recipe.save(update_fields=["views"])
+    recipe.refresh_from_db()
 
     return render(request, "recipe_detail.html", {
         "recipe": recipe,

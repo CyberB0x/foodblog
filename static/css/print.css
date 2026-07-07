@@ -1,0 +1,219 @@
+/* ===========================================
+   FOOD BLOG - PRINT LAYOUT
+=========================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #333;
+    background: #f5f5f5;
+    line-height: 1.7;
+    padding: 40px;
+}
+
+.print-wrapper {
+    max-width: 900px;
+    margin: auto;
+    background: #fff;
+    border-radius: 14px;
+    padding: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+}
+
+/* ================= HEADER ================= */
+
+.print-header {
+    text-align: center;
+    border-bottom: 3px solid #28a745;
+    padding-bottom: 20px;
+    margin-bottom: 35px;
+}
+
+.print-header h1 {
+    font-size: 42px;
+    color: #28a745;
+}
+
+.print-header p {
+    color: #777;
+    margin-top: 8px;
+}
+
+/* ================= TITLE ================= */
+
+.recipe-title {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 15px;
+}
+
+.recipe-meta {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.meta-pill {
+    background: #28a745;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 14px;
+}
+
+/* ================= IMAGE ================= */
+
+.recipe-image {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 35px;
+    max-height: 500px;
+    object-fit: cover;
+}
+
+/* ================= INFO GRID ================= */
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 18px;
+    margin-bottom: 40px;
+}
+
+.info-card {
+    border: 1px solid #ddd;
+    border-left: 5px solid #28a745;
+    border-radius: 10px;
+    padding: 18px;
+}
+
+.info-title {
+    color: #888;
+    font-size: 14px;
+}
+
+.info-value {
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+/* ================= SECTIONS ================= */
+
+.section-title {
+    font-size: 28px;
+    margin: 40px 0 20px;
+    border-bottom: 2px solid #28a745;
+    padding-bottom: 8px;
+}
+
+/* ================= INGREDIENTS ================= */
+
+.ingredients ul {
+    list-style: none;
+}
+
+.ingredients li {
+    padding: 10px 0;
+    border-bottom: 1px dashed #ddd;
+}
+
+.ingredients li::before {
+    content: "☐ ";
+    font-size: 18px;
+}
+
+/* ================= INSTRUCTIONS ================= */
+
+.instructions ol {
+    padding-left: 24px;
+}
+
+.instructions li {
+    margin-bottom: 18px;
+}
+
+/* ================= STATS ================= */
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 45px;
+    border-top: 2px solid #eee;
+    padding-top: 20px;
+    font-weight: 600;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* ================= FOOTER ================= */
+
+.footer {
+    margin-top: 60px;
+    text-align: center;
+    border-top: 2px solid #ddd;
+    padding-top: 25px;
+    color: #777;
+}
+
+.print-button {
+    display: inline-block;
+    margin-bottom: 30px;
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* ================= PRINT ================= */
+
+@page {
+    size: A4;
+    margin: 15mm;
+}
+
+@media print {
+
+    body {
+        background: white;
+        padding: 0;
+    }
+
+    .print-wrapper {
+        box-shadow: none;
+        border-radius: 0;
+        padding: 0;
+        max-width: 100%;
+    }
+
+    .print-button {
+        display: none;
+    }
+
+    img,
+    .info-card {
+        break-inside: avoid;
+    }
+
+    h2 {
+        break-after: avoid;
+    }
+
+    .section-title {
+        page-break-after: avoid;
+    }
+
+    .stats {
+        page-break-inside: avoid;
+    }
+}

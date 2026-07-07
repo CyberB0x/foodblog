@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 <div class="max-w-4xl mx-auto">
 
@@ -12,6 +15,80 @@
         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
             <h1 class="text-3xl font-bold">{{ recipe.title }}</h1>
         </div>
+    </div>
+
+    <div class="recipe-info-grid">
+
+        <div class="info-box">
+            <div class="info-icon">
+                <i class="bi bi-clock"></i>
+            </div>
+
+            <div class="info-label">
+                Prep Time
+            </div>
+
+            <div class="info-value">
+                {{ recipe.prep_time }} min
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="info-icon">
+                <i class="bi bi-fire"></i>
+            </div>
+
+            <div class="info-label">
+                Cook Time
+            </div>
+
+            <div class="info-value">
+                {{ recipe.cook_time }} min
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="info-icon">
+                <i class="bi bi-people"></i>
+            </div>
+
+            <div class="info-label">
+                Servings
+            </div>
+
+            <div class="info-value">
+                {{ recipe.servings }}
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="info-icon">
+                <i class="bi bi-award"></i>
+            </div>
+
+            <div class="info-label">
+                Difficulty
+            </div>
+
+            <div class="info-value">
+                {{ recipe.difficulty }}
+            </div>
+        </div>
+
+        <div class="info-box">
+            <div class="info-icon">
+                <i class="bi bi-eye"></i>
+            </div>
+
+            <div class="info-label">
+                Views
+            </div>
+
+            <div class="info-value">
+                {{ recipe.views }}
+            </div>
+        </div>
+
     </div>
 
     <!-- ACTIONS -->
@@ -210,13 +287,18 @@
         </div>
 
     </br>
+    </br>
 
     <!--Print recipe -->
     <div class="recipe-actions">
-        <button onclick="window.print()" class="btn btn-outline-secondary">
-            <i class="fa-solid fa-print fa-2xl" style="color: rgb(99, 230, 190);"></i>
-        </button>
+        <a href="{% url 'recipe_print' recipe.pk %}"
+           target="_blank"
+           class="btn btn-outline-dark">
 
+            <i class="fa-solid fa-print fa-2xl" style="color: rgb(99, 230, 190);"></i>
+            Print Recipe
+
+        </a>
     </div>
 
     </br>

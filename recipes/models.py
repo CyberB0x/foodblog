@@ -23,6 +23,32 @@ class Recipe(models.Model):
     video_url = models.URLField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     likes = models.PositiveSmallIntegerField(default=0)
+    views = models.PositiveIntegerField(default=0)
+
+    prep_time = models.PositiveIntegerField(
+        "Preparation time (minutes)",
+        default=15
+    )
+
+    cook_time = models.PositiveIntegerField(
+        "Cooking time (minutes)",
+        default=30
+    )
+
+    servings = models.PositiveSmallIntegerField(
+        default=4
+    )
+
+    difficulty = models.CharField(
+        max_length=20,
+        choices=[
+            ("Easy", "Easy"),
+            ("Medium", "Medium"),
+            ("Hard", "Hard"),
+        ],
+        default="Easy",
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property
@@ -33,6 +59,14 @@ class Recipe(models.Model):
     @property
     def rating_count(self):
         return self.ratings.count()
+
+    @property
+    def ingredients_list(self):
+        return [line.strip() for line in self.ingredients.splitlines() if line.strip()]
+
+    @property
+    def instructions_list(self):
+        return [line.strip() for line in self.instructions.splitlines() if line.strip()]
 
     def __str__(self):
         return self.title

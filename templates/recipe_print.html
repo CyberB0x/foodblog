@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% load static %}
 
 <html lang="en">
 <head>
@@ -7,196 +8,195 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ recipe.title }} | Print Recipe</title>
 
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
-            color: #333;
-            line-height: 1.7;
-            background: #fff;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .logo {
-            text-align: center;
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 25px;
-        }
-
-        .recipe-image {
-            width: 100%;
-            max-height: 450px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 35px;
-        }
-
-        .info-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-        }
-
-        .info-card strong {
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        h2 {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 8px;
-            margin-top: 35px;
-        }
-
-        ul {
-            padding-left: 22px;
-        }
-
-        li {
-            margin-bottom: 8px;
-        }
-
-        ol li {
-            margin-bottom: 14px;
-        }
-
-        .footer {
-            margin-top: 50px;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .print-btn {
-            display: inline-block;
-            margin-bottom: 30px;
-            padding: 12px 24px;
-            border: none;
-            background: #28a745;
-            color: white;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .print-btn:hover {
-            background: #218838;
-        }
-
-        @media print {
-
-            .print-btn {
-                display: none;
-            }
-
-            body {
-                margin: 0;
-                padding: 20px;
-            }
-
-            a {
-                color: black;
-                text-decoration: none;
-            }
-
-            .info-card {
-                break-inside: avoid;
-            }
-
-            img {
-                break-inside: avoid;
-            }
-
-            h2 {
-                break-after: avoid;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/print.css' %}">
 </head>
 
 <body>
 
-<button class="print-btn" onclick="window.print()">
-    🖨 Print Recipe
-</button>
+<div class="print-wrapper">
 
-<div class="logo">
-    🍴 Food Blog
-</div>
+    <button class="print-button" onclick="window.print()">
+        🖨 Print Recipe
+    </button>
 
-<h1>{{ recipe.title }}</h1>
+    <!-- Header -->
+    <header class="print-header">
+        <h1>🍴 Food Blog</h1>
+        <p>Delicious Recipes Every Day</p>
+    </header>
 
-{% if recipe.image %}
-<img src="{{ recipe.image.url }}"
-     alt="{{ recipe.title }}"
-     class="recipe-image">
-{% endif %}
+    <!-- Recipe title -->
+    <h2 class="recipe-title">
+        {{ recipe.title }}
+    </h2>
 
-<div class="info-grid">
+    <!-- Rating -->
+    <div class="recipe-meta">
 
-    <div class="info-card">
-        <strong>Prep Time</strong>
-        {{ recipe.prep_time }}
+        <span class="meta-pill">
+            ⭐ {{ recipe.average_rating }}/5
+        </span>
+
+        <span class="meta-pill">
+            🗳 {{ recipe.rating_count }} Ratings
+        </span>
+
+        <span class="meta-pill">
+            ❤️ {{ recipe.likes }} Likes
+        </span>
+
+        <span class="meta-pill">
+            👁 {{ recipe.views }} Views
+        </span>
+
     </div>
 
-    <div class="info-card">
-        <strong>Cook Time</strong>
-        {{ recipe.cook_time }}
+    <!-- Image -->
+    {% if recipe.image %}
+        <img
+            src="{{ recipe.image.url }}"
+            alt="{{ recipe.title }}"
+            class="recipe-image">
+    {% endif %}
+
+    <!-- Recipe Info -->
+    <div class="info-grid">
+
+        <div class="info-card">
+            <div class="info-title">Category</div>
+            <div class="info-value">{{ recipe.category.name }}</div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-title">Preparation Time</div>
+            <div class="info-value">{{ recipe.prep_time }} min</div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-title">Cooking Time</div>
+            <div class="info-value">{{ recipe.cook_time }} min</div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-title">Servings</div>
+            <div class="info-value">{{ recipe.servings }}</div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-title">Difficulty</div>
+            <div class="info-value">{{ recipe.difficulty }}</div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-title">Published</div>
+            <div class="info-value">
+                {{ recipe.created_at|date:"M d, Y" }}
+            </div>
+        </div>
+
     </div>
 
-    <div class="info-card">
-        <strong>Servings</strong>
-        {{ recipe.servings }}
+    <!-- Description -->
+    {% if recipe.description %}
+        <h2 class="section-title">
+            Description
+        </h2>
+
+        <p>
+            {{ recipe.description|linebreaks }}
+        </p>
+    {% endif %}
+
+    <!-- Ingredients -->
+    <section class="ingredients">
+
+        <h2 class="section-title">
+            Ingredients
+        </h2>
+
+        <ul>
+
+            {% for ingredient in recipe.ingredients.splitlines %}
+
+                {% if ingredient %}
+
+                    <li>{{ ingredient }}</li>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </ul>
+
+    </section>
+
+    <!-- Instructions -->
+    <section class="instructions">
+
+        <h2 class="section-title">
+            Instructions
+        </h2>
+
+        <ol>
+
+            {% for step in recipe.instructions.splitlines %}
+
+                {% if step %}
+
+                    <li>{{ step }}</li>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </ol>
+
+    </section>
+
+    <!-- Statistics -->
+
+    <div class="stats">
+
+        <div>
+            ⭐ {{ recipe.average_rating }}/5
+        </div>
+
+        <div>
+            ❤️ {{ recipe.likes }}
+        </div>
+
+        <div>
+            👁 {{ recipe.views }}
+        </div>
+
     </div>
 
-    <div class="info-card">
-        <strong>Category</strong>
-        {{ recipe.category }}
-    </div>
+    <!-- Footer -->
+
+    <footer class="footer">
+
+        <p>
+            Printed from <strong>Food Blog</strong>
+        </p>
+
+        <p>
+            Printed on:
+            {% now "F j, Y H:i" %}
+        </p>
+
+        <p>
+            Enjoy your meal! ❤️
+        </p>
+
+    </footer>
 
 </div>
 
-<h2>Ingredients</h2>
-
-<div>
-    {{ recipe.ingredients|linebreaks }}
-</div>
-
-<h2>Instructions</h2>
-
-<div>
-    {{ recipe.instructions|linebreaks }}
-</div>
-
-<div class="footer">
-
-    <p>
-        Printed on:
-        {% now "F j, Y H:i" %}
-    </p>
-
-    <p>
-        Source:
-        {{ request.build_absolute_uri }}
-    </p>
-
-</div>
+<script>
+    window.onload = function () {
+        window.print();
+    };
+</script>
 
 </body>
 </html>
