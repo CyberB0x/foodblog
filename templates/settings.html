@@ -1,100 +1,182 @@
 {% extends "base.html" %}
 
+{% block title %}Settings{% endblock %}
+
 {% block content %}
 
-<div class="max-w-4xl mx-auto mt-10 bg-white text-black p-8 rounded-2xl shadow-xl">
+<div class="max-w-4xl mx-auto px-4 py-10">
 
-    <h1 class="text-3xl font-bold mb-8">
-        Settings ⚙️
-    </h1>
+    <div class="bg-white border rounded-2xl p-8">
 
-    <form method="POST" enctype="multipart/form-data">
+        <div class="mb-8">
 
-        {% csrf_token %}
+            <h1 class="text-3xl font-bold">
 
-        <div class="mb-6">
+                Settings
 
-            {% if profile.avatar %}
-                <img src="{{ profile.avatar.url }}"
-                    class="w-28 h-28 rounded-full object-cover mb-4">
-            {% endif %}
+            </h1>
 
-            <label class="block font-semibold mb-2">
-                Avatar
-            </label>
+            <p class="text-gray-500 mt-2">
 
-            {{ form.avatar }}
+                Manage your profile information.
+
+            </p>
 
         </div>
 
-        <div class="mb-6">
+        <form method="POST" enctype="multipart/form-data" class="space-y-8">
 
-            <label class="block font-semibold mb-2">
-                Bio
-            </label>
+            {% csrf_token %}
 
-            {{ form.bio }}
+            <!-- Avatar -->
 
-        </div>
+            <div class="flex flex-col sm:flex-row items-center gap-6">
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {% if profile.avatar %}
 
-            <div>
-                <label class="block font-semibold mb-2">
-                    GitHub
-                </label>
+                    <img src="{{ profile.avatar.url }}"
+                         alt="Avatar"
+                         class="w-28 h-28 rounded-full object-cover border">
 
-                {{ form.github }}
+                {% else %}
+
+                    <div class="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center text-4xl font-bold text-gray-500">
+
+                        {{ request.user.username|first|upper }}
+
+                    </div>
+
+                {% endif %}
+
+                <div class="flex-1 w-full">
+
+                    <label class="block font-medium mb-2">
+
+                        Avatar
+
+                    </label>
+
+                    {{ form.avatar }}
+
+                </div>
+
             </div>
 
-            <div>
-                <label class="block font-semibold mb-2">
-                    LinkedIn
-                </label>
-
-                {{ form.linkedin }}
-            </div>
+            <!-- Bio -->
 
             <div>
-                <label class="block font-semibold mb-2">
-                    Instagram
+
+                <label class="block font-medium mb-2">
+
+                    Bio
+
                 </label>
 
-                {{ form.instagram }}
+                {{ form.bio }}
+
             </div>
+
+            <!-- Social -->
 
             <div>
-                <label class="block font-semibold mb-2">
-                    YouTube
-                </label>
 
-                {{ form.youtube }}
+                <h2 class="text-xl font-semibold mb-4">
+
+                    Social Links
+
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-5">
+
+                    <div>
+
+                        <label class="block mb-2">
+
+                            GitHub
+
+                        </label>
+
+                        {{ form.github }}
+
+                    </div>
+
+                    <div>
+
+                        <label class="block mb-2">
+
+                            LinkedIn
+
+                        </label>
+
+                        {{ form.linkedin }}
+
+                    </div>
+
+                    <div>
+
+                        <label class="block mb-2">
+
+                            Instagram
+
+                        </label>
+
+                        {{ form.instagram }}
+
+                    </div>
+
+                    <div>
+
+                        <label class="block mb-2">
+
+                            YouTube
+
+                        </label>
+
+                        {{ form.youtube }}
+
+                    </div>
+
+                </div>
+
             </div>
 
-        </div>
+            <!-- Cuisine -->
 
-        <div class="mt-6">
+            <div>
 
-            <label class="block font-semibold mb-2">
-                Favorite Cuisine 🍔
-            </label>
+                <label class="block font-medium mb-2">
 
-            {{ form.favorite_cuisine }}
+                    Favorite Cuisine
 
-        </div>
+                </label>
 
-        <button type="submit"
-            class="mt-8 bg-black text-white px-6 py-3 rounded-xl hover:bg-gray-800 transition">
-            Save Changes
-        </button>
+                {{ form.favorite_cuisine }}
 
-        <a href="{% url 'dashboard' %}"
-           class="bg-black text-white px-5 py-2 rounded-xl hover:bg-gray-800 transition">
-            ← Dashboard
-        </a>
+            </div>
 
+            <!-- Buttons -->
 
-    </form>
+            <div class="flex flex-col sm:flex-row gap-3">
+
+                <button type="submit"
+                        class="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl">
+
+                    Save Changes
+
+                </button>
+
+                <a href="{% url 'dashboard' %}"
+                   class="px-6 py-3 border rounded-xl hover:bg-gray-100 text-center">
+
+                    ← Dashboard
+
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
 
 </div>
 

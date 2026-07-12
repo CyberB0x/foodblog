@@ -2,161 +2,111 @@
 
 {% block content %}
 
-<div class="flex min-h-screen bg-black text-white">
+<div class="max-w-7xl mx-auto px-4 py-8">
 
+    <!-- Categories -->
+    <div class="flex gap-3 overflow-x-auto pb-4 mb-8">
 
-<!-- MAIN -->
-<main class="flex-1 lg:ml-24 p-6 lg:p-10">
+        {% for cat in categories %}
+        <a href="{% url 'category' cat.slug %}"
+           class="flex-shrink-0 px-4 py-2 rounded-full border hover:bg-gray-100">
 
-    <!-- SEARCH -->
-<div class="mb-8">
-
-</div>
-
-<!-- CATEGORIES -->
-<div class="flex gap-4 overflow-x-auto mb-8 pb-2">
-
-    {% for cat in categories %}
-
-    <a href="{% url 'category' cat.slug %}" class="flex-shrink-0">
-
-        <div class="w-16 h-16 rounded-full bg-zinc-900 border border-orange-500 flex items-center justify-center">
-
-            <span class="font-bold text-orange-500">
-                {{ cat.name|first }}
-            </span>
-
-        </div>
-
-        <p class="text-xs text-center mt-2">
             {{ cat.name }}
-        </p>
 
-    </a>
+        </a>
+        {% endfor %}
 
-    {% endfor %}
+    </div>
 
-</div>
+    <!-- Featured -->
+    {% if page_obj and not query and not selected_category %}
 
-<!-- FEATURED RECIPE -->
-{% if page_obj and not query and not selected_category %}
+        {% with featured=page_obj.0 %}
 
-    {% with featured=page_obj.0 %}
+        <a href="{% url 'recipe_detail' featured.id %}"
+           class="block mb-10">
 
-    <a href="/recipe/{{ featured.id }}/">
+            <div class="grid lg:grid-cols-2 border rounded-2xl overflow-hidden bg-white">
 
-        <div class="relative h-[500px] rounded-3xl overflow-hidden mb-10 group">
+                <img src="{{ featured.image.url }}"
+                     class="w-full h-72 lg:h-full object-cover">
 
-            <img
-                src="{{ featured.image.url }}"
-                class="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition duration-700"
-            >
+                <div class="p-8 flex flex-col justify-center">
 
-            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-
-            <div class="absolute bottom-8 left-8">
-
-                <p class="uppercase tracking-widest text-orange-400 text-sm mb-2">
-                    Featured Recipe
-                </p>
-
-                <h1 class="text-4xl lg:text-6xl font-black">
-                    {{ featured.title }}
-                </h1>
-
-                <p class="text-zinc-300 mt-4 max-w-xl">
-                    {{ featured.description|truncatewords:20 }}
-                </p>
-
-                <div class="flex gap-6 mt-4 text-sm text-zinc-300">
-
-                    <span>
-                        ❤️ {{ featured.likes }}
+                    <span class="text-sm text-orange-500 font-medium">
+                        Featured Recipe
                     </span>
 
-                    <span>
-                        💬 {{ featured.comments.count }}
-                    </span>
+                    <h1 class="text-3xl font-bold mt-2">
+                        {{ featured.title }}
+                    </h1>
 
-                    <span>
-                        {{ featured.created_at|date:"M d" }}
-                    </span>
+                    <p class="text-gray-600 mt-4">
+                        {{ featured.description|truncatewords:30 }}
+                    </p>
+
+                    <div class="flex gap-6 mt-6 text-sm text-gray-500">
+
+                        <span>❤️ {{ featured.likes }}</span>
+                        <span>💬 {{ featured.comments.count }}</span>
+                        <span>{{ featured.created_at|date:"M d" }}</span>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+        </a>
 
-    </a>
-
-    {% endwith %}
+        {% endwith %}
 
     {% endif %}
 
-    <!-- RECIPES -->
+    <!-- Recipes -->
+
     {% if page_obj %}
 
-    <div class="columns-1 md:columns-2 xl:columns-4 gap-6">
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 
         {% for recipe in page_obj %}
 
-        <div class="break-inside-avoid mb-6">
+        <article class="bg-white border rounded-2xl overflow-hidden">
 
-            <div class="bg-zinc-900 rounded-3xl overflow-hidden shadow-xl hover:scale-[1.03] transition duration-300">
+            <a href="{% url 'recipe_detail' recipe.id %}">
 
-                <div class="relative group">
+                <img src="{{ recipe.image.url }}"
+                     class="w-full h-56 object-cover">
 
-                    <img
-                        src="{{ recipe.image.url }}"
-                        class="w-full object-cover"
-                    >
+            </a>
 
-                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+            <div class="p-5">
 
-                        <a
-                            href="/recipe/{{ recipe.id }}/"
-                            class="bg-orange-500 text-black px-5 py-2 rounded-xl font-bold">
+                <h2 class="font-semibold text-lg">
 
-                            View Recipe
+                    {{ recipe.title }}
 
-                        </a>
+                </h2>
 
-                    </div>
+                <p class="text-gray-600 text-sm mt-2">
 
-                </div>
+                    {{ recipe.description|truncatewords:18 }}
 
-                <div class="p-5">
+                </p>
 
-                    <h3 class="font-bold text-xl">
-                        {{ recipe.title }}
-                    </h3>
+                <div class="flex justify-between text-sm text-gray-500 mt-5">
 
-                    <p class="text-zinc-400 text-sm mt-3">
-                        {{ recipe.description|truncatewords:14 }}
-                    </p>
+                    <span>❤️ {{ recipe.likes }}</span>
 
-                    <div class="flex justify-between mt-5 text-sm text-zinc-400">
+                    <span>💬 {{ recipe.comments.count }}</span>
 
-                        <span>
-                            ❤️ {{ recipe.likes }}
-                        </span>
-
-                        <span>
-                            💬 {{ recipe.comments.count }}
-                        </span>
-
-                        <span>
-                            {{ recipe.created_at|date:"M d" }}
-                        </span>
-
-                    </div>
+                    <span>{{ recipe.created_at|date:"M d" }}</span>
 
                 </div>
 
             </div>
 
-        </div>
+        </article>
 
         {% endfor %}
 
@@ -164,24 +114,24 @@
 
     {% else %}
 
-    <div class="text-center py-20">
+    <div class="py-20 text-center text-gray-500">
 
-        <h3 class="text-zinc-400 text-xl">
-            No recipes found 😢
-        </h3>
+        No recipes found.
 
     </div>
 
     {% endif %}
 
-    <!-- PAGINATION -->
-    <div class="flex justify-center mt-12 mb-10 gap-2 flex-wrap">
+    <!-- Pagination -->
+
+    {% if page_obj.paginator.num_pages > 1 %}
+
+    <div class="flex justify-center gap-2 mt-10 flex-wrap">
 
         {% if page_obj.has_previous %}
-        <a
-            href="?page={{ page_obj.previous_page_number }}"
-            class="px-4 py-2 bg-zinc-800 rounded-xl hover:bg-zinc-700">
-            Prev
+        <a href="?page={{ page_obj.previous_page_number }}"
+           class="px-4 py-2 border rounded-lg">
+            Previous
         </a>
         {% endif %}
 
@@ -189,34 +139,35 @@
 
             {% if page_obj.number == num %}
 
-                <span class="px-4 py-2 bg-orange-500 text-black rounded-xl font-bold">
-                    {{ num }}
-                </span>
+            <span class="px-4 py-2 rounded-lg bg-orange-500 text-white">
+
+                {{ num }}
+
+            </span>
 
             {% else %}
 
-                <a
-                    href="?page={{ num }}"
-                    class="px-4 py-2 bg-zinc-800 rounded-xl hover:bg-zinc-700">
-                    {{ num }}
-                </a>
+            <a href="?page={{ num }}"
+               class="px-4 py-2 border rounded-lg">
+
+                {{ num }}
+
+            </a>
 
             {% endif %}
 
         {% endfor %}
 
         {% if page_obj.has_next %}
-        <a
-            href="?page={{ page_obj.next_page_number }}"
-            class="px-4 py-2 bg-zinc-800 rounded-xl hover:bg-zinc-700">
+        <a href="?page={{ page_obj.next_page_number }}"
+           class="px-4 py-2 border rounded-lg">
             Next
         </a>
         {% endif %}
 
     </div>
 
-</main>
-
+    {% endif %}
 
 </div>
 

@@ -1,342 +1,489 @@
 {% extends "base.html" %}
-{% block content %}
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% block content %}
 
-<div class="max-w-4xl mx-auto">
+<div class="max-w-6xl mx-auto px-4 py-8">
 
-    <!-- IMAGE -->
-    <div class="relative rounded-2xl overflow-hidden shadow-lg">
-        <img src="{{ recipe.image.url }}"
-             class="w-full h-80 object-cover">
+    <!-- Recipe Header -->
+    <div class="grid lg:grid-cols-2 gap-8">
 
-        <!-- overlay info -->
-        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-            <h1 class="text-3xl font-bold">{{ recipe.title }}</h1>
-        </div>
-    </div>
+        <div>
 
-    <div class="recipe-info-grid">
+            <img src="{{ recipe.image.url }}"
+                 alt="{{ recipe.title }}"
+                 class="w-full h-80 lg:h-[500px] object-cover rounded-2xl border">
 
-        <div class="info-box">
-            <div class="info-icon">
-                <i class="bi bi-clock"></i>
-            </div>
-
-            <div class="info-label">
-                Prep Time
-            </div>
-
-            <div class="info-value">
-                {{ recipe.prep_time }} min
-            </div>
         </div>
 
-        <div class="info-box">
-            <div class="info-icon">
-                <i class="bi bi-fire"></i>
-            </div>
+        <div class="flex flex-col justify-center">
 
-            <div class="info-label">
-                Cook Time
-            </div>
-
-            <div class="info-value">
-                {{ recipe.cook_time }} min
-            </div>
-        </div>
-
-        <div class="info-box">
-            <div class="info-icon">
-                <i class="bi bi-people"></i>
-            </div>
-
-            <div class="info-label">
-                Servings
-            </div>
-
-            <div class="info-value">
-                {{ recipe.servings }}
-            </div>
-        </div>
-
-        <div class="info-box">
-            <div class="info-icon">
-                <i class="bi bi-award"></i>
-            </div>
-
-            <div class="info-label">
-                Difficulty
-            </div>
-
-            <div class="info-value">
-                {{ recipe.difficulty }}
-            </div>
-        </div>
-
-        <div class="info-box">
-            <div class="info-icon">
-                <i class="bi bi-eye"></i>
-            </div>
-
-            <div class="info-label">
-                Views
-            </div>
-
-            <div class="info-value">
-                {{ recipe.views }}
-            </div>
-        </div>
-
-    </div>
-
-    <!-- ACTIONS -->
-    <div class="flex gap-4 mt-4">
-
-        <!-- LIKE -->
-        <button onclick="likeRecipe({{ recipe.id }})"
-                class="flex items-center gap-2">
-
-            <i id="heart-{{ recipe.id }}"
-               class="fa-regular fa-heart text-xl text-red-500"></i>
-
-            <span id="likes-{{ recipe.id }}">
-                {{ recipe.likes }}
+            <span class="text-sm font-medium text-orange-500 uppercase">
+                Recipe
             </span>
 
-        </button>
+            <h1 class="text-4xl font-bold mt-2">
 
-        <!-- FAVORITE -->
-        <button id="fav-{{ recipe.id }}"
-                onclick="toggleFavorite({{ recipe.id }})"
-                class="px-4 py-2 rounded-xl flex items-center gap-2
-                {% if recipe.id in favorite_recipes_ids %}
-                    bg-red-600
-                {% else %}
-                    bg-red-500
-                {% endif %} text-white transition">
+                {{ recipe.title }}
 
-            <i class="fa-solid fa-heart"></i>
+            </h1>
 
-            <span>
-                {% if recipe.id in favorite_recipes_ids %}
-                    Favorited
-                {% else %}
-                    Favorite
-                {% endif %}
-            </span>
+            <p class="text-gray-600 mt-4 leading-7">
 
-            <form action="{% url 'save_recipe' recipe.id %}" method="POST">
-                {% csrf_token %}
+                {{ recipe.description }}
 
-                <button type="submit"
-                    class="px-4 py-2 rounded-xl flex items-center gap-2 transition
-                    {% if recipe.id in saved_recipes %}
-                        bg-yellow-500 text-black
-                    {% else %}
-                        bg-blue-500 text-white
-                    {% endif %}">
+            </p>
 
-                    <i class="fa-solid fa-bookmark"></i>
+            <!-- Recipe Stats -->
 
-                    <span>
-                        {% if recipe.id in saved_recipes %}
-                            Saved
-                        {% else %}
-                            Save
-                        {% endif %}
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-8">
+
+                <div class="border rounded-xl p-4">
+
+                    <p class="text-gray-500 text-sm">
+                        Prep
+                    </p>
+
+                    <p class="font-semibold">
+
+                        {{ recipe.prep_time }} min
+
+                    </p>
+
+                </div>
+
+                <div class="border rounded-xl p-4">
+
+                    <p class="text-gray-500 text-sm">
+                        Cook
+                    </p>
+
+                    <p class="font-semibold">
+
+                        {{ recipe.cook_time }} min
+
+                    </p>
+
+                </div>
+
+                <div class="border rounded-xl p-4">
+
+                    <p class="text-gray-500 text-sm">
+                        Servings
+                    </p>
+
+                    <p class="font-semibold">
+
+                        {{ recipe.servings }}
+
+                    </p>
+
+                </div>
+
+                <div class="border rounded-xl p-4">
+
+                    <p class="text-gray-500 text-sm">
+                        Difficulty
+                    </p>
+
+                    <p class="font-semibold">
+
+                        {{ recipe.difficulty }}
+
+                    </p>
+
+                </div>
+
+                <div class="border rounded-xl p-4">
+
+                    <p class="text-gray-500 text-sm">
+                        Views
+                    </p>
+
+                    <p class="font-semibold">
+
+                        {{ recipe.views }}
+
+                    </p>
+
+                </div>
+
+                <div class="border rounded-xl p-4">
+
+                    <p class="text-gray-500 text-sm">
+                        Rating
+                    </p>
+
+                    <p class="font-semibold">
+
+                        {{ recipe.average_rating }}/5
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- Actions -->
+
+            <div class="flex flex-wrap gap-3 mt-8">
+
+                <!-- Like -->
+
+                <button onclick="likeRecipe({{ recipe.id }})"
+                        class="border rounded-lg px-4 py-2 flex items-center gap-2 hover:bg-gray-100">
+
+                    <i id="heart-{{ recipe.id }}"
+                       class="fa-regular fa-heart text-red-500"></i>
+
+                    <span id="likes-{{ recipe.id }}">
+
+                        {{ recipe.likes }}
+
                     </span>
 
                 </button>
-            </form>
-        </button>
 
-    </div>
+                <!-- Favorite -->
 
-    <!-- DESCRIPTION -->
-    <div class="mt-6">
-        <h2 class="text-xl font-semibold mb-2">Description</h2>
-        <p class="text-gray-300 leading-relaxed">
-            {{ recipe.description }}
-        </p>
-    </div>
+                <button id="fav-{{ recipe.id }}"
+                        onclick="toggleFavorite({{ recipe.id }})"
+                        class="border rounded-lg px-4 py-2 flex items-center gap-2">
 
-    <!-- VIDEO -->
-    {% if recipe.get_youtube_embed_url %}
-    <div class="mt-8">
-        <h2 class="text-xl font-semibold mb-4">
-            <i class="fa-brands fa-youtube text-red-500 mr-2"></i>
-            Video Recipe
-        </h2>
+                    <i class="fa-solid fa-heart text-red-500"></i>
 
-        <div class="rounded-2xl overflow-hidden shadow-xl border border-gray-700">
-            <iframe
-                class="w-full aspect-video"
-                src="{{ recipe.get_youtube_embed_url }}"
-                title="Recipe Video"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen>
-            </iframe>
-        </div>
-    </div>
-    {% endif %}
+                    <span>
 
-    <!-- INGREDIENTS -->
-    <div class="mt-6">
-        <h2 class="text-xl font-semibold mb-2">Ingredients</h2>
-        <p class="text-gray-300 whitespace-pre-line">
-            {{ recipe.ingredients }}
-        </p>
-    </div>
+                        {% if recipe.id in favorite_recipes_ids %}
+                            Favorited
+                        {% else %}
+                            Favorite
+                        {% endif %}
 
-    <!-- INSTRUCTIONS -->
-    <div class="mt-6">
-        <h2 class="text-xl font-semibold mb-2">Instructions</h2>
-        <p class="text-gray-300 whitespace-pre-line">
-            {{ recipe.instructions }}
-        </p>
-    </div>
-
-    </br>
-
-    <!-- ⭐ RATING -->
-    <div class="recipe-rating">
-
-        <div class="stars" data-recipe-id="{{ recipe.id }}">
-            <span class="star" data-value="1">&#9733;</span>
-            <span class="star" data-value="2">&#9733;</span>
-            <span class="star" data-value="3">&#9733;</span>
-            <span class="star" data-value="4">&#9733;</span>
-            <span class="star" data-value="5">&#9733;</span>
-        </div>
-
-        <div class="rating-info">
-            <strong id="average-rating">{{ recipe.average_rating }}</strong> / 5
-            <span id="rating-count">
-                ({{ recipe.ratings_count }} votes)
-            </span>
-        </div>
-
-    </div>
-
-    <hr class="my-8 border-gray-700">
-
-
-    <!--Share-->
-        <div class="share-section mt-5">
-
-            <h5 class="mb-3">
-                <i class="bi bi-share-fill"></i>
-                Share this recipe
-            </h5>
-
-            <div class="share-buttons">
-
-                <a class="share-btn facebook"
-                   href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
-                   target="_blank">
-
-                    <i class="fa-brands fa-facebook fa-2xl" style="color: rgb(116, 192, 252);"></i>
-                </a>
-
-                <a class="share-btn twitter"
-                   href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ recipe.title }}"
-                   target="_blank">
-
-                    <i class="fa-brands fa-square-x-twitter fa-2xl" style="color: rgb(116, 192, 252);"></i>
-                </a>
-
-                <a class="share-btn linkedin"
-                   href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}"
-                   target="_blank">
-
-                    <i class="fa-brands fa-linkedin fa-2xl" style="color: rgb(29, 108, 231);"></i>
-                </a>
-
-                <a class="share-btn pinterest"
-                   href="https://pinterest.com/pin/create/button/?url={{ request.build_absolute_uri }}"
-                   target="_blank">
-
-                    <i class="fa-brands fa-pinterest fa-2xl" style="color: rgb(231, 49, 29);"></i>
-                </a>
-
-                <a class="share-btn telegram"
-                   href="https://t.me/share/url?url={{ request.build_absolute_uri }}&text={{ recipe.title }}"
-                   target="_blank">
-
-                    <i class="fa-brands fa-telegram fa-2xl" style="color: rgb(116, 192, 252);"></i>
-                </a>
-
-                <a class="share-btn whatsapp"
-                   href="https://api.whatsapp.com/send?text={{ recipe.title }} {{ request.build_absolute_uri }}"
-                   target="_blank">
-
-                    <i class="fa-brands fa-whatsapp fa-2xl" style="color: rgb(7, 232, 70);"></i>
-                </a>
-
-                <button class="share-btn copy" onclick="copyRecipeLink()">
-
-                    <i class="fa-solid fa-link fa-2xl" style="color: rgb(255, 212, 59);"></i>
+                    </span>
 
                 </button>
+
+                <!-- Save -->
+
+                <form action="{% url 'save_recipe' recipe.id %}" method="POST">
+
+                    {% csrf_token %}
+
+                    <button type="submit"
+                            class="border rounded-lg px-4 py-2 flex items-center gap-2">
+
+                        <i class="fa-solid fa-bookmark text-orange-500"></i>
+
+                        <span>
+
+                            {% if recipe.id in saved_recipes %}
+                                Saved
+                            {% else %}
+                                Save
+                            {% endif %}
+
+                        </span>
+
+                    </button>
+
+                </form>
+
+                <!-- Print -->
+
+                <a href="{% url 'recipe_print' recipe.pk %}"
+                   target="_blank"
+                   class="border rounded-lg px-4 py-2 flex items-center gap-2">
+
+                    <i class="fa-solid fa-print"></i>
+
+                    Print
+
+                </a>
 
             </div>
 
         </div>
 
-    </br>
-    </br>
-
-    <!--Print recipe -->
-    <div class="recipe-actions">
-        <a href="{% url 'recipe_print' recipe.pk %}"
-           target="_blank"
-           class="btn btn-outline-dark">
-
-            <i class="fa-solid fa-print fa-2xl" style="color: rgb(99, 230, 190);"></i>
-            Print Recipe
-
-        </a>
     </div>
 
-    </br>
+        <!-- Video -->
+    {% if recipe.get_youtube_embed_url %}
 
-    <!-- COMMENTS -->
-    <h3 class="text-2xl font-bold mb-4">
-        Comments
-        <!--Comment icon-->
-        <i class="fa-regular fa-comment" style="color: rgb(255, 140, 0);"></i>
-    </h3>
+    <section class="mt-12">
 
-    <div class="space-y-4">
-        {% for comment in comments %}
-        <div class="bg-secondary p-4 rounded-xl shadow">
-            <strong class="text-accent">{{ comment.name }}</strong>
-            <p class="text-gray-300 mt-1">{{ comment.text }}</p>
+        <h2 class="text-2xl font-semibold mb-4">
+
+            Video Recipe
+
+        </h2>
+
+        <div class="overflow-hidden rounded-2xl border">
+
+            <iframe
+                class="w-full aspect-video"
+                src="{{ recipe.get_youtube_embed_url }}"
+                title="{{ recipe.title }}"
+                allowfullscreen>
+            </iframe>
+
         </div>
-        {% endfor %}
-    </div>
 
-    <!-- ADD COMMENT -->
-    <div class="mt-6">
-        <h3 class="text-xl font-semibold mb-3">Add Comment</h3>
+    </section>
 
-        <form method="POST" class="space-y-3">
+    {% endif %}
+
+
+    <!-- Ingredients & Instructions -->
+
+    <section class="grid lg:grid-cols-2 gap-8 mt-12">
+
+        <!-- Ingredients -->
+
+        <div>
+
+            <h2 class="text-2xl font-semibold mb-5">
+
+                Ingredients
+
+            </h2>
+
+            <div class="border rounded-2xl p-6">
+
+                <div class="whitespace-pre-line leading-8">
+
+                    {{ recipe.ingredients }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Instructions -->
+
+        <div>
+
+            <h2 class="text-2xl font-semibold mb-5">
+
+                Instructions
+
+            </h2>
+
+            <div class="border rounded-2xl p-6">
+
+                <div class="whitespace-pre-line leading-8">
+
+                    {{ recipe.instructions }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Rating -->
+
+    <section class="mt-12">
+
+        <h2 class="text-2xl font-semibold mb-4">
+
+            Rate this recipe
+
+        </h2>
+
+        <div class="border rounded-2xl p-6">
+
+            <div class="stars flex gap-2 text-3xl"
+                 data-recipe-id="{{ recipe.id }}">
+
+                <span class="star cursor-pointer" data-value="1">&#9733;</span>
+                <span class="star cursor-pointer" data-value="2">&#9733;</span>
+                <span class="star cursor-pointer" data-value="3">&#9733;</span>
+                <span class="star cursor-pointer" data-value="4">&#9733;</span>
+                <span class="star cursor-pointer" data-value="5">&#9733;</span>
+
+            </div>
+
+            <div class="mt-4 text-gray-600">
+
+                <strong id="average-rating">
+
+                    {{ recipe.average_rating }}
+
+                </strong>
+
+                / 5
+
+                <span id="rating-count">
+
+                    ({{ recipe.ratings_count }} votes)
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Share -->
+
+    <section class="mt-12">
+
+        <h2 class="text-2xl font-semibold mb-4">
+
+            Share
+
+        </h2>
+
+        <div class="flex flex-wrap gap-3">
+
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+               target="_blank"
+               class="border rounded-lg px-4 py-3">
+
+                <i class="fab fa-facebook-f"></i>
+
+            </a>
+
+            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ recipe.title }}"
+               target="_blank"
+               class="border rounded-lg px-4 py-3">
+
+                <i class="fab fa-x-twitter"></i>
+
+            </a>
+
+            <a href="https://t.me/share/url?url={{ request.build_absolute_uri }}&text={{ recipe.title }}"
+               target="_blank"
+               class="border rounded-lg px-4 py-3">
+
+                <i class="fab fa-telegram"></i>
+
+            </a>
+
+            <a href="https://api.whatsapp.com/send?text={{ recipe.title }} {{ request.build_absolute_uri }}"
+               target="_blank"
+               class="border rounded-lg px-4 py-3">
+
+                <i class="fab fa-whatsapp"></i>
+
+            </a>
+
+            <button onclick="copyRecipeLink()"
+                    class="border rounded-lg px-4 py-3">
+
+                <i class="fa-solid fa-link"></i>
+
+            </button>
+
+        </div>
+
+    </section>
+        <!-- Comments -->
+
+    <section class="mt-12">
+
+        <div class="flex items-center justify-between mb-6">
+
+            <h2 class="text-2xl font-semibold">
+
+                Comments
+
+            </h2>
+
+            <span class="text-gray-500">
+
+                {{ comments|length }}
+
+            </span>
+
+        </div>
+
+        {% if comments %}
+
+            <div class="space-y-4">
+
+                {% for comment in comments %}
+
+                <div class="border rounded-2xl p-5">
+
+                    <div class="flex items-center justify-between mb-2">
+
+                        <strong>
+
+                            {{ comment.name }}
+
+                        </strong>
+
+                    </div>
+
+                    <p class="text-gray-600">
+
+                        {{ comment.text }}
+
+                    </p>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <div class="border rounded-2xl p-8 text-center text-gray-500">
+
+                No comments yet.
+
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- Add Comment -->
+
+    <section class="mt-12">
+
+        <h2 class="text-2xl font-semibold mb-6">
+
+            Leave a Comment
+
+        </h2>
+
+        <form method="POST" class="space-y-4">
+
             {% csrf_token %}
 
-            <input type="text" name="name" placeholder="Your name"
-                   class="w-full p-3 rounded-xl bg-secondary text-white outline-none">
+            <input
+                type="text"
+                name="name"
+                placeholder="Your name"
+                class="w-full border rounded-xl p-3">
 
-            <textarea name="text" placeholder="Your comment"
-                      class="w-full p-3 rounded-xl bg-secondary text-white outline-none"></textarea>
+            <textarea
+                name="text"
+                rows="5"
+                placeholder="Write your comment..."
+                class="w-full border rounded-xl p-3 resize-none"></textarea>
 
-            <button class="bg-accent text-black px-4 py-2 rounded-xl hover:opacity-80 transition">
-                Add Comment
+            <button
+                class="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-6 py-3">
+
+                Post Comment
+
             </button>
+
         </form>
-    </div>
+
+    </section>
 
 </div>
 
@@ -344,79 +491,78 @@
 
 function copyRecipeLink() {
 
-    navigator.clipboard.writeText(window.location.href);
-
-    alert("Recipe link copied!");
+    navigator.clipboard.writeText(location.href);
 
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const stars = document.querySelectorAll(".star");
-    const starsContainer = document.querySelector(".stars");
+    const box = document.querySelector(".stars");
 
-    if (!starsContainer) return;
+    if (!box) return;
 
-    let selectedRating = 0;
+    const recipeId = box.dataset.recipeId;
 
-    const recipeId = starsContainer.dataset.recipeId;
+    const stars = [...document.querySelectorAll(".star")];
 
-    function paintStars(value) {
-        stars.forEach(star => {
-            if (parseInt(star.dataset.value) <= value) {
-                star.classList.add("active");
-            } else {
-                star.classList.remove("active");
-            }
-        });
-    }
+    let selected = 0;
+
+    const paint = value =>
+        stars.forEach(star =>
+            star.classList.toggle(
+                "active",
+                star.dataset.value <= value
+            )
+        );
 
     stars.forEach(star => {
 
-        star.addEventListener("mouseenter", function () {
-            paintStars(parseInt(this.dataset.value));
-        });
+        star.onmouseenter = () => paint(star.dataset.value);
 
-        star.addEventListener("mouseleave", function () {
-            paintStars(selectedRating);
-        });
+        star.onmouseleave = () => paint(selected);
 
-        star.addEventListener("click", function () {
+        star.onclick = () => {
 
             fetch(`/recipe/${recipeId}/rate/`, {
 
                 method: "POST",
 
                 headers: {
+
                     "X-CSRFToken": "{{ csrf_token }}",
-                    "Content-Type": "application/x-www-form-urlencoded",
+
+                    "Content-Type":
+                        "application/x-www-form-urlencoded"
+
                 },
 
-                body: `stars=${this.dataset.value}`
+                body: `stars=${star.dataset.value}`
 
             })
-            .then(response => response.json())
+
+            .then(r => r.json())
+
             .then(data => {
 
-                if (data.success) {
+                if (!data.success) return;
 
-                    selectedRating = data.your_rating;
-                    paintStars(selectedRating);
+                selected = data.your_rating;
 
-                    document.getElementById("average-rating").innerText =
-                        data.average;
+                paint(selected);
 
-                    document.getElementById("rating-count").innerText =
-                        `(${data.count} votes)`;
-                }
+                average-rating.textContent = data.average;
+
+                rating-count.textContent =
+                    `(${data.count} votes)`;
 
             });
 
-        });
+        };
 
     });
 
 });
+
 </script>
 
 {% endblock %}

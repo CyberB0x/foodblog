@@ -2,89 +2,162 @@
 
 {% block content %}
 
-<div class="max-w-4xl mx-auto mt-10 bg-white text-black p-8 rounded-2xl shadow-xl">
+<div class="max-w-4xl mx-auto px-4 py-10">
 
-    <div class="flex items-center gap-6">
+    <div class="bg-white border rounded-2xl p-8">
 
-        {% if profile.avatar %}
-            <img src="{{ profile.avatar.url }}"
-                 class="w-32 h-32 rounded-full object-cover">
-        {% else %}
-            <div class="w-32 h-32 rounded-full bg-gray-300"></div>
-        {% endif %}
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
 
-        <div>
+            {% if profile.avatar %}
+                <img src="{{ profile.avatar.url }}"
+                     alt="{{ request.user.username }}"
+                     class="w-28 h-28 rounded-full object-cover border">
+            {% else %}
+                <div class="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center text-4xl font-bold text-gray-500">
+                    {{ request.user.username|first|upper }}
+                </div>
+            {% endif %}
 
-            <h1 class="text-3xl font-bold">
-                {{ request.user.username }}
-            </h1>
+            <div class="flex-1 text-center sm:text-left">
 
-            <p class="text-gray-600 mt-3">
-                {{ profile.bio }}
+                <h1 class="text-3xl font-bold">
+
+                    {{ request.user.username }}
+
+                </h1>
+
+                {% if profile.bio %}
+
+                <p class="mt-3 text-gray-600 leading-7">
+
+                    {{ profile.bio }}
+
+                </p>
+
+                {% else %}
+
+                <p class="mt-3 text-gray-400">
+
+                    No bio yet.
+
+                </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="grid md:grid-cols-2 gap-6 mt-8">
+
+        <!-- Favorite Cuisine -->
+
+        <div class="bg-white border rounded-2xl p-6">
+
+            <h2 class="font-semibold text-lg mb-3">
+
+                Favorite Cuisine
+
+            </h2>
+
+            <p class="text-gray-600">
+
+                {{ profile.favorite_cuisine|default:"Not specified" }}
+
             </p>
 
         </div>
 
-    </div>
 
-    <div class="mt-10">
+        <!-- Social -->
 
-        <h2 class="text-2xl font-bold mb-4">
-            Social Links
-        </h2>
+        <div class="bg-white border rounded-2xl p-6">
 
-        <div class="space-y-3">
+            <h2 class="font-semibold text-lg mb-3">
 
-            {% if profile.github %}
+                Social Links
+
+            </h2>
+
+            <div class="space-y-3">
+
+                {% if profile.github %}
                 <a href="{{ profile.github }}"
                    target="_blank"
-                   class="block text-blue-600 hover:underline">
-                    GitHub
-                </a>
-            {% endif %}
+                   class="flex items-center gap-2 text-gray-700 hover:text-orange-500">
 
-            {% if profile.linkedin %}
+                    <i class="fa-brands fa-github"></i>
+
+                    GitHub
+
+                </a>
+                {% endif %}
+
+                {% if profile.linkedin %}
                 <a href="{{ profile.linkedin }}"
                    target="_blank"
-                   class="block text-blue-600 hover:underline">
-                    LinkedIn
-                </a>
-            {% endif %}
+                   class="flex items-center gap-2 text-gray-700 hover:text-orange-500">
 
-            {% if profile.instagram %}
+                    <i class="fa-brands fa-linkedin"></i>
+
+                    LinkedIn
+
+                </a>
+                {% endif %}
+
+                {% if profile.instagram %}
                 <a href="{{ profile.instagram }}"
                    target="_blank"
-                   class="block text-pink-600 hover:underline">
-                    Instagram
-                </a>
-            {% endif %}
+                   class="flex items-center gap-2 text-gray-700 hover:text-orange-500">
 
-            {% if profile.youtube %}
+                    <i class="fa-brands fa-instagram"></i>
+
+                    Instagram
+
+                </a>
+                {% endif %}
+
+                {% if profile.youtube %}
                 <a href="{{ profile.youtube }}"
                    target="_blank"
-                   class="block text-red-600 hover:underline">
+                   class="flex items-center gap-2 text-gray-700 hover:text-orange-500">
+
+                    <i class="fa-brands fa-youtube"></i>
+
                     YouTube
+
                 </a>
-            {% endif %}
+                {% endif %}
+
+                {% if not profile.github and not profile.linkedin and not profile.instagram and not profile.youtube %}
+
+                <p class="text-gray-400">
+
+                    No social links.
+
+                </p>
+
+                {% endif %}
+
+            </div>
 
         </div>
 
     </div>
 
-    <div class="mt-10">
 
-        <h2 class="text-2xl font-bold mb-2">
-            Favorite Cuisine 🍔
-        </h2>
-
-        <p class="text-lg">
-            {{ profile.favorite_cuisine }}
-        </p>
-        </br>
+    <div class="mt-8">
 
         <a href="{% url 'dashboard' %}"
-           class="bg-black text-white px-5 py-2 rounded-xl hover:bg-gray-800 transition">
-            ← Dashboard
+           class="inline-flex items-center gap-2 px-5 py-3 border rounded-xl hover:bg-gray-100">
+
+            <i class="fa-solid fa-arrow-left"></i>
+
+            Dashboard
+
         </a>
 
     </div>
