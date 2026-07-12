@@ -207,26 +207,31 @@ def settings_view(request):
 def toggle_favorite(request, id):
 
     if request.method != "POST":
-        return JsonResponse({"error": "Invalid request"}, status=400)
+        return redirect("dashboard")
 
     recipe = get_object_or_404(Recipe, id=id)
 
-    obj = FavoriteRecipe.objects.filter(
+    favorite = FavoriteRecipe.objects.filter(
         user=request.user,
         recipe=recipe
     )
 
-    if obj.exists():
-        obj.delete()
-        status = "removed"
+    if favorite.exists():
+        favorite.delete()
     else:
-        FavoriteRecipe.objects.create(
+        FavoriteRecipe.objects.filter(
             user=request.user,
             recipe=recipe
         )
-        status = "added"
 
-    return JsonResponse({"status": status})
+    next_page = request.POST.get("next")
+
+    if next_page:
+        return redirect(next_page)
+
+    return redirect("recipe_detail", id=id)
+
+
 
 
 # =========================

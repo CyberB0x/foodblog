@@ -1,0 +1,52 @@
+<nav class="fixed bottom-0 left-0 right-0 bg-white border-t md:hidden z-50">
+
+    <div class="grid grid-cols-5 h-16">
+
+        <a href="{% url 'home' %}"
+           class="flex flex-col items-center justify-center text-gray-600 hover:text-orange-500">
+
+            <i class="fa-solid fa-house text-lg"></i>
+
+            <span class="text-xs mt-1">Home</span>
+
+        </a>
+
+        <a href="{% url 'recipes' %}"
+           class="flex flex-col items-center justify-center text-gray-600 hover:text-orange-500">
+
+            <i class="fa-solid fa-book-open text-lg"></i>
+
+            <span class="text-xs mt-1">Recipes</span>
+
+        </a>
+
+        <a href="{% url 'dashboard' %}"
+           class="flex flex-col items-center justify-center text-gray-600 hover:text-orange-500">
+
+            <i class="fa-solid fa-heart text-lg"></i>
+
+            <span class="text-xs mt-1">Saved</span>
+
+        </a>
+
+        <a href="{% url 'profile' %}"
+           class="flex flex-col items-center justify-center text-gray-600 hover:text-orange-500">
+
+            <i class="fa-solid fa-user text-lg"></i>
+
+            <span class="text-xs mt-1">Profile</span>
+
+        </a>
+
+        <a href="{% url 'settings' %}"
+           class="flex flex-col items-center justify-center text-gray-600 hover:text-orange-500">
+
+            <i class="fa-solid fa-gear text-lg"></i>
+
+            <span class="text-xs mt-1">Settings</span>
+
+        </a>
+
+    </div>
+
+</nav>
