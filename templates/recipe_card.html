@@ -1,0 +1,20 @@
+<a href="{% url 'recipe_detail' recipe.id %}"
+   class="bg-zinc-900 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition duration-300">
+
+    <img src="{{ recipe.image.url }}"
+         alt="{{ recipe.title }}"
+         class="w-full h-56 object-cover">
+
+    <div class="p-4">
+
+        <h3 class="text-xl font-bold text-white">
+            {{ recipe.title }}
+        </h3>
+
+        <p class="text-yellow-400 mt-2">
+            ⭐ {{ recipe.average_rating }}
+        </p>
+
+    </div>
+
+</a>

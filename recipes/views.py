@@ -323,11 +323,19 @@ def recipe_detail(request, id):
     recipe.save(update_fields=["views"])
     recipe.refresh_from_db()
 
+    # Similar_recipes
+    similar_recipes = (
+        Recipe.objects.filter(category=recipe.category)
+        .exclude(id=recipe.id)
+        .order_by("?")[:3]
+    )
+
     return render(request, "recipe_detail.html", {
         "recipe": recipe,
         "comments": comments,
         "saved_recipes": saved_recipes,
         "favorite_recipes_ids": favorite_recipes_ids,
+        "similar_recipes": similar_recipes,
     })
 
 
