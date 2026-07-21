@@ -4,6 +4,7 @@ from sqlalchemy import false
 from .validators import validate_avatar
 from django.db.models import Avg
 from urllib.parse import urlparse, parse_qs
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -99,6 +100,10 @@ class Recipe(models.Model):
             return f"https://www.youtube.com/embed/{video_id}"
 
         return None
+
+    def get_absolute_url(self):
+        return reverse("recipe_detail", kwargs={"pk": self.pk})
+
 
 # User profile
 class Profile(models.Model):
