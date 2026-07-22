@@ -1,4 +1,33 @@
 {% extends "base.html" %}
+
+{% block title %}
+{{ recipe.title }}
+{% endblock %}
+
+{% block description %}
+{{ recipe.description|truncatechars:155 }}
+{% endblock %}
+
+{% block keywords %}
+{{ recipe.category.name }}, {{ recipe.title }}, dessert recipe
+{% endblock %}
+
+{% block og_type %}
+article
+{% endblock %}
+
+{% block og_title %}
+{{ recipe.title }}
+{% endblock %}
+
+{% block og_description %}
+{{ recipe.description|truncatechars:160 }}
+{% endblock %}
+
+{% block og_image %}
+{{ request.scheme }}://{{ request.get_host }}{{ recipe.image.url }}
+{% endblock %}
+
 {% load static %}
 
 {% block content %}

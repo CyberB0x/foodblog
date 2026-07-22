@@ -283,9 +283,9 @@ def about(request):
 # RECIPE DETAIL + COMMENTS
 # =========================
 @ratelimit(key='ip', rate='5/m')
-def recipe_detail(request, id):
+def recipe_detail(request, pk):
 
-    recipe = get_object_or_404(Recipe, id=id)
+    recipe = get_object_or_404(Recipe, pk=pk)
 
     if request.method == "POST":
 
@@ -303,7 +303,7 @@ def recipe_detail(request, id):
                 text=text
             )
 
-            return redirect("recipe_detail", id=recipe.id)
+            return redirect("recipe_detail", pk=recipe.id)
 
     comments = recipe.comments.all().order_by("-created_at")
 
@@ -336,6 +336,15 @@ def recipe_detail(request, id):
         "saved_recipes": saved_recipes,
         "favorite_recipes_ids": favorite_recipes_ids,
         "similar_recipes": similar_recipes,
+
+        #SEO Open Graph
+        "meta_title": f"{recipe.title} | Food Blog",
+        "meta_description": recipe.description[:160],
+        "meta_image": (
+            request.build_absolute_uri(recipe.image.url)
+            if recipe.image
+            else ""
+        ),
     })
 
 

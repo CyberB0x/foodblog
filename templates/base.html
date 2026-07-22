@@ -3,12 +3,25 @@
 <html lang="en">
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{% block description %}Delicious dessert recipes with step-by-step instructions.{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}dessert, recipes, cakes, cookies, baking, sweets{% endblock %}">
+    <meta name="author" content="Food Blog">
+    <meta name="robots" content="index, follow">
 
-    <title>{% block title %}FoodBlog{% endblock %}</title>
+    <meta property="og:title" content="{{ meta_title }}">
+    <meta property="og:description" content="{{ meta_description }}">
+    <meta property="og:image" content="{{ meta_image }}">
+
+    <meta name="twitter:title" content="{{ meta_title }}">
+    <meta name="twitter:description" content="{{ meta_description }}">
+    <meta name="twitter:image" content="{{ meta_image }}">
+
+
+    <title>{% block title %}Food Blog{% endblock %} | Food Blog</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
