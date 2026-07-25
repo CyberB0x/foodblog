@@ -34,6 +34,11 @@ article
   "@context": "https://schema.org",
   "@type": "Recipe",
 
+  "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{{ request.build_absolute_uri }}"
+  },
+
   "name": "{{ recipe.title|escapejs }}",
 
   "description": "{{ recipe.description|striptags|truncatechars:200|escapejs }}",
@@ -42,14 +47,32 @@ article
     "{{ request.scheme }}://{{ request.get_host }}{{ recipe.image.url }}"
   ],
 
+  {% if recipe.video_url %}
+    "video": {
+      "@type": "VideoObject",
+      "name": "{{ recipe.title|escapejs }}",
+      "description": "{{ recipe.description|striptags|truncatechars:200|escapejs }}",
+      "thumbnailUrl": [
+        "{{ request.scheme }}://{{ request.get_host }}{{ recipe.image.url }}"
+      ],
+      "embedUrl": "{{ recipe.get_youtube_embed_url }}",
+      "uploadDate": "{{ recipe.created_at|date:'Y-m-d' }}"
+    },
+  {% endif %}
+
   "author": {
-    "@type": "Person",
-    "name": "Food Blog"
+    "@id": "https://maisonefsun.com/#author"
+  },
+
+  "publisher": {
+      "@id": "https://maisonefsun.com/#organization"
   },
 
   "recipeCategory": "{{ recipe.category.name }}",
 
   "recipeCuisine": "International",
+
+  "keywords": "{{ recipe.category.name }}, {{ recipe.title|escapejs }}, homemade, baking",
 
   "datePublished": "{{ recipe.created_at|date:'Y-m-d' }}",
 
@@ -59,7 +82,80 @@ article
 
   "totalTime": "PT{{ recipe.prep_time|add:recipe.cook_time }}M",
 
-  "recipeYield": "{{ recipe.servings }} servings"
+  "recipeYield": "{{ recipe.servings }} servings",
+
+  "nutrition": {
+    "@type": "NutritionInformation",
+    "calories": "420 calories"
+  },
+
+  "recipeIngredient": [
+    "{{ recipe.ingredients|escapejs }}"
+  ],
+
+  "recipeInstructions": [
+   {
+     "@type": "HowToStep",
+     "text": "{{ recipe.instructions|escapejs }}"
+   }
+  ],
+
+  "aggregateRating": {
+  "@type": "AggregateRating",
+  "ratingValue": "{{ recipe.average_rating }}",
+  "ratingCount": "{{ recipe.rating_count }}",
+  "bestRating": "5",
+  "worstRating": "1"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {
+      "@type":"Question",
+      "name":"How long does it take to make {{ recipe.title|escapejs }}?",
+      "acceptedAnswer":{
+        "@type":"Answer",
+        "text":"This recipe takes approximately {{ recipe.prep_time }} minutes to prepare and {{ recipe.cook_time }} minutes to cook."
+      }
+    },
+    {
+      "@type":"Question",
+      "name":"How many servings does this recipe make?",
+      "acceptedAnswer":{
+        "@type":"Answer",
+        "text":"This recipe makes {{ recipe.servings|escapejs }} servings."
+      }
+    },
+    {
+      "@type":"Question",
+      "name":"What difficulty level is this recipe?",
+      "acceptedAnswer":{
+        "@type":"Answer",
+        "text":"The difficulty level is {{ recipe.difficulty|default:'Easy'|escapejs }}."
+      }
+    },
+    {
+      "@type":"Question",
+      "name":"What ingredients do I need?",
+      "acceptedAnswer":{
+        "@type":"Answer",
+        "text":"See the ingredients list on this page."
+      }
+    },
+    {
+      "@type":"Question",
+      "name":"How do I make this recipe?",
+      "acceptedAnswer":{
+        "@type":"Answer",
+        "text":"Follow the step-by-step instructions above."
+      }
+    }
+  ]
 }
 </script>
 {% endblock %}
@@ -71,6 +167,37 @@ article
 <div class="max-w-6xl mx-auto px-4 py-8">
 
     <!-- Recipe Header -->
+
+    <nav aria-label="Breadcrumb" class="mb-8">
+        <ol class="flex flex-wrap items-center text-sm">
+
+            <li>
+                <a href="{% url 'home' %}" class="text-gray-500 hover:text-orange-500">
+                    Home
+                </a>
+            </li>
+
+            <li class="mx-2 text-gray-400">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </li>
+
+            <li>
+                <a href="{% url 'recipes' %}" class="text-gray-500 hover:text-orange-500">
+                    Recipes
+                </a>
+            </li>
+
+            <li class="mx-2 text-gray-400">
+                <i class="fa-solid fa-chevron-right text-xs"></i>
+            </li>
+
+            <li class="font-semibold text-gray-900">
+                {{ recipe.title }}
+            </li>
+
+        </ol>
+    </nav>
+
     <div class="grid lg:grid-cols-2 gap-8">
 
         <div>
@@ -648,5 +775,37 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 </script>
+
+
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"BreadcrumbList",
+  "itemListElement":[
+    {
+      "@type":"ListItem",
+      "position":1,
+      "name":"Home",
+      "item":"{{ request.scheme }}://{{ request.get_host }}{% url 'home' %}"
+    },
+    {
+      "@type":"ListItem",
+      "position":2,
+      "name":"Recipes",
+      "item":"{{ request.scheme }}://{{ request.get_host }}{% url 'recipes' %}"
+    },
+    {
+      "@type":"ListItem",
+      "position":3,
+      "name":"{{ recipe.title|escapejs }}",
+      "item":"{{ request.build_absolute_uri }}"
+    }
+  ]
+}
+</script>
+
+
 {% endblock %}
+
+
 
