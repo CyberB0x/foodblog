@@ -476,3 +476,12 @@ def recipe_print(request, pk):
     recipe = get_object_or_404(Recipe, pk=pk)
 
     return render(request, "recipe_print.html",{"recipe":recipe})
+
+
+# ===== 404 page
+def custom_404(request, exception):
+    return render(request, "404.html", status=404)
+
+# ==== 500 page
+def custom_500(request):
+    return render(request, "500.html", status=500)

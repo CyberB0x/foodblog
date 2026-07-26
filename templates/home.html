@@ -46,9 +46,13 @@ Discover delicious dessert recipes with step-by-step instructions.
            class="block mb-10">
 
             <div class="grid lg:grid-cols-2 border rounded-2xl overflow-hidden bg-white">
-
-                <img src="{{ featured.image.url }}"
-                     class="w-full h-72 lg:h-full object-cover">
+                <picture>
+                    <source
+                        srcset="{{ recipe.image_webp.url }}"
+                        type="image/webp">
+                    <img src="{{ featured.image.url }}"
+                         class="w-full h-72 lg:h-full object-cover" loading="lazy" decoding="async">
+                </picture>
 
                 <div class="p-8 flex flex-col justify-center">
 
@@ -93,10 +97,16 @@ Discover delicious dessert recipes with step-by-step instructions.
         <article class="bg-white border rounded-2xl overflow-hidden">
 
             <a href="{% url 'recipe_detail' recipe.id %}">
+                <picture>
 
-                <img src="{{ recipe.image.url }}"
-                     class="w-full h-56 object-cover">
+                    <source
+                        srcset="{{ recipe.image_webp.url }}"
+                        type="image/webp">
 
+                    <img src="{{ recipe.image.url }}"
+                         class="w-full h-56 object-cover" loading="lazy" decoding="async">
+
+                </picture>
             </a>
 
             <div class="p-5">

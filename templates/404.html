@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}404 - Page Not Found{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center bg-gray-50 px-6 py-16">
+    <div class="max-w-xl w-full bg-white rounded-3xl shadow-lg p-10 text-center">
+
+        <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-orange-100">
+            <span class="text-5xl">🍽️</span>
+        </div>
+
+        <h1 class="text-7xl font-extrabold text-gray-900 mb-2">
+            404
+        </h1>
+
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            Recipe Not Found
+        </h2>
+
+        <p class="text-gray-600 leading-relaxed mb-8">
+            Sorry, the page you're looking for doesn't exist,
+            may have been moved, or has been removed.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+
+            <a href="{% url 'recipes' %}"
+               class="px-6 py-3 rounded-xl bg-orange-500 text-white font-semibold shadow hover:bg-orange-600 hover:scale-105 transition duration-300">
+
+                Browse Recipes
+
+            </a>
+
+            <a href="{% url 'home' %}"
+               class="px-6 py-3 rounded-xl border border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 hover:scale-105 transition duration-300">
+
+                Go Home
+
+            </a>
+
+        </div>
+
+        <div class="mt-12 border-t pt-8">
+
+            <h3 class="text-lg font-semibold text-gray-800 mb-2">
+                Need inspiration?
+            </h3>
+
+            <p class="text-gray-500 mb-5">
+                Discover delicious recipes and cooking ideas.
+            </p>
+
+            <a href="{% url 'recipes' %}"
+               class="text-orange-500 font-semibold hover:text-orange-600">
+
+                View Recipes →
+
+            </a>
+
+        </div>
+
+    </div>
+</div>
+{% endblock %}

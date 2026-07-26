@@ -39,11 +39,15 @@
         </p>
 
         {% if recipe.image %}
+        <picture>
+            <source
+                srcset="{{ recipe.image_webp.url }}"
+                type="image/webp">
 
-        <img src="{{ recipe.image.url }}"
-             alt="{{ recipe.title }}"
-             class="w-full rounded-2xl mt-6 mb-8">
-
+            <img src="{{ recipe.image.url }}"
+                 alt="{{ recipe.title }}"
+                 class="w-full rounded-2xl mt-6 mb-8" loading="lazy" decoding="async">
+        </picture>
         {% endif %}
 
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-10">

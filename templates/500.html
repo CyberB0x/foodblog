@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}500 - Server Error{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center bg-gray-50 px-6 py-16">
+
+    <div class="max-w-xl w-full bg-white rounded-3xl shadow-lg p-10 text-center">
+
+        <div class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-red-100">
+            <span class="text-5xl">🍳</span>
+        </div>
+
+        <h1 class="text-7xl font-extrabold text-gray-900 mb-2">
+            500
+        </h1>
+
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">
+            Something Went Wrong
+        </h2>
+
+        <p class="text-gray-600 leading-relaxed mb-8">
+            Our kitchen had a little accident.
+            We're already working on fixing the problem.
+            Please try again in a few minutes.
+        </p>
+
+        <a href="{% url 'home' %}"
+           class="inline-block px-8 py-3 rounded-xl bg-red-500 text-white font-semibold shadow hover:bg-red-600 hover:scale-105 transition duration-300">
+
+            Go Home
+
+        </a>
+
+        <div class="mt-12 border-t pt-8">
+
+            <p class="text-gray-500">
+                Thank you for your patience.
+                We appreciate your visit and hope to see you again soon.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+{% endblock %}

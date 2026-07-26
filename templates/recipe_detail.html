@@ -201,11 +201,16 @@ article
     <div class="grid lg:grid-cols-2 gap-8">
 
         <div>
+            <picture>
 
-            <img src="{{ recipe.image.url }}"
-                 alt="{{ recipe.title }}"
-                 class="w-full h-80 lg:h-[500px] object-cover rounded-2xl border">
+                <source
+                    srcset="{{ recipe.image_webp.url }}"
+                    type="image/webp">
 
+                <img src="{{ recipe.image.url }}"
+                     alt="{{ recipe.title }}"
+                     class="w-full h-80 lg:h-[500px] object-cover rounded-2xl border" loading="lazy" decoding="async">
+            </picture>
         </div>
 
         <div class="flex flex-col justify-center">

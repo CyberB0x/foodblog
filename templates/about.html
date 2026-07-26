@@ -30,11 +30,14 @@
     <div class="grid md:grid-cols-2 gap-10 items-center mb-20">
 
         <div class="flex justify-center">
-
-            <img src="/static/img/me.jpg"
-                 alt="Arslonbek"
-                 class="w-72 h-72 object-cover rounded-2xl border">
-
+            <picture>
+                <source
+                    srcset="{{ recipe.image_webp.url }}"
+                    type="image/webp">
+                <img src="/static/img/me.jpg"
+                     alt="Arslonbek"
+                     class="w-72 h-72 object-cover rounded-2xl border" loading="lazy" decoding="async">
+            </picture>
         </div>
 
         <div>

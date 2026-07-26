@@ -71,10 +71,15 @@
             {% if recipe.image %}
 
             <a href="{% url 'recipe_detail' recipe.id %}">
+                <picture>
+                    <source
+                        srcset="{{ recipe.image_webp.url }}"
+                        type="image/webp">
 
-                <img src="{{ recipe.image.url }}"
-                     alt="{{ recipe.title }}"
-                     class="w-full h-56 object-cover">
+                    <img src="{{ recipe.image.url }}"
+                         alt="{{ recipe.title }}"
+                         class="w-full h-56 object-cover" loading="lazy" decoding="async">
+                </picture>
 
             </a>
 
