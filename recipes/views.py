@@ -485,3 +485,11 @@ def custom_404(request, exception):
 # ==== 500 page
 def custom_500(request):
     return render(request, "500.html", status=500)
+
+# privacy policy
+def privacy_policy(request):
+    return render(request, "privacy_policy.html")
+
+# cookie policy
+def cookie_policy(request):
+    return render(request, "cookie_policy.html")

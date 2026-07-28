@@ -26,6 +26,9 @@ urlpatterns = [
     path('settings/', views.settings_view, name='settings'),
     path("recipe/<int:pk>/rate/", views.rate_recipe, name="rate_recipe"),
     path("recipe/<int:pk>/print/", views.recipe_print, name="recipe_print"),
+
+    path("privacy-policy/", views.privacy_policy, name="privacy_policy"),
+    path("cookie-policy/", views.cookie_policy, name="cookie_policy"),
 ]
 if settings.DEBUG:
     urlpatterns += static(
