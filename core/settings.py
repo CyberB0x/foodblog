@@ -70,8 +70,9 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'axes.backends.AxesStandaloneBackend',
-    'django.contrib.auth.backends.ModelBackend',
+    "axes.backends.AxesStandaloneBackend",
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 AXES_FAILURE_LIMIT = 5
@@ -92,9 +93,28 @@ SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
-# Email
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# ==========================
+# Django Allauth Settings
+# ==========================
+
 ACCOUNT_UNIQUE_EMAIL = True
+
+# Не требовать подтверждение email
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+# Новый формат allauth 65+
+ACCOUNT_LOGIN_METHODS = {"email"}
+
+# Автоматический вход после Google
+SOCIALACCOUNT_AUTO_SIGNUP = True
+
+# Google уже подтвердил email
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "VERIFIED_EMAIL": True,
+        "EMAIL_AUTHENTICATION": True,
+    }
+}
 
 ACCOUNT_SIGNUP_FIELDS = [
     "email*",

@@ -1,220 +1,470 @@
 {% extends "base.html" %}
 
-{% block title %}About{% endblock %}
+{% block title %}About MAISON EFSUN{% endblock %}
+
 
 {% block content %}
 
 <div class="max-w-6xl mx-auto px-4 py-10">
 
-    <!-- Header -->
 
-    <div class="text-center mb-16">
+<!-- HERO -->
 
-        <h1 class="text-5xl font-bold">
+<section class="text-center mb-20">
 
-            About Food Blog
 
-        </h1>
+<h1 class="text-5xl font-bold mb-6">
+    About MAISON EFSUN
+</h1>
 
-        <p class="text-gray-600 mt-4 max-w-2xl mx-auto">
 
-            A modern recipe website built with Django where I share my favorite recipes and combine my passion for cooking with software development.
+<h2 class="text-3xl font-semibold mb-6">
+    The Art of Creating Sweet Moments
+</h2>
 
-        </p>
 
-    </div>
+<p class="text-gray-600 leading-8 max-w-3xl mx-auto">
 
+MAISON EFSUN is a premium dessert brand dedicated to creating elegant
+and memorable pastry experiences through craftsmanship, creativity,
+and a passion for excellence.
 
-    <!-- About -->
+</p>
 
-    <div class="grid md:grid-cols-2 gap-10 items-center mb-20">
 
-        <div class="flex justify-center">
-            <picture>
-                <source
-                    srcset="{{ recipe.image_webp.url }}"
-                    type="image/webp">
-                <img src="/static/img/me.jpg"
-                     alt="Arslonbek"
-                     class="w-72 h-72 object-cover rounded-2xl border" loading="lazy" decoding="async">
-            </picture>
-        </div>
+</section>
 
-        <div>
 
-            <h2 class="text-3xl font-bold mb-4">
 
-                Hi, I'm Arslonbek
 
-            </h2>
 
-            <p class="text-gray-600 leading-8">
+<!-- FOUNDER STORY -->
 
-                I'm a pastry chef and a Python Full Stack Developer. This project combines my two passions: creating delicious food and building modern web applications with Django.
+<section class="grid md:grid-cols-2 gap-10 items-center mb-20">
 
-            </p>
 
-            <p class="text-gray-600 leading-8 mt-5">
+<div class="flex justify-center">
 
-                Every recipe is carefully prepared, tested and shared to help people enjoy cooking at home.
 
-            </p>
+<img src="/static/img/arslon-efsun.jpg"
+     alt="Arslonbek and Efsun - Founder Story MAISON EFSUN"
+     class="w-full max-w-md rounded-2xl border object-cover"
+     loading="lazy">
 
-        </div>
-
-    </div>
-
-
-    <!-- Project -->
-
-    <section class="border rounded-2xl p-8 mb-20">
-
-        <h2 class="text-3xl font-bold mb-5">
-
-            About the Project
-
-        </h2>
-
-        <p class="text-gray-600 leading-8">
-
-            Food Blog is a personal project built with Django and Tailwind CSS. It allows visitors to browse recipes, save favorites, rate dishes, print recipes and discover new ideas for everyday cooking.
-
-        </p>
-
-    </section>
-    <!-- Features -->
-
-    <section class="mb-20">
-
-        <h2 class="text-3xl font-bold text-center mb-10">
-
-            Features
-
-        </h2>
-
-        <div class="grid gap-6 md:grid-cols-3">
-
-            <div class="border rounded-2xl p-6">
-
-                <i class="fa-solid fa-magnifying-glass text-2xl text-orange-500 mb-4"></i>
-
-                <h3 class="text-xl font-semibold mb-2">
-
-                    Smart Search
-
-                </h3>
-
-                <p class="text-gray-600">
-
-                    Quickly find recipes using categories and search.
-
-                </p>
-
-            </div>
-
-            <div class="border rounded-2xl p-6">
-
-                <i class="fa-solid fa-layer-group text-2xl text-orange-500 mb-4"></i>
-
-                <h3 class="text-xl font-semibold mb-2">
-
-                    Categories
-
-                </h3>
-
-                <p class="text-gray-600">
-
-                    Browse recipes by category and discover new ideas.
-
-                </p>
-
-            </div>
-
-            <div class="border rounded-2xl p-6">
-
-                <i class="fa-solid fa-heart text-2xl text-orange-500 mb-4"></i>
-
-                <h3 class="text-xl font-semibold mb-2">
-
-                    Favorites
-
-                </h3>
-
-                <p class="text-gray-600">
-
-                    Save your favorite recipes for quick access anytime.
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- Social -->
-
-    <section class="text-center mb-20">
-
-        <h2 class="text-3xl font-bold mb-8">
-
-            Connect with Me
-
-        </h2>
-
-        <div class="flex flex-wrap justify-center gap-4">
-
-            <a href="https://github.com/CyberB0x"
-               target="_blank"
-               class="px-6 py-3 border rounded-xl hover:bg-gray-100 flex items-center gap-3">
-
-                <i class="fa-brands fa-github text-xl"></i>
-
-                GitHub
-
-            </a>
-
-            <a href="https://www.linkedin.com/in/arslon-erkinov-6723aa1a2/"
-               target="_blank"
-               class="px-6 py-3 border rounded-xl hover:bg-gray-100 flex items-center gap-3">
-
-                <i class="fa-brands fa-linkedin text-xl text-blue-600"></i>
-
-                LinkedIn
-
-            </a>
-
-        </div>
-
-    </section>
-
-
-    <!-- CTA -->
-
-    <section class="text-center border rounded-2xl p-10">
-
-        <h2 class="text-3xl font-bold mb-4">
-
-            Ready to Cook?
-
-        </h2>
-
-        <p class="text-gray-600 mb-8">
-
-            Discover delicious recipes and start cooking today.
-
-        </p>
-
-        <a href="{% url 'home' %}"
-           class="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl">
-
-            Browse Recipes
-
-        </a>
-
-    </section>
 
 </div>
+
+
+
+
+
+<div>
+
+
+<h2 class="text-3xl font-bold mb-4">
+The Story Behind MAISON EFSUN
+</h2>
+
+
+<h3 class="text-xl font-semibold mb-5">
+A Journey Between Creativity, Technology, and Pastry
+</h3>
+
+
+
+<p class="text-gray-600 leading-8 mb-5">
+
+My name is Arslonbek, and MAISON EFSUN was created from the combination
+of my passions: the art of pastry, creativity, and technology.
+
+</p>
+
+
+
+<p class="text-gray-600 leading-8 mb-5">
+
+Throughout my journey, I have always been inspired by the process of
+creating something meaningful — whether it is developing unique dessert
+concepts or building modern digital solutions through programming.
+
+</p>
+
+
+
+<p class="text-gray-600 leading-8 mb-5">
+
+Alongside my passion for pastry, I have a strong interest in software
+development and modern technologies. As a Python Full Stack Developer,
+I enjoy creating digital experiences, solving complex challenges,
+and transforming ideas into real projects.
+
+</p>
+
+
+
+<p class="text-gray-600 leading-8 mb-5">
+
+The name <b>MAISON EFSUN</b> carries a special personal meaning.
+Efsun is the name of my beloved dog, who has been an important part
+of my life and inspired the identity of this brand.
+
+The name represents loyalty, warmth, and the emotional connection
+that stands behind every creation.
+
+</p>
+
+
+
+<p class="text-gray-600 leading-8">
+
+MAISON EFSUN represents the connection between two worlds that inspire me:
+the precision and creativity of programming, and the emotion,
+artistry, and craftsmanship of pastry.
+
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- BRAND STORY -->
+
+<section class="grid md:grid-cols-2 gap-10 items-center mb-20">
+
+
+<div>
+
+
+<h2 class="text-3xl font-bold mb-5">
+Our Story
+</h2>
+
+
+<p class="text-gray-600 leading-8 mb-5">
+
+Inspired by the traditions of fine pastry making and enriched with a modern
+artistic vision, MAISON EFSUN creates desserts where refined flavors,
+carefully selected ingredients, and exceptional attention to detail come
+together in perfect harmony.
+
+</p>
+
+
+
+<p class="text-gray-600 leading-8">
+
+Every creation represents more than a dessert — it is a carefully designed
+experience where taste, texture, and presentation tell a unique story.
+
+</p>
+
+
+</div>
+
+
+
+
+<div class="border rounded-2xl p-8">
+
+
+<h3 class="text-2xl font-bold mb-4">
+MAISON EFSUN Philosophy
+</h3>
+
+
+<p class="text-gray-600 leading-8">
+
+True luxury lies in details. From the recipe and ingredients to the final
+presentation, every element reflects quality, elegance, and creativity.
+
+</p>
+
+
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
+<!-- VALUES -->
+
+
+<section class="mb-20">
+
+
+<h2 class="text-3xl font-bold text-center mb-10">
+Our Values
+</h2>
+
+
+
+<div class="grid md:grid-cols-3 gap-6">
+
+
+
+<div class="border rounded-2xl p-6">
+
+
+<i class="fa-solid fa-star text-2xl text-yellow-600 mb-4"></i>
+
+
+<h3 class="text-xl font-semibold mb-3">
+Excellence
+</h3>
+
+
+<p class="text-gray-600">
+Commitment to the highest standards in every creation.
+</p>
+
+
+</div>
+
+
+
+
+
+<div class="border rounded-2xl p-6">
+
+
+<i class="fa-solid fa-leaf text-2xl text-yellow-600 mb-4"></i>
+
+
+<h3 class="text-xl font-semibold mb-3">
+Quality
+</h3>
+
+
+<p class="text-gray-600">
+Carefully selected ingredients and attention to every detail.
+</p>
+
+
+</div>
+
+
+
+
+
+
+<div class="border rounded-2xl p-6">
+
+
+<i class="fa-solid fa-lightbulb text-2xl text-yellow-600 mb-4"></i>
+
+
+<h3 class="text-xl font-semibold mb-3">
+Creativity
+</h3>
+
+
+<p class="text-gray-600">
+Modern ideas inspired by classic pastry traditions.
+</p>
+
+
+</div>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+<!-- FOUNDER CARD -->
+
+
+<section class="grid md:grid-cols-2 gap-10 items-center mb-20">
+
+
+
+<div class="flex justify-center">
+
+
+<img src="/static/img/me.jpg"
+     alt="Arslonbek Founder MAISON EFSUN"
+     class="w-72 h-72 object-cover rounded-2xl border"
+     loading="lazy">
+
+
+</div>
+
+
+
+
+<div>
+
+
+<h2 class="text-3xl font-bold mb-4">
+Founder & Creator
+</h2>
+
+
+
+<p class="text-gray-600 leading-8">
+
+Arslonbek Erkinov
+
+<br>
+
+Founder of MAISON EFSUN
+
+<br>
+
+Python Full Stack Developer & Dessert Creator
+
+</p>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+<!-- PROJECT -->
+
+
+<section class="border rounded-2xl p-8 mb-20">
+
+
+<h2 class="text-3xl font-bold mb-5">
+About the Project
+</h2>
+
+
+<p class="text-gray-600 leading-8">
+
+MAISON EFSUN is a Django-based platform created to share recipes,
+discover culinary ideas, and combine technology with the art of cooking.
+
+The project includes recipe management, favorites, ratings, search,
+categories, SEO optimization and a modern responsive experience.
+
+</p>
+
+
+</section>
+
+
+
+
+
+
+
+
+<!-- SOCIAL -->
+
+
+<section class="text-center mb-20">
+
+
+<h2 class="text-3xl font-bold mb-8">
+Connect
+</h2>
+
+
+<div class="flex justify-center gap-4">
+
+
+
+<a href="https://github.com/CyberB0x"
+target="_blank"
+class="px-6 py-3 border rounded-xl hover:bg-gray-100">
+
+GitHub
+
+</a>
+
+
+
+
+<a href="https://www.linkedin.com/in/arslon-erkinov-6723aa1/"
+target="_blank"
+class="px-6 py-3 border rounded-xl hover:bg-gray-100">
+
+LinkedIn
+
+</a>
+
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<!-- CTA -->
+
+
+<section class="text-center border rounded-2xl p-10">
+
+
+<h2 class="text-3xl font-bold mb-4">
+Discover MAISON EFSUN
+</h2>
+
+
+
+<p class="text-gray-600 mb-8">
+
+Explore elegant recipes and discover new culinary inspirations.
+
+</p>
+
+
+
+
+<a href="{% url 'home' %}"
+class="inline-block bg-yellow-600 hover:bg-yellow-700 text-white px-8 py-3 rounded-xl">
+
+Explore Recipes
+
+</a>
+
+
+
+</section>
+
+
+
+</div>
+
 
 {% endblock %}
