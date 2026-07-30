@@ -282,7 +282,7 @@ def about(request):
 # =========================
 # RECIPE DETAIL + COMMENTS
 # =========================
-@ratelimit(key='ip', rate='5/m')
+# @ratelimit(key='ip', rate='5/m')
 def recipe_detail(request, pk):
 
     recipe = get_object_or_404(Recipe, pk=pk)
