@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}
   MAISON EFSUN | Best Dessert Recipes
 {% endblock %}
@@ -21,115 +22,343 @@ Discover delicious dessert recipes with step-by-step instructions.
 
 {% block content %}
 
+<!-- ================= HERO ================= -->
+
+{% if page_obj %}
+
+{% with featured=page_obj.0 %}
+
+<!-- ================= HERO ================= -->
+
+<section class="max-w-7xl mx-auto px-5 lg:px-6 py-8 lg:py-12">
+
+    <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+
+        <!-- LEFT -->
+
+        <div>
+
+            <span class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#E5D8C8] bg-[#FAF6F1]">
+
+                <span class="w-2 h-2 rounded-full bg-[#C79B45]"></span>
+
+                <span class="uppercase tracking-[0.35em] text-[11px] text-[#C79B45]">
+
+                    MAISON EFSUN
+
+                </span>
+
+            </span>
+
+            <h1 class="brand-title text-4xl sm:text-5xl lg:text-7xl leading-tight mt-6 lg:mt-8">
+
+                Luxury
+                <br>
+                Dessert
+                <br>
+                Recipes
+
+            </h1>
+
+            <p class="mt-6 text-base lg:text-lg leading-8 text-[#6B574C] max-w-xl">
+
+                Discover elegant desserts inspired by French pâtisserie.
+                Carefully tested recipes, premium ingredients and timeless
+                baking techniques for everyone who loves beautiful desserts.
+
+            </p>
+
+            <div class="flex flex-wrap gap-4 mt-10">
+
+                <a href="{% url 'recipes' %}"
+                   class="px-6 lg:px-8 py-3 rounded-full bg-[#3B2D26] text-white hover:bg-[#B78A3B] transition">
+
+                    Explore Recipes
+
+                </a>
+
+                <a href="{% url 'about' %}"
+                   class="px-6 lg:px-8 py-3 rounded-full border border-[#D9CBB9] hover:bg-[#F8F3EC] transition">
+
+                    Our Story
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div>
+
+            <img src="{% static 'img/hero-dessert.jpg' %}"
+                 alt="Luxury Dessert"
+                 class="w-full h-[300px] sm:h-[420px] lg:h-[650px] object-cover rounded-[28px] lg:rounded-[36px] shadow-xl">
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endwith %}
+
+{% endif %}
+
+
 <div class="max-w-7xl mx-auto px-4 py-8">
 
-    <!-- Categories -->
-    <div class="flex gap-3 overflow-x-auto pb-4 mb-8">
+
+<!-- Categories -->
+
+<section class="mb-20">
+
+    <div class="flex items-center justify-between mb-8">
+
+        <div>
+
+            <p class="uppercase tracking-[0.30em] text-xs text-[#B78A3B] mb-2">
+                Browse Collection
+            </p>
+
+            <h2 class="brand-title text-4xl text-[#3B2D26]">
+                Categories
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="flex flex-wrap gap-4">
 
         {% for cat in categories %}
-        <a href="{% url 'category' cat.slug %}"
-           class="flex-shrink-0 px-4 py-2 rounded-full border hover:bg-gray-100">
 
-            {{ cat.name }}
+        <a href="{% url 'category' cat.slug %}"
+           class="group px-7 py-3 rounded-full bg-white border border-[#E8DDD0]
+                  hover:bg-[#3B2D26]
+                  hover:border-[#3B2D26]
+                  transition duration-300">
+
+            <span class="text-[#6A5649] group-hover:text-white font-medium">
+
+                {{ cat.name }}
+
+            </span>
 
         </a>
+
         {% endfor %}
 
     </div>
 
+</section>
+
     <!-- Featured -->
-    {% if page_obj and not query and not selected_category %}
+   <!-- ================= LATEST RECIPES ================= -->
 
-        {% with featured=page_obj.0 %}
+<section class="mb-24">
 
-        <a href="{% url 'recipe_detail' featured.id %}"
-           class="block mb-10">
+    <div class="flex items-end justify-between mb-12">
 
-            <div class="grid lg:grid-cols-2 border rounded-2xl overflow-hidden bg-white">
-                <picture>
-                    <source
-                        srcset="{{ recipe.image_webp.url }}"
-                        type="image/webp">
-                    <img src="{{ featured.image.url }}"
-                         class="w-full h-72 lg:h-full object-cover" loading="lazy" decoding="async">
-                </picture>
+        <div>
 
-                <div class="p-8 flex flex-col justify-center">
+            <span class="uppercase tracking-[0.35em] text-[11px] text-[#B78A3B]">
 
-                    <span class="text-sm text-orange-500 font-medium">
-                        Featured Recipe
+                Journal
+
+            </span>
+
+            <h2 class="brand-title text-5xl mt-4 text-[#3B2D26]">
+
+                Latest Recipes
+
+            </h2>
+
+        </div>
+
+        <a href="{% url 'recipes' %}"
+
+           class="hidden md:flex items-center gap-3
+                  text-[#3B2D26]
+                  hover:text-[#B78A3B]
+                  transition">
+
+            View All
+
+            <i class="fa-solid fa-arrow-right"></i>
+
+        </a>
+
+    </div>
+
+    <div class="space-y-12">
+
+        {% for recipe in page_obj %}
+
+        {% if not forloop.first or query or selected_category %}
+
+        <article
+            class="group
+                   overflow-hidden
+                   rounded-[36px]
+                   bg-white
+                   border
+                   border-[#ECE2D7]
+                   hover:shadow-2xl
+                   transition
+                   duration-500">
+
+            <div class="grid lg:grid-cols-2">
+
+                {% if forloop.counter|divisibleby:2 %}
+
+                <!-- TEXT -->
+
+                <div class="order-2 lg:order-1 p-10 lg:p-16 flex flex-col justify-center">
+
+                {% else %}
+
+                <!-- TEXT -->
+
+                <div class="p-10 lg:p-16 flex flex-col justify-center">
+
+                {% endif %}
+
+                    <span
+                        class="inline-flex
+                               w-fit
+                               rounded-full
+                               bg-[#F8F3EC]
+                               border
+                               border-[#E7DAC8]
+                               px-5
+                               py-2
+                               uppercase
+                               tracking-[0.30em]
+                               text-[11px]
+                               text-[#B78A3B]">
+
+                        Signature Recipe
+
                     </span>
 
-                    <h1 class="text-3xl font-bold mt-2">
-                        {{ featured.title }}
-                    </h1>
+                    <h2
+                        class="brand-title
+                               text-4xl
+                               lg:text-5xl
+                               mt-6
+                               text-[#3B2D26]
+                               leading-tight">
 
-                    <p class="text-gray-600 mt-4">
-                        {{ featured.description|truncatewords:30 }}
+                        {{ recipe.title }}
+
+                    </h2>
+
+                    <p
+                        class="mt-6
+                               text-[#6B574C]
+                               leading-8">
+
+                        {{ recipe.description|truncatewords:35 }}
+
                     </p>
 
-                    <div class="flex gap-6 mt-6 text-sm text-gray-500">
+                    <div
+                        class="flex
+                               flex-wrap
+                               gap-8
+                               mt-8">
 
-                        <span>❤️ {{ featured.likes }}</span>
-                        <span>💬 {{ featured.comments.count }}</span>
-                        <span>{{ featured.created_at|date:"M d" }}</span>
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-regular fa-heart text-[#B78A3B]"></i>
+
+                            <span>{{ recipe.likes }}</span>
+
+                        </div>
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-regular fa-comment text-[#B78A3B]"></i>
+
+                            <span>{{ recipe.comments.count }}</span>
+
+                        </div>
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-solid fa-star text-[#D4AF37]"></i>
+
+                            <span>{{ recipe.average_rating }}</span>
+
+                        </div>
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-regular fa-clock text-[#B78A3B]"></i>
+
+                            <span>{{ recipe.prep_time }} min</span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="mt-10">
+
+                        <a
+                            href="{% url 'recipe_detail' recipe.id %}"
+
+                            class="inline-flex
+                                   items-center
+                                   gap-3
+                                   rounded-full
+                                   bg-[#3B2D26]
+                                   px-8
+                                   py-4
+                                   text-white
+                                   hover:bg-[#B78A3B]
+                                   transition">
+
+                            View Recipe
+
+                            <i class="fa-solid fa-arrow-right"></i>
+
+                        </a>
 
                     </div>
 
                 </div>
 
-            </div>
+                {% if forloop.counter|divisibleby:2 %}
 
-        </a>
+                <!-- IMAGE -->
 
-        {% endwith %}
+                <div class="order-1 lg:order-2 overflow-hidden">
 
-    {% endif %}
+                {% else %}
 
-    <!-- Recipes -->
+                <!-- IMAGE -->
 
-    {% if page_obj %}
+                <div class="overflow-hidden">
 
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {% endif %}
 
-        {% for recipe in page_obj %}
+                    <img
 
-        <article class="bg-white border rounded-2xl overflow-hidden">
+                        src="{{ recipe.image.url }}"
 
-            <a href="{% url 'recipe_detail' recipe.id %}">
-                <picture>
+                        class="w-full
+                               h-[340px]
+                               lg:h-[560px]
+                               object-cover
+                               group-hover:scale-105
+                               transition
+                               duration-700"
 
-                    <source
-                        srcset="{{ recipe.image_webp.url }}"
-                        type="image/webp">
+                        alt="{{ recipe.title }}"
 
-                    <img src="{{ recipe.image.url }}"
-                         class="w-full h-56 object-cover" loading="lazy" decoding="async">
-
-                </picture>
-            </a>
-
-            <div class="p-5">
-
-                <h2 class="font-semibold text-lg">
-
-                    {{ recipe.title }}
-
-                </h2>
-
-                <p class="text-gray-600 text-sm mt-2">
-
-                    {{ recipe.description|truncatewords:18 }}
-
-                </p>
-
-                <div class="flex justify-between text-sm text-gray-500 mt-5">
-
-                    <span>❤️ {{ recipe.likes }}</span>
-
-                    <span>💬 {{ recipe.comments.count }}</span>
-
-                    <span>{{ recipe.created_at|date:"M d" }}</span>
+                        loading="lazy">
 
                 </div>
 
@@ -137,19 +366,13 @@ Discover delicious dessert recipes with step-by-step instructions.
 
         </article>
 
+        {% endif %}
+
         {% endfor %}
 
     </div>
 
-    {% else %}
-
-    <div class="py-20 text-center text-gray-500">
-
-        No recipes found.
-
-    </div>
-
-    {% endif %}
+</section>
 
     <!-- Pagination -->
 
@@ -168,7 +391,8 @@ Discover delicious dessert recipes with step-by-step instructions.
 
             {% if page_obj.number == num %}
 
-            <span class="px-4 py-2 rounded-lg bg-orange-500 text-white">
+            <span class="px-4 py-2 rounded-lg bg-[#3B2D26] text-white hover:bg-[#B78A3B] hover:text-white
+            transition">
 
                 {{ num }}
 

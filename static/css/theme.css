@@ -1,0 +1,359 @@
+/* ==========================================================
+   MAISON EFSUN DESIGN SYSTEM
+   ========================================================== */
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* =====================
+   COLORS
+===================== */
+
+:root{
+
+    --cream:#F8F5F0;
+    --white:#ffffff;
+
+    --espresso:#3B2D26;
+    --brown:#6E594B;
+
+    --gold:#B78A3B;
+
+    --border:#E9DED2;
+
+    --shadow:0 12px 40px rgba(0,0,0,.08);
+
+}
+
+
+/* =====================
+   BASE
+===================== */
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    font-family:'Inter',sans-serif;
+
+    background:var(--cream);
+
+    color:var(--espresso);
+
+}
+
+img{
+
+    display:block;
+
+    max-width:100%;
+
+}
+
+
+/* =====================
+   TYPOGRAPHY
+===================== */
+
+.brand-title{
+
+    font-family:'Cormorant Garamond',serif;
+
+    font-weight:700;
+
+    letter-spacing:.02em;
+
+    color:var(--espresso);
+
+}
+
+.brand-subtitle{
+
+    color:var(--brown);
+
+    line-height:1.8;
+
+}
+
+
+/* =====================
+   CONTAINER
+===================== */
+
+.efsun-container{
+
+    max-width:1320px;
+
+    margin:auto;
+
+    padding-left:24px;
+
+    padding-right:24px;
+
+}
+
+
+/* =====================
+   CARD
+===================== */
+
+.efsun-card{
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    border-radius:28px;
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
+
+    transition:.35s;
+
+}
+
+.efsun-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+
+/* =====================
+   BUTTON
+===================== */
+
+.efsun-btn{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:14px 30px;
+
+    border-radius:999px;
+
+    background:var(--espresso);
+
+    color:#fff;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.efsun-btn:hover{
+
+    background:#201813;
+
+    transform:translateY(-2px);
+
+}
+
+
+.efsun-btn-outline{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:10px;
+
+    padding:14px 30px;
+
+    border-radius:999px;
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    color:var(--espresso);
+
+    transition:.3s;
+
+}
+
+.efsun-btn-outline:hover{
+
+    background:var(--cream);
+
+}
+
+
+/* =====================
+   INPUT
+===================== */
+
+.efsun-input{
+
+    width:100%;
+
+    padding:16px 22px;
+
+    border-radius:18px;
+
+    border:1px solid var(--border);
+
+    background:#fff;
+
+    transition:.3s;
+
+    outline:none;
+
+}
+
+.efsun-input:focus{
+
+    border-color:var(--gold);
+
+    box-shadow:0 0 0 4px rgba(183,138,59,.15);
+
+}
+
+
+/* =====================
+   BADGE
+===================== */
+
+.efsun-badge{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    padding:8px 18px;
+
+    border-radius:999px;
+
+    background:#F5EEE4;
+
+    color:var(--gold);
+
+    font-size:12px;
+
+    text-transform:uppercase;
+
+    letter-spacing:.25em;
+
+}
+
+
+/* =====================
+   STAT CARD
+===================== */
+
+.efsun-stat{
+
+    background:#fff;
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    padding:20px;
+
+    text-align:center;
+
+    transition:.3s;
+
+}
+
+.efsun-stat:hover{
+
+    box-shadow:var(--shadow);
+
+}
+
+
+/* =====================
+   IMAGE
+===================== */
+
+.efsun-image{
+
+    border-radius:32px;
+
+    overflow:hidden;
+
+    box-shadow:var(--shadow);
+
+}
+
+
+/* =====================
+   SECTION
+===================== */
+
+.efsun-section{
+
+    margin-top:100px;
+
+}
+
+
+/* =====================
+   LINKS
+===================== */
+
+a{
+
+    transition:.3s;
+
+}
+
+a:hover{
+
+    color:var(--gold);
+
+}
+
+
+/* =====================
+   MOBILE
+===================== */
+
+@media(max-width:768px){
+
+.brand-title{
+
+    font-size:42px!important;
+
+}
+
+.efsun-card{
+
+    border-radius:20px;
+
+}
+
+.efsun-image{
+
+    border-radius:22px;
+
+}
+
+.efsun-btn{
+
+    width:100%;
+
+}
+
+.efsun-btn-outline{
+
+    width:100%;
+
+}
+
+}

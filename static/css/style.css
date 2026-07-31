@@ -286,3 +286,36 @@ html{
 
     margin-bottom:20px;
 }
+
+.stars .star{
+
+    color:#ddd;
+
+    transition:.25s;
+
+}
+
+.stars .star:hover{
+
+    color:#D4A437;
+
+}
+
+.stars .star.active{
+
+    color:#D4A437;
+
+    transform:scale(1.15);
+
+}
+.line-clamp-3{
+
+display:-webkit-box;
+
+-webkit-line-clamp:3;
+
+-webkit-box-orient:vertical;
+
+overflow:hidden;
+
+}

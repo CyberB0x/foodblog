@@ -1,28 +1,75 @@
 <a href="{% url 'recipe_detail' recipe.id %}"
-   class="bg-zinc-900 rounded-2xl overflow-hidden shadow-lg hover:scale-105 transition duration-300">
+   class="group block">
 
-    <picture>
+    <article class="efsun-card overflow-hidden h-full">
 
-        <source
-            srcset="{{ recipe.image_webp.url }}"
-            type="image/webp">
+        <div class="relative overflow-hidden">
 
-        <img src="{{ recipe.image.url }}"
-             alt="{{ recipe.title }}"
-             class="w-full h-56 object-cover" loading="lazy" decoding="async">
+            <picture>
 
-    </picture>
+                <source
+                    srcset="{{ recipe.image_webp.url }}"
+                    type="image/webp">
 
-    <div class="p-4">
+                <img
+                    src="{{ recipe.image.url }}"
+                    alt="{{ recipe.title }}"
+                    class="h-80 w-full object-cover transition duration-700 group-hover:scale-110"
+                    loading="lazy"
+                    decoding="async">
 
-        <h3 class="text-xl font-bold text-white">
-            {{ recipe.title }}
-        </h3>
+            </picture>
 
-        <p class="text-yellow-400 mt-2">
-            ⭐ {{ recipe.average_rating }}
-        </p>
+            <div class="absolute top-6 left-6">
 
-    </div>
+                <span class="efsun-badge">
+
+                    {{ recipe.category.name }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="p-8">
+
+            <h3 class="brand-title text-3xl mb-5 group-hover:text-[#B78A3B] transition">
+
+                {{ recipe.title }}
+
+            </h3>
+
+            <p class="brand-subtitle line-clamp-3">
+
+                {{ recipe.description|truncatewords:20 }}
+
+            </p>
+
+            <div class="flex justify-between items-center mt-8">
+
+                <div class="flex items-center gap-2">
+
+                    <i class="fa-solid fa-star text-[#D4A437]"></i>
+
+                    <span class="font-semibold">
+
+                        {{ recipe.average_rating }}
+
+                    </span>
+
+                </div>
+
+                <div class="text-sm text-[#8B776A]">
+
+                    {{ recipe.created_at|date:"M d, Y" }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </article>
 
 </a>

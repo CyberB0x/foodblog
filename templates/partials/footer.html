@@ -1,79 +1,183 @@
-<footer class="bg-black text-gray-300 mt-8">
-    <div class="max-w-7xl mx-auto px-6 py-12">
+{% load static %}
+<footer class="bg-[#2F241E] text-white mt-24">
 
-        <div class="grid md:grid-cols-3 gap-10">
+    <div class="efsun-container py-20">
+
+        <div class="grid lg:grid-cols-4 md:grid-cols-2 gap-12">
 
             <!-- Brand -->
+
             <div>
-                <h2 class="text-2xl font-bold text-white mb-4">
-                    🍽️ MAISON EFSUN
+
+                <img src="{% static 'img/logo-2.png' %}"
+                     alt="MAISON EFSUN"
+                     class="h-16 mb-6">
+
+                <h2 class="brand-title text-4xl text-white mb-4">
+                    MAISON EFSUN
                 </h2>
 
-                <p class="text-gray-400">
-                    Crafting premium desserts with passion, elegance, and exceptional craftsmanship to create unforgettable sweet moments.
+                <p class="text-[#C9BFB4] leading-8">
+
+                    Elegant desserts inspired by French pâtisserie.
+                    Carefully crafted recipes, premium ingredients,
+                    and timeless baking traditions.
+
                 </p>
+
             </div>
 
-            <!-- Quick Links -->
+            <!-- Explore -->
+
             <div>
-                <h3 class="text-xl font-semibold text-white mb-4">
-                    Quick Links
+
+                <h3 class="text-xl font-semibold mb-6">
+
+                    Explore
+
                 </h3>
 
-                <ul class="space-y-2">
+                <ul class="space-y-4">
+
                     <li>
-                        <a href="{% url 'home' %}"
-                           class="hover:text-white transition">
+                        <a href="{% url 'home' %}">
                             Home
                         </a>
                     </li>
 
                     <li>
-                        <a href="{% url 'recipes' %}"
-                           class="hover:text-white transition">
+                        <a href="{% url 'recipes' %}">
                             Recipes
                         </a>
                     </li>
 
                     <li>
-                        <a href="{% url 'about' %}"
-                           class="hover:text-white transition">
+                        <a href="{% url 'about' %}">
                             About
                         </a>
                     </li>
+
+                    {% if user.is_authenticated %}
                     <li>
-                        <a href="{% url 'privacy_policy' %}" class="hover:text-orange-500">
+                        <a href="{% url 'dashboard' %}">
+                            Dashboard
+                        </a>
+                    </li>
+                    {% endif %}
+
+                </ul>
+
+            </div>
+
+            <!-- Company -->
+
+            <div>
+
+                <h3 class="text-xl font-semibold mb-6">
+
+                    Company
+
+                </h3>
+
+                <ul class="space-y-4">
+
+                    <li>
+                        <a href="{% url 'privacy_policy' %}">
                             Privacy Policy
                         </a>
                     </li>
+
                     <li>
-                        <a href="{% url 'cookie_policy' %}" class="hover:text-orange-500">
+                        <a href="{% url 'cookie_policy' %}">
                             Cookie Policy
                         </a>
                     </li>
+
+                    <li>
+                        <a href="">
+                            Contact
+                        </a>
+                    </li>
+
                 </ul>
+
             </div>
 
-            <!-- Contact -->
+            <!-- Newsletter -->
+
             <div>
-                <h3 class="text-xl font-semibold text-white mb-4">
-                    Connect
+
+                <h3 class="text-xl font-semibold mb-6">
+
+                    Stay Inspired
+
                 </h3>
 
-                <div class="space-y-2">
-                    <p>Email: hello@foodblog.com</p>
-                    <p>Instagram: @foodblog</p>
-                    <p>LinkedIn: FoodBlog</p>
-                </div>
+                <p class="text-[#C9BFB4] mb-6">
+
+                    Receive our newest recipes,
+                    baking inspiration,
+                    and seasonal collections.
+
+                </p>
+
+                <form class="space-y-4">
+
+                    <input
+                        type="email"
+                        placeholder="Email address"
+                        class="efsun-input">
+
+                    <button
+                        class="efsun-btn w-full">
+
+                        Subscribe
+
+                    </button>
+
+                </form>
+
             </div>
-
-
 
         </div>
 
-        <div class="border-t border-gray-800 mt-10 pt-6 text-center text-gray-500">
-            © 2026 MAISON EFSUN. All rights reserved.
+        <!-- Bottom -->
+
+        <div class="border-t border-[#4C3B33] mt-16 pt-8">
+
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+
+                <p class="text-[#BFAF9F] text-sm">
+
+                    © 2026 MAISON EFSUN.
+                    All Rights Reserved.
+
+                </p>
+
+                <div class="flex gap-5 text-xl">
+
+                    <a href="#">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+
+                    <a href="#">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+
+                    <a href="#">
+                        <i class="fab fa-pinterest"></i>
+                    </a>
+
+                    <a href="#">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+
+                </div>
+
+            </div>
+
         </div>
 
     </div>
+
 </footer>

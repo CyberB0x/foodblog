@@ -198,122 +198,276 @@ article
         </ol>
     </nav>
 
-    <div class="grid lg:grid-cols-2 gap-8">
+    <section class="grid lg:grid-cols-2 gap-16 items-center">
 
-        <div>
+    <!-- LEFT -->
+
+    <div>
+
+        <div class="overflow-hidden rounded-[34px] shadow-2xl">
+
             <picture>
 
+                {% if recipe.image_webp %}
                 <source
                     srcset="{{ recipe.image_webp.url }}"
                     type="image/webp">
+                {% endif %}
 
-                <img src="{{ recipe.image.url }}"
-                     alt="{{ recipe.title }}"
-                     class="w-full h-80 lg:h-[500px] object-cover rounded-2xl border" loading="lazy" decoding="async">
+                <img
+                    src="{{ recipe.image.url }}"
+                    alt="{{ recipe.title }}"
+                    class="w-full h-[420px] lg:h-[760px] object-cover">
+
             </picture>
+
         </div>
 
-        <div class="flex flex-col justify-center">
+    </div>
 
-            <span class="text-sm font-medium text-orange-500 uppercase">
-                Recipe
-            </span>
+    <!-- RIGHT -->
 
-            <h1 class="text-4xl font-bold mt-2">
+    <div>
 
-                {{ recipe.title }}
+        <span class="efsun-badge">
 
-            </h1>
+            {{ recipe.category.name }}
 
-            <p class="text-gray-600 mt-4 leading-7">
+        </span>
 
-                {{ recipe.description }}
+        <h1 class="brand-title text-5xl lg:text-7xl leading-tight mt-6">
 
-            </p>
+            {{ recipe.title }}
 
-            <!-- Recipe Stats -->
+        </h1>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-8">
+        <p class="brand-subtitle text-lg leading-9 mt-8">
 
-                <div class="border rounded-xl p-4">
+            {{ recipe.description }}
 
-                    <p class="text-gray-500 text-sm">
-                        Prep
-                    </p>
+        </p>
 
-                    <p class="font-semibold">
+        <!-- STATS -->
 
-                        {{ recipe.prep_time }} min
+        <div class="grid grid-cols-2 gap-5 mt-10">
 
-                    </p>
+            <div class="efsun-card p-6">
 
-                </div>
+                <div class="text-[#B78A3B] uppercase tracking-[0.25em] text-xs">
 
-                <div class="border rounded-xl p-4">
-
-                    <p class="text-gray-500 text-sm">
-                        Cook
-                    </p>
-
-                    <p class="font-semibold">
-
-                        {{ recipe.cook_time }} min
-
-                    </p>
+                    Prep Time
 
                 </div>
 
-                <div class="border rounded-xl p-4">
+                <div class="text-3xl mt-3 font-semibold">
 
-                    <p class="text-gray-500 text-sm">
-                        Servings
-                    </p>
+                    {{ recipe.prep_time }}
 
-                    <p class="font-semibold">
+                    <span class="text-lg">
 
-                        {{ recipe.servings }}
+                        min
 
-                    </p>
+                    </span>
 
                 </div>
 
-                <div class="border rounded-xl p-4">
+            </div>
 
-                    <p class="text-gray-500 text-sm">
-                        Difficulty
-                    </p>
+            <div class="efsun-card p-6">
 
-                    <p class="font-semibold">
+                <div class="text-[#B78A3B] uppercase tracking-[0.25em] text-xs">
 
-                        {{ recipe.difficulty }}
-
-                    </p>
+                    Cook Time
 
                 </div>
 
-                <div class="border rounded-xl p-4">
+                <div class="text-3xl mt-3 font-semibold">
 
-                    <p class="text-gray-500 text-sm">
-                        Views
-                    </p>
+                    {{ recipe.cook_time }}
 
-                    <p class="font-semibold">
+                    <span class="text-lg">
 
-                        {{ recipe.views }}
+                        min
 
-                    </p>
+                    </span>
 
                 </div>
 
-                <div class="border rounded-xl p-4">
+            </div>
 
-                    <p class="text-gray-500 text-sm">
-                        Rating
-                    </p>
+            <div class="efsun-card p-6">
 
-                    <p class="font-semibold">
+                <div class="text-[#B78A3B] uppercase tracking-[0.25em] text-xs">
 
-                        {{ recipe.average_rating }}/5
+                    Servings
+
+                </div>
+
+                <div class="text-3xl mt-3 font-semibold">
+
+                    {{ recipe.servings }}
+
+                </div>
+
+            </div>
+
+            <div class="efsun-card p-6">
+
+                <div class="text-[#B78A3B] uppercase tracking-[0.25em] text-xs">
+
+                    Rating
+
+                </div>
+
+                <div class="text-3xl mt-3 font-semibold">
+
+                    ⭐ {{ recipe.average_rating }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- BUTTONS -->
+
+        <div class="flex flex-wrap gap-4 mt-12">
+
+            <button
+                onclick="likeRecipe({{ recipe.id }})"
+                class="efsun-btn-outline flex items-center gap-3">
+
+                ❤ Like
+
+            </button>
+
+            <button
+                onclick="toggleFavorite({{ recipe.id }})"
+                class="efsun-btn-outline flex items-center gap-3">
+
+                ♥ Favorite
+
+            </button>
+
+            <form
+                action="{% url 'save_recipe' recipe.id %}"
+                method="POST">
+
+                {% csrf_token %}
+
+                <button
+                    class="efsun-btn-outline flex items-center gap-3">
+
+                    Save
+
+                </button>
+
+            </form>
+
+            <a
+                href="{% url 'recipe_print' recipe.pk %}"
+                target="_blank"
+                class="efsun-btn-outline flex items-center gap-3">
+
+                Print
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+        <!-- Video -->
+    {% if recipe.get_youtube_embed_url %}
+
+
+        <section class="mt-24">
+
+            <div class="text-center mb-12">
+
+                <span class="efsun-badge">
+
+                    WATCH
+
+                </span>
+
+                <h2 class="brand-title text-5xl mt-6">
+
+                    Video Tutorial
+
+                </h2>
+
+            </div>
+
+            <div class="overflow-hidden rounded-[36px] shadow-2xl">
+
+                <iframe
+                    class="w-full aspect-video"
+                    src="{{ recipe.get_youtube_embed_url }}"
+                    title="{{ recipe.title }}"
+                    allowfullscreen>
+                </iframe>
+
+            </div>
+
+        </section>
+
+    {% endif %}
+
+
+    <!-- Ingredients & Instructions -->
+
+    <section class="mt-24">
+
+    <div class="text-center mb-16">
+
+        <span class="efsun-badge">
+
+            RECIPE GUIDE
+
+        </span>
+
+        <h2 class="brand-title text-5xl mt-6">
+
+            Everything You Need
+
+        </h2>
+
+        <p class="brand-subtitle mt-5 max-w-2xl mx-auto">
+
+            Carefully selected ingredients and detailed instructions
+            designed to help you recreate this dessert perfectly.
+
+        </p>
+
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-10">
+
+        <!-- INGREDIENTS -->
+
+        <div class="efsun-card p-10">
+
+            <div class="flex items-center gap-4 mb-8">
+
+                <div class="w-14 h-14 rounded-full bg-[#F7EFE6] flex items-center justify-center">
+
+                    🥐
+
+                </div>
+
+                <div>
+
+                    <h3 class="brand-title text-3xl">
+
+                        Ingredients
+
+                    </h3>
+
+                    <p class="brand-subtitle">
+
+                        Premium ingredients
 
                     </p>
 
@@ -321,82 +475,47 @@ article
 
             </div>
 
-            <!-- Actions -->
+            <div class="whitespace-pre-line leading-9 text-[#5D4B40]">
 
-            <div class="flex flex-wrap gap-3 mt-8">
+                {{ recipe.ingredients }}
 
-                <!-- Like -->
+            </div>
 
-                <button onclick="likeRecipe({{ recipe.id }})"
-                        class="border rounded-lg px-4 py-2 flex items-center gap-2 hover:bg-gray-100">
+        </div>
 
-                    <i id="heart-{{ recipe.id }}"
-                       class="fa-regular fa-heart text-red-500"></i>
+        <!-- INSTRUCTIONS -->
 
-                    <span id="likes-{{ recipe.id }}">
+        <div class="efsun-card p-10">
 
-                        {{ recipe.likes }}
+            <div class="flex items-center gap-4 mb-8">
 
-                    </span>
+                <div class="w-14 h-14 rounded-full bg-[#F7EFE6] flex items-center justify-center">
 
-                </button>
+                    👨‍🍳
 
-                <!-- Favorite -->
+                </div>
 
-                <button id="fav-{{ recipe.id }}"
-                        onclick="toggleFavorite({{ recipe.id }})"
-                        class="border rounded-lg px-4 py-2 flex items-center gap-2">
+                <div>
 
-                    <i class="fa-solid fa-heart text-red-500"></i>
+                    <h3 class="brand-title text-3xl">
 
-                    <span>
+                        Instructions
 
-                        {% if recipe.id in favorite_recipes_ids %}
-                            Favorited
-                        {% else %}
-                            Favorite
-                        {% endif %}
+                    </h3>
 
-                    </span>
+                    <p class="brand-subtitle">
 
-                </button>
+                        Step by step
 
-                <!-- Save -->
+                    </p>
 
-                <form action="{% url 'save_recipe' recipe.id %}" method="POST">
+                </div>
 
-                    {% csrf_token %}
+            </div>
 
-                    <button type="submit"
-                            class="border rounded-lg px-4 py-2 flex items-center gap-2">
+            <div class="whitespace-pre-line leading-9 text-[#5D4B40]">
 
-                        <i class="fa-solid fa-bookmark text-orange-500"></i>
-
-                        <span>
-
-                            {% if recipe.id in saved_recipes %}
-                                Saved
-                            {% else %}
-                                Save
-                            {% endif %}
-
-                        </span>
-
-                    </button>
-
-                </form>
-
-                <!-- Print -->
-
-                <a href="{% url 'recipe_print' recipe.pk %}"
-                   target="_blank"
-                   class="border rounded-lg px-4 py-2 flex items-center gap-2">
-
-                    <i class="fa-solid fa-print"></i>
-
-                    Print
-
-                </a>
+                {{ recipe.instructions }}
 
             </div>
 
@@ -404,302 +523,363 @@ article
 
     </div>
 
-        <!-- Video -->
-    {% if recipe.get_youtube_embed_url %}
-
-    <section class="mt-12">
-
-        <h2 class="text-2xl font-semibold mb-4">
-
-            Video Recipe
-
-        </h2>
-
-        <div class="overflow-hidden rounded-2xl border">
-
-            <iframe
-                class="w-full aspect-video"
-                src="{{ recipe.get_youtube_embed_url }}"
-                title="{{ recipe.title }}"
-                allowfullscreen>
-            </iframe>
-
-        </div>
-
-    </section>
-
-    {% endif %}
-
-
-    <!-- Ingredients & Instructions -->
-
-    <section class="grid lg:grid-cols-2 gap-8 mt-12">
-
-        <!-- Ingredients -->
-
-        <div>
-
-            <h2 class="text-2xl font-semibold mb-5">
-
-                Ingredients
-
-            </h2>
-
-            <div class="border rounded-2xl p-6">
-
-                <div class="whitespace-pre-line leading-8">
-
-                    {{ recipe.ingredients }}
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Instructions -->
-
-        <div>
-
-            <h2 class="text-2xl font-semibold mb-5">
-
-                Instructions
-
-            </h2>
-
-            <div class="border rounded-2xl p-6">
-
-                <div class="whitespace-pre-line leading-8">
-
-                    {{ recipe.instructions }}
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
+</section>
 
 
     <!-- Rating -->
 
-    <section class="mt-12">
+    <section class="mt-24">
 
-        <h2 class="text-2xl font-semibold mb-4">
+    <div class="efsun-card p-12">
 
-            Rate this recipe
+        <div class="text-center mb-10">
 
-        </h2>
+            <span class="efsun-badge">
 
-        <div class="border rounded-2xl p-6">
+                YOUR OPINION
 
-            <div class="stars flex gap-2 text-3xl"
-                 data-recipe-id="{{ recipe.id }}">
+            </span>
 
-                <span class="star cursor-pointer" data-value="1">&#9733;</span>
-                <span class="star cursor-pointer" data-value="2">&#9733;</span>
-                <span class="star cursor-pointer" data-value="3">&#9733;</span>
-                <span class="star cursor-pointer" data-value="4">&#9733;</span>
-                <span class="star cursor-pointer" data-value="5">&#9733;</span>
+            <h2 class="brand-title text-5xl mt-6">
 
-            </div>
+                Rate This Recipe
 
-            <div class="mt-4 text-gray-600">
+            </h2>
 
-                <strong id="average-rating">
+            <p class="brand-subtitle mt-4">
+
+                Help other dessert lovers by leaving your rating.
+
+            </p>
+
+        </div>
+
+        <div
+            class="stars flex justify-center gap-4 text-5xl"
+            data-recipe-id="{{ recipe.id }}">
+
+            <span class="star cursor-pointer transition hover:scale-125"
+                  data-value="1">★</span>
+
+            <span class="star cursor-pointer transition hover:scale-125"
+                  data-value="2">★</span>
+
+            <span class="star cursor-pointer transition hover:scale-125"
+                  data-value="3">★</span>
+
+            <span class="star cursor-pointer transition hover:scale-125"
+                  data-value="4">★</span>
+
+            <span class="star cursor-pointer transition hover:scale-125"
+                  data-value="5">★</span>
+
+        </div>
+
+        <div class="text-center mt-8">
+
+            <div class="text-4xl font-bold text-[#3B2D26]">
+
+                <span id="average-rating">
 
                     {{ recipe.average_rating }}
 
-                </strong>
+                </span>
 
                 / 5
 
-                <span id="rating-count">
+            </div>
 
-                    ({{ recipe.ratings_count }} votes)
+            <div
+                id="rating-count"
+                class="brand-subtitle mt-2">
 
-                </span>
+                {{ recipe.ratings_count }} votes
 
             </div>
 
         </div>
 
-    </section>
+    </div>
+
+</section>
 
 
     <!-- Share -->
 
-    <section class="mt-12">
+    <section class="mt-24">
 
-        <h2 class="text-2xl font-semibold mb-4">
+    <div class="text-center">
 
-            Share
+        <span class="efsun-badge">
+
+            SHARE
+
+        </span>
+
+        <h2 class="brand-title text-5xl mt-6">
+
+            Share This Recipe
 
         </h2>
 
-        <div class="flex flex-wrap gap-3">
+    </div>
 
-            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
-               target="_blank"
-               class="border rounded-lg px-4 py-3">
+    <div class="flex justify-center flex-wrap gap-6 mt-12">
 
-                <i class="fab fa-facebook-f"></i>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+           target="_blank"
+           class="w-16 h-16 rounded-full bg-white shadow hover:shadow-xl flex items-center justify-center transition hover:-translate-y-1">
 
-            </a>
+            <i class="fab fa-facebook-f text-xl"></i>
 
-            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ recipe.title }}"
-               target="_blank"
-               class="border rounded-lg px-4 py-3">
+        </a>
 
-                <i class="fab fa-x-twitter"></i>
+        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}"
+           target="_blank"
+           class="w-16 h-16 rounded-full bg-white shadow hover:shadow-xl flex items-center justify-center transition hover:-translate-y-1">
 
-            </a>
+            <i class="fab fa-x-twitter text-xl"></i>
 
-            <a href="https://t.me/share/url?url={{ request.build_absolute_uri }}&text={{ recipe.title }}"
-               target="_blank"
-               class="border rounded-lg px-4 py-3">
+        </a>
 
-                <i class="fab fa-telegram"></i>
+        <a href="https://t.me/share/url?url={{ request.build_absolute_uri }}"
+           target="_blank"
+           class="w-16 h-16 rounded-full bg-white shadow hover:shadow-xl flex items-center justify-center transition hover:-translate-y-1">
 
-            </a>
+            <i class="fab fa-telegram text-xl"></i>
 
-            <a href="https://api.whatsapp.com/send?text={{ recipe.title }} {{ request.build_absolute_uri }}"
-               target="_blank"
-               class="border rounded-lg px-4 py-3">
+        </a>
 
-                <i class="fab fa-whatsapp"></i>
+        <a href="https://api.whatsapp.com/send?text={{ recipe.title }} {{ request.build_absolute_uri }}"
+           target="_blank"
+           class="w-16 h-16 rounded-full bg-white shadow hover:shadow-xl flex items-center justify-center transition hover:-translate-y-1">
 
-            </a>
+            <i class="fab fa-whatsapp text-xl"></i>
 
-            <button onclick="copyRecipeLink()"
-                    class="border rounded-lg px-4 py-3">
+        </a>
 
-                <i class="fa-solid fa-link"></i>
+        <button
+            onclick="copyRecipeLink()"
+            class="w-16 h-16 rounded-full bg-[#3B2D26] text-white shadow-lg hover:scale-110 transition">
 
-            </button>
+            <i class="fa-solid fa-link"></i>
 
-        </div>
+        </button>
 
-    </section>
+    </div>
+
+</section>
         <!-- Comments -->
 
-    <section class="mt-12">
+    <section class="mt-24">
 
-        <div class="flex items-center justify-between mb-6">
+    <div class="text-center mb-14">
 
-            <h2 class="text-2xl font-semibold">
+        <span class="efsun-badge">
 
-                Comments
+            COMMUNITY
 
-            </h2>
+        </span>
 
-            <span class="text-gray-500">
+        <h2 class="brand-title text-5xl mt-6">
 
-                {{ comments|length }}
+            Customer Reviews
 
-            </span>
+        </h2>
 
-        </div>
+        <p class="brand-subtitle mt-5">
 
-        {% if comments %}
+            Discover what our community thinks about this recipe.
 
-            <div class="space-y-4">
+        </p>
 
-                {% for comment in comments %}
+    </div>
 
-                <div class="border rounded-2xl p-5">
+    {% if comments %}
 
-                    <div class="flex items-center justify-between mb-2">
+        <div class="space-y-8">
 
-                        <strong>
+            {% for comment in comments %}
 
-                            {{ comment.name }}
+            <div class="efsun-card p-8">
 
-                        </strong>
+                <div class="flex items-start gap-5">
+
+                    <!-- Avatar -->
+
+                    <div class="w-16 h-16 rounded-full bg-[#3B2D26] text-white flex items-center justify-center text-xl font-semibold flex-shrink-0">
+
+                        {{ comment.name|first|upper }}
 
                     </div>
 
-                    <p class="text-gray-600">
+                    <!-- Content -->
 
-                        {{ comment.text }}
+                    <div class="flex-1">
 
-                    </p>
+                        <div class="flex items-center justify-between">
+
+                            <h3 class="font-semibold text-xl text-[#3B2D26]">
+
+                                {{ comment.name }}
+
+                            </h3>
+
+                        </div>
+
+                        <p class="text-[#6B574C] leading-8 mt-4">
+
+                            {{ comment.text }}
+
+                        </p>
+
+                    </div>
 
                 </div>
 
-                {% endfor %}
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% else %}
+
+        <div class="efsun-card p-16 text-center">
+
+            <div class="text-6xl mb-6">
+
+                💬
 
             </div>
 
-        {% else %}
+            <h3 class="brand-title text-3xl mb-4">
 
-            <div class="border rounded-2xl p-8 text-center text-gray-500">
+                Be the first to comment
 
-                No comments yet.
+            </h3>
 
-            </div>
+            <p class="brand-subtitle">
 
-        {% endif %}
+                Share your experience after preparing this recipe.
 
-    </section>
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</section>
 
 
     <!-- Add Comment -->
 
-    <section class="mt-12">
+    <section class="mt-20">
 
-        <h2 class="text-2xl font-semibold mb-6">
+    <div class="efsun-card p-12">
 
-            Leave a Comment
+        <div class="text-center mb-12">
 
-        </h2>
+            <span class="efsun-badge">
 
-        <form method="POST" class="space-y-4">
+                SHARE YOUR EXPERIENCE
+
+            </span>
+
+            <h2 class="brand-title text-5xl mt-6">
+
+                Leave a Comment
+
+            </h2>
+
+            <p class="brand-subtitle mt-5">
+
+                We'd love to hear how your dessert turned out.
+
+            </p>
+
+        </div>
+
+        <form method="POST" class="space-y-7">
 
             {% csrf_token %}
 
             <input
                 type="text"
                 name="name"
-                placeholder="Your name"
-                class="w-full border rounded-xl p-3">
+                placeholder="Your Name"
+                class="efsun-input">
 
             <textarea
                 name="text"
-                rows="5"
-                placeholder="Write your comment..."
-                class="w-full border rounded-xl p-3 resize-none"></textarea>
+                rows="7"
+                placeholder="Write your review..."
+                class="efsun-input resize-none"></textarea>
 
             <button
-                class="bg-orange-500 hover:bg-orange-600 text-white rounded-xl px-6 py-3">
+                class="efsun-btn w-full">
 
-                Post Comment
+                Publish Comment
 
             </button>
 
         </form>
 
-    </section>
+    </div>
+
+</section>
 
 
     {% if similar_recipes %}
-        <section class="mt-16">
 
-            <h2 class="text-3xl font-bold mb-8">
-                🍽️ You may also like
-            </h2>
+<section class="mt-32">
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="text-center mb-16">
 
-                {% for recipe in similar_recipes %}
-                    {% include "recipe_card.html" %}
-                {% endfor %}
+        <span class="efsun-badge">
 
-            </div>
+            MAISON EFSUN COLLECTION
 
-        </section>
-    {% endif %}
+        </span>
+
+        <h2 class="brand-title text-5xl lg:text-6xl mt-6">
+
+            You May Also Like
+
+        </h2>
+
+        <p class="brand-subtitle mt-6 max-w-2xl mx-auto">
+
+            Continue exploring our carefully curated collection of handcrafted
+            desserts inspired by timeless French pâtisserie.
+
+        </p>
+
+    </div>
+
+    <div class="grid gap-10 md:grid-cols-2 xl:grid-cols-3">
+
+        {% for recipe in similar_recipes %}
+
+            {% include "recipe_card.html" %}
+
+        {% endfor %}
+
+    </div>
+
+    <div class="text-center mt-16">
+
+        <a href="{% url 'recipes' %}" class="efsun-btn">
+
+            Explore All Recipes
+
+        </a>
+
+    </div>
+
+</section>
+
+{% endif %}
 
 </div>
 
