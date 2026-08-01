@@ -6,62 +6,182 @@
 
 <div class="max-w-4xl mx-auto px-4 py-10">
 
-    <div class="bg-white border rounded-2xl p-8">
+    <!-- Hero -->
 
-        <div class="mb-8">
+<div class="overflow-hidden rounded-[36px] bg-[#F8F3EC] mb-12">
 
-            <h1 class="text-3xl font-bold">
+    <div class="grid lg:grid-cols-2 items-center">
+
+        <!-- LEFT -->
+
+        <div class="px-8 py-12 lg:px-14 lg:py-16">
+
+            <span class="uppercase tracking-[0.35em] text-[11px] text-[#B78A3B]">
+
+                MAISON EFSUN ACCOUNT
+
+            </span>
+
+            <h1 class="brand-title text-5xl lg:text-6xl text-[#3B2D26] mt-6">
+
+                Account
+                <br>
 
                 Settings
 
             </h1>
 
-            <p class="text-gray-500 mt-2">
+            <p class="mt-6 text-[#6B574C] leading-8 max-w-lg">
 
-                Manage your profile information.
+                Personalize your profile, update your social links,
+                upload your avatar and make your MAISON EFSUN account truly yours.
+
+            </p>
+
+            <div class="flex flex-wrap gap-4 mt-10">
+
+                <a href="{% url 'dashboard' %}"
+                   class="efsun-btn">
+
+                    <i class="fa-solid fa-arrow-left mr-2"></i>
+
+                    Dashboard
+
+                </a>
+
+                <a href="{% url 'profile' %}"
+                   class="efsun-btn-outline px-8 py-3 rounded-full">
+
+                    <i class="fa-regular fa-user mr-2"></i>
+
+                    View Profile
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="flex justify-center items-center py-10">
+
+            {% if profile.avatar %}
+
+                <img src="{{ profile.avatar.url }}"
+                     alt="Avatar"
+                     class="w-56 h-56 rounded-full object-cover border-[10px] border-white shadow-xl">
+
+            {% else %}
+
+                <div class="w-56 h-56 rounded-full bg-white flex items-center justify-center shadow-xl">
+
+                    <span class="brand-title text-8xl text-[#3B2D26]">
+
+                        {{ request.user.username|first|upper }}
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Form Card -->
+
+<div class="bg-white rounded-[34px] border border-[#ECE2D7] p-8 lg:p-12">
+<div class="bg-white rounded-[34px] border border-[#ECE2D7] p-8 lg:p-12">
+
+    <!-- Profile Information -->
+
+    <section class="mb-14">
+
+        <div class="mb-10">
+
+            <span class="uppercase tracking-[0.30em] text-[11px] text-[#B78A3B]">
+
+                PERSONAL INFORMATION
+
+            </span>
+
+            <h2 class="brand-title text-4xl text-[#3B2D26] mt-3">
+
+                Profile Settings
+
+            </h2>
+
+            <p class="text-[#6B574C] mt-3">
+
+                Update your profile information and personalize your MAISON EFSUN account.
 
             </p>
 
         </div>
 
-        <form method="POST" enctype="multipart/form-data" class="space-y-8">
+        <form method="POST" enctype="multipart/form-data">
 
             {% csrf_token %}
 
             <!-- Avatar -->
 
-            <div class="flex flex-col sm:flex-row items-center gap-6">
+            <div class="mb-12">
 
-                {% if profile.avatar %}
-                <picture>
+                <label class="block text-sm uppercase tracking-[0.25em] text-[#B78A3B] mb-4">
 
-                    <source
-                        srcset="{{ recipe.image_webp.url }}"
-                        type="image/webp">
+                    Profile Picture
 
-                    <img src="{{ profile.avatar.url }}"
-                         alt="Avatar"
-                         class="w-28 h-28 rounded-full object-cover border" loading="lazy" decoding="async">
-                </picture>
-                {% else %}
+                </label>
 
-                    <div class="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center text-4xl font-bold text-gray-500">
+                <div class="flex flex-col lg:flex-row gap-8 items-center">
 
-                        {{ request.user.username|first|upper }}
+                    {% if profile.avatar %}
+
+                        <img src="{{ profile.avatar.url }}"
+                             class="w-36 h-36 rounded-full object-cover border-[6px] border-[#F8F3EC] shadow-md">
+
+                    {% else %}
+
+                        <div class="w-36 h-36 rounded-full bg-[#F8F3EC] flex items-center justify-center">
+
+                            <span class="brand-title text-5xl text-[#3B2D26]">
+
+                                {{ request.user.username|first|upper }}
+
+                            </span>
+
+                        </div>
+
+                    {% endif %}
+
+                    <div class="flex-1">
+
+                        <label for="id_avatar"
+                               class="inline-flex items-center px-6 py-3 rounded-full bg-[#3B2D26] text-white cursor-pointer hover:bg-[#B78A3B] transition">
+
+                            <i class="fa-solid fa-upload mr-2"></i>
+
+                            Upload Photo
+
+                        </label>
+
+                        <input
+                            id="id_avatar"
+                            type="file"
+                            name="avatar"
+                            accept="image/png,image/jpeg,image/webp"
+                            class="hidden">
+
+                        <p class="text-sm text-[#8D7C70] mt-3">
+                            PNG, JPG or WEBP • Recommended size 500×500 px
+                        </p>
+
 
                     </div>
-
-                {% endif %}
-
-                <div class="flex-1 w-full">
-
-                    <label class="block font-medium mb-2">
-
-                        Avatar
-
-                    </label>
-
-                    {{ form.avatar }}
 
                 </div>
 
@@ -69,11 +189,11 @@
 
             <!-- Bio -->
 
-            <div>
+            <div class="mb-12">
 
-                <label class="block font-medium mb-2">
+                <label class="block text-sm uppercase tracking-[0.25em] text-[#B78A3B] mb-4">
 
-                    Bio
+                    About You
 
                 </label>
 
@@ -83,19 +203,21 @@
 
             <!-- Social -->
 
-            <div>
+            <div class="mb-12">
 
-                <h2 class="text-xl font-semibold mb-4">
+                <h3 class="brand-title text-3xl text-[#3B2D26] mb-8">
 
                     Social Links
 
-                </h2>
+                </h3>
 
-                <div class="grid md:grid-cols-2 gap-5">
+                <div class="grid md:grid-cols-2 gap-6">
 
                     <div>
 
-                        <label class="block mb-2">
+                        <label class="block mb-2 font-medium">
+
+                            <i class="fab fa-github mr-2 text-[#B78A3B]"></i>
 
                             GitHub
 
@@ -107,7 +229,9 @@
 
                     <div>
 
-                        <label class="block mb-2">
+                        <label class="block mb-2 font-medium">
+
+                            <i class="fab fa-linkedin mr-2 text-[#B78A3B]"></i>
 
                             LinkedIn
 
@@ -119,7 +243,9 @@
 
                     <div>
 
-                        <label class="block mb-2">
+                        <label class="block mb-2 font-medium">
+
+                            <i class="fab fa-instagram mr-2 text-[#B78A3B]"></i>
 
                             Instagram
 
@@ -131,7 +257,9 @@
 
                     <div>
 
-                        <label class="block mb-2">
+                        <label class="block mb-2 font-medium">
+
+                            <i class="fab fa-youtube mr-2 text-[#B78A3B]"></i>
 
                             YouTube
 
@@ -145,11 +273,11 @@
 
             </div>
 
-            <!-- Cuisine -->
+            <!-- Favorite Cuisine -->
 
-            <div>
+            <div class="mb-12">
 
-                <label class="block font-medium mb-2">
+                <label class="block text-sm uppercase tracking-[0.25em] text-[#B78A3B] mb-4">
 
                     Favorite Cuisine
 
@@ -161,19 +289,21 @@
 
             <!-- Buttons -->
 
-            <div class="flex flex-col sm:flex-row gap-3">
+            <div class="flex flex-wrap gap-4">
 
                 <button type="submit"
-                        class="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-xl">
+                        class="efsun-btn">
+
+                    <i class="fa-solid fa-floppy-disk mr-2"></i>
 
                     Save Changes
 
                 </button>
 
                 <a href="{% url 'dashboard' %}"
-                   class="px-6 py-3 border rounded-xl hover:bg-gray-100 text-center">
+                   class="efsun-btn-outline px-8 py-3 rounded-full">
 
-                    ← Dashboard
+                    Cancel
 
                 </a>
 
@@ -181,8 +311,21 @@
 
         </form>
 
-    </div>
+    </section>
 
 </div>
+</div>
+</div>
+
+<script>
+const input = document.getElementById("id_avatar");
+const fileName = document.getElementById("file-name");
+
+input.addEventListener("change", function () {
+    if (this.files.length > 0) {
+        fileName.textContent = "✔ " + this.files[0].name;
+    }
+});
+</script>
 
 {% endblock %}

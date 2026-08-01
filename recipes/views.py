@@ -204,10 +204,11 @@ def settings_view(request):
 # FAVORITE TOGGLE
 # =========================
 @login_required
+@ratelimit(key="user", rate="20/m")
 def toggle_favorite(request, id):
 
     if request.method != "POST":
-        return redirect("dashboard")
+        return JsonResponse({"error": "Invalid request"}, status=400)
 
     recipe = get_object_or_404(Recipe, id=id)
 
@@ -217,21 +218,25 @@ def toggle_favorite(request, id):
     )
 
     if favorite.exists():
+
         favorite.delete()
+
+        is_favorite = False
+
     else:
-        FavoriteRecipe.objects.filter(
+
+        FavoriteRecipe.objects.create(
             user=request.user,
             recipe=recipe
         )
 
-    next_page = request.POST.get("next")
+        is_favorite = True
 
-    if next_page:
-        return redirect(next_page)
-
-    return redirect("recipe_detail", id=id)
-
-
+    return JsonResponse({
+        "success": True,
+        "favorite": is_favorite,
+        "count": FavoriteRecipe.objects.filter(recipe=recipe).count()
+    })
 
 
 # =========================

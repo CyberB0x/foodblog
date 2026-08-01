@@ -4,54 +4,153 @@
 
 <div class="max-w-4xl mx-auto px-4 py-10">
 
-    <div class="bg-white border rounded-2xl p-8">
+    <div class="overflow-hidden rounded-[36px] bg-[#F8F3EC] mb-12">
 
-        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+    <div class="grid lg:grid-cols-2 items-center">
 
-            {% if profile.avatar %}
-            <picture>
+        <!-- LEFT -->
 
-                <source
-                    srcset="{{ recipe.image_webp.url }}"
-                    type="image/webp">
+        <div class="px-8 py-12 lg:px-14 lg:py-16">
 
-                <img src="{{ profile.avatar.url }}"
-                     alt="{{ request.user.username }}"
-                     class="w-28 h-28 rounded-full object-cover border" loading="lazy" decoding="async">
+            <span class="uppercase tracking-[0.35em] text-[11px] text-[#B78A3B]">
+                MAISON EFSUN PROFILE
+            </span>
 
-            </picture>
+            <h1 class="brand-title text-5xl lg:text-6xl text-[#3B2D26] mt-6">
+
+                {{ request.user.username }}
+
+            </h1>
+
+            {% if profile.bio %}
+
+            <p class="mt-6 text-[#6B574C] leading-8 max-w-lg">
+
+                {{ profile.bio }}
+
+            </p>
+
             {% else %}
 
-                <div class="w-28 h-28 rounded-full bg-gray-200 flex items-center justify-center text-4xl font-bold text-gray-500">
-                    {{ request.user.username|first|upper }}
-                </div>
+            <p class="mt-6 text-[#8D7C70] leading-8">
+
+                Welcome to your MAISON EFSUN profile.
+
+            </p>
+
             {% endif %}
 
-            <div class="flex-1 text-center sm:text-left">
+            <div class="flex flex-wrap gap-4 mt-10">
 
-                <h1 class="text-3xl font-bold">
+                <a href="{% url 'settings' %}" class="efsun-btn">
 
+                    <i class="fa-solid fa-pen mr-2"></i>
+
+                    Edit Profile
+
+                </a>
+
+                <a href="{% url 'dashboard' %}"
+                   class="efsun-btn-outline px-8 py-3 rounded-full">
+
+                    Dashboard
+
+                </a>
+
+                <a href="{% url 'logout' %}"
+                   class="efsun-btn-outline px-8 py-3 rounded-full">
+
+                    Logout
+
+                </a>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="flex justify-center py-10">
+
+            {% if profile.avatar %}
+
+                <img src="{{ profile.avatar.url }}"
+                     class="w-64 h-64 rounded-full object-cover border-[10px] border-white shadow-xl">
+
+            {% else %}
+
+                <div class="w-64 h-64 rounded-full bg-white shadow-xl flex items-center justify-center">
+
+                    <span class="brand-title text-8xl text-[#3B2D26]">
+
+                        {{ request.user.username|first|upper }}
+
+                    </span>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+   <div class="grid lg:grid-cols-2 gap-8 mt-10">
+
+    <!-- Account -->
+
+    <div class="bg-white rounded-[30px] border border-[#ECE2D7] p-8">
+
+        <span class="uppercase tracking-[0.30em] text-[11px] text-[#B78A3B]">
+            ACCOUNT
+        </span>
+
+        <h2 class="brand-title text-3xl text-[#3B2D26] mt-4 mb-8">
+            Information
+        </h2>
+
+        <div class="space-y-6">
+
+            <div class="flex justify-between items-center border-b border-[#F3E8DB] pb-4">
+
+                <span class="text-[#8D7C70]">Username</span>
+
+                <span class="font-medium text-[#3B2D26]">
                     {{ request.user.username }}
+                </span>
 
-                </h1>
+            </div>
 
-                {% if profile.bio %}
+            <div class="flex justify-between items-center border-b border-[#F3E8DB] pb-4">
 
-                <p class="mt-3 text-gray-600 leading-7">
+                <span class="text-[#8D7C70]">
+                    Favorite Cuisine
+                </span>
 
-                    {{ profile.bio }}
+                <span class="font-medium text-[#3B2D26]">
 
-                </p>
+                    {{ profile.favorite_cuisine|default:"Not specified" }}
 
-                {% else %}
+                </span>
 
-                <p class="mt-3 text-gray-400">
+            </div>
 
-                    No bio yet.
+            <div class="flex justify-between items-center">
 
-                </p>
+                <span class="text-[#8D7C70]">
 
-                {% endif %}
+                    Member
+
+                </span>
+
+                <span class="text-[#B78A3B] font-semibold">
+
+                    MAISON EFSUN
+
+                </span>
 
             </div>
 
@@ -59,117 +158,164 @@
 
     </div>
 
+    <!-- Social -->
 
-    <div class="grid md:grid-cols-2 gap-6 mt-8">
+    <div class="bg-white rounded-[30px] border border-[#ECE2D7] p-8">
 
-        <!-- Favorite Cuisine -->
+        <span class="uppercase tracking-[0.30em] text-[11px] text-[#B78A3B]">
 
-        <div class="bg-white border rounded-2xl p-6">
+            SOCIAL
 
-            <h2 class="font-semibold text-lg mb-3">
+        </span>
 
-                Favorite Cuisine
+        <h2 class="brand-title text-3xl text-[#3B2D26] mt-4 mb-8">
 
-            </h2>
+            Connect
 
-            <p class="text-gray-600">
+        </h2>
 
-                {{ profile.favorite_cuisine|default:"Not specified" }}
+        <div class="space-y-5">
+
+            {% if profile.github %}
+            <a href="{{ profile.github }}" target="_blank"
+               class="flex items-center justify-between rounded-2xl border border-[#ECE2D7] px-5 py-4 hover:border-[#B78A3B] transition">
+
+                <div class="flex items-center gap-3">
+
+                    <i class="fab fa-github text-xl"></i>
+
+                    <span>GitHub</span>
+
+                </div>
+
+                <i class="fa-solid fa-arrow-up-right-from-square text-[#B78A3B]"></i>
+
+            </a>
+            {% endif %}
+
+            {% if profile.linkedin %}
+            <a href="{{ profile.linkedin }}" target="_blank"
+               class="flex items-center justify-between rounded-2xl border border-[#ECE2D7] px-5 py-4 hover:border-[#B78A3B] transition">
+
+                <div class="flex items-center gap-3">
+
+                    <i class="fab fa-linkedin"></i>
+
+                    <span>LinkedIn</span>
+
+                </div>
+
+                <i class="fa-solid fa-arrow-up-right-from-square text-[#B78A3B]"></i>
+
+            </a>
+            {% endif %}
+
+            {% if profile.instagram %}
+            <a href="{{ profile.instagram }}" target="_blank"
+               class="flex items-center justify-between rounded-2xl border border-[#ECE2D7] px-5 py-4 hover:border-[#B78A3B] transition">
+
+                <div class="flex items-center gap-3">
+
+                    <i class="fab fa-instagram"></i>
+
+                    <span>Instagram</span>
+
+                </div>
+
+                <i class="fa-solid fa-arrow-up-right-from-square text-[#B78A3B]"></i>
+
+            </a>
+            {% endif %}
+
+            {% if profile.youtube %}
+            <a href="{{ profile.youtube }}" target="_blank"
+               class="flex items-center justify-between rounded-2xl border border-[#ECE2D7] px-5 py-4 hover:border-[#B78A3B] transition">
+
+                <div class="flex items-center gap-3">
+
+                    <i class="fab fa-youtube"></i>
+
+                    <span>YouTube</span>
+
+                </div>
+
+                <i class="fa-solid fa-arrow-up-right-from-square text-[#B78A3B]"></i>
+
+            </a>
+            {% endif %}
+
+            {% if not profile.github and not profile.linkedin and not profile.instagram and not profile.youtube %}
+
+            <div class="text-center py-8 text-[#8D7C70]">
+
+                No social links added yet.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+    <!-- Bottom Actions -->
+
+<div class="mt-12 rounded-[30px] bg-[#F8F3EC] border border-[#ECE2D7] p-8">
+
+    <div class="flex flex-col lg:flex-row items-center justify-between gap-6">
+
+        <div>
+
+            <span class="uppercase tracking-[0.30em] text-[11px] text-[#B78A3B]">
+
+                MAISON EFSUN
+
+            </span>
+
+            <h3 class="brand-title text-3xl text-[#3B2D26] mt-3">
+
+                Manage Your Account
+
+            </h3>
+
+            <p class="text-[#6B574C] mt-2">
+
+                Update your profile, manage your recipes and continue discovering new desserts.
 
             </p>
 
         </div>
 
+        <div class="flex flex-wrap gap-4">
 
-        <!-- Social -->
+            <a href="{% url 'settings' %}"
+               class="efsun-btn">
 
-        <div class="bg-white border rounded-2xl p-6">
+                <i class="fa-solid fa-user-gear mr-2"></i>
 
-            <h2 class="font-semibold text-lg mb-3">
+                Settings
 
-                Social Links
+            </a>
 
-            </h2>
+            <a href="{% url 'dashboard' %}"
+               class="efsun-btn-outline px-8 py-3 rounded-full">
 
-            <div class="space-y-3">
+                <i class="fa-solid fa-arrow-left mr-2"></i>
 
-                {% if profile.github %}
-                <a href="{{ profile.github }}"
-                   target="_blank"
-                   class="flex items-center gap-2 text-gray-700 hover:text-orange-500">
+                Dashboard
 
-                    <i class="fa-brands fa-github"></i>
+            </a>
 
-                    GitHub
 
-                </a>
-                {% endif %}
-
-                {% if profile.linkedin %}
-                <a href="{{ profile.linkedin }}"
-                   target="_blank"
-                   class="flex items-center gap-2 text-gray-700 hover:text-orange-500">
-
-                    <i class="fa-brands fa-linkedin"></i>
-
-                    LinkedIn
-
-                </a>
-                {% endif %}
-
-                {% if profile.instagram %}
-                <a href="{{ profile.instagram }}"
-                   target="_blank"
-                   class="flex items-center gap-2 text-gray-700 hover:text-orange-500">
-
-                    <i class="fa-brands fa-instagram"></i>
-
-                    Instagram
-
-                </a>
-                {% endif %}
-
-                {% if profile.youtube %}
-                <a href="{{ profile.youtube }}"
-                   target="_blank"
-                   class="flex items-center gap-2 text-gray-700 hover:text-orange-500">
-
-                    <i class="fa-brands fa-youtube"></i>
-
-                    YouTube
-
-                </a>
-                {% endif %}
-
-                {% if not profile.github and not profile.linkedin and not profile.instagram and not profile.youtube %}
-
-                <p class="text-gray-400">
-
-                    No social links.
-
-                </p>
-
-                {% endif %}
-
-            </div>
 
         </div>
 
     </div>
 
-
-    <div class="mt-8">
-
-        <a href="{% url 'dashboard' %}"
-           class="inline-flex items-center gap-2 px-5 py-3 border rounded-xl hover:bg-gray-100">
-
-            <i class="fa-solid fa-arrow-left"></i>
-
-            Dashboard
-
-        </a>
-
-    </div>
+</div>
 
 </div>
 

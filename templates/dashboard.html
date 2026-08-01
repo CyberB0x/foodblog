@@ -7,60 +7,141 @@
 <div class="max-w-7xl mx-auto px-4 py-8">
 
     <!-- Header -->
+<section class="overflow-hidden rounded-[36px] bg-[#F8F3EC] mb-16">
 
-    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
+    <div class="grid lg:grid-cols-2 items-center">
 
-        <div>
+        <!-- Left -->
 
-            <h1 class="text-4xl font-bold">
+        <div class="px-8 py-12 lg:px-16 lg:py-20">
 
-                Dashboard
+            <span class="uppercase tracking-[0.35em] text-[12px] text-[#B78A3B]">
+
+                MAISON EFSUN ACCOUNT
+
+            </span>
+
+            <h1 class="brand-title text-5xl lg:text-7xl text-[#3B2D26] mt-6 leading-tight">
+
+                Welcome,
+                <br>
+
+                {{ request.user.username }}
 
             </h1>
 
-            <p class="text-gray-500 mt-2">
+            <p class="mt-8 text-lg leading-8 text-[#6B574C] max-w-xl">
 
-                Welcome back,
-                <span class="font-semibold text-black">
-
-                    {{ request.user.username }}
-
-                </span>
+                Manage your favorite desserts, saved recipes and
+                personalize your MAISON EFSUN experience from one place.
 
             </p>
 
+            <div class="flex flex-wrap gap-4 mt-10">
+
+                <a href="{% url 'profile' %}"
+                   class="efsun-btn">
+
+                    <i class="fa-regular fa-user mr-2"></i>
+
+                    My Profile
+
+                </a>
+
+                <a href="{% url 'settings' %}"
+                   class="efsun-btn-outline px-8 py-3 rounded-full">
+
+                    <i class="fa-solid fa-gear mr-2"></i>
+
+                    Settings
+
+                </a>
+
+            </div>
+
         </div>
 
-        <div class="flex flex-wrap gap-3">
+        <!-- Right -->
 
-            <a href="{% url 'profile' %}"
-               class="px-5 py-3 border rounded-xl hover:bg-gray-100 transition">
+        <div class="relative flex items-center justify-center h-[320px] lg:h-[500px]">
 
-                <i class="fa-regular fa-user mr-2"></i>
+            <div class="grid grid-cols-2 gap-5 w-full max-w-md px-8">
 
-                Profile
+                <!-- Saved -->
 
-            </a>
+                <div class="bg-white rounded-[28px] p-6 shadow-sm">
 
-            <a href="{% url 'settings' %}"
-               class="px-5 py-3 border rounded-xl hover:bg-gray-100 transition">
+                    <i class="fa-regular fa-bookmark text-3xl text-[#B78A3B]"></i>
 
-                <i class="fa-solid fa-gear mr-2"></i>
+                    <h3 class="text-4xl font-bold mt-6 text-[#3B2D26]">
 
-                Settings
+                        {{ total_saved }}
 
-            </a>
+                    </h3>
 
-            <a href="{% url 'logout' %}"
-               class="px-5 py-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition">
+                    <p class="mt-2 text-[#7A6A5D]">
 
-                Logout
+                        Saved Recipes
 
-            </a>
+                    </p>
+
+                </div>
+
+                <!-- Favorites -->
+
+                <div class="bg-white rounded-[28px] p-6 shadow-sm">
+
+                    <i class="fa-solid fa-heart text-3xl text-[#B78A3B]"></i>
+
+                    <h3 class="text-4xl font-bold mt-6 text-[#3B2D26]">
+
+                        {{ favorite_count }}
+
+                    </h3>
+
+                    <p class="mt-2 text-[#7A6A5D]">
+
+                        Favorites
+
+                    </p>
+
+                </div>
+
+                <!-- Categories -->
+
+                <div class="bg-white rounded-[28px] p-6 shadow-sm col-span-2">
+
+                    <div class="flex justify-between items-center">
+
+                        <div>
+
+                            <h3 class="text-4xl font-bold text-[#3B2D26]">
+
+                                {{ categories.count }}
+
+                            </h3>
+
+                            <p class="mt-2 text-[#7A6A5D]">
+
+                                Recipe Categories
+
+                            </p>
+
+                        </div>
+
+                        <i class="fa-solid fa-layer-group text-4xl text-[#B78A3B]"></i>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
     </div>
+
+</section>
 
 
     <!-- Statistics -->
@@ -87,7 +168,7 @@
 
                 </div>
 
-                <i class="fa-regular fa-bookmark text-3xl text-orange-500"></i>
+                <i class="fa-regular fa-bookmark text-3xl text-[#8D7C70]"></i>
 
             </div>
 
@@ -113,7 +194,7 @@
 
                 </div>
 
-                <i class="fa-solid fa-heart text-3xl text-red-500"></i>
+              <i class="fa-regular fa-heart text-3xl text-[#8D7C70]"></i>
 
             </div>
 
@@ -139,7 +220,7 @@
 
                 </div>
 
-                <i class="fa-solid fa-layer-group text-3xl text-blue-500"></i>
+                <i class="fa-solid fa-layer-group text-3xl text-[#8D7C70]"></i>
 
             </div>
 
@@ -150,258 +231,375 @@
 
     <!-- Saved Recipes -->
 
-    <section class="mb-14">
+  <!-- Saved Recipes -->
 
-        <div class="flex items-center justify-between mb-6">
+<section class="mb-20">
 
-            <h2 class="text-2xl font-bold">
+    <div class="flex items-center justify-between mb-10">
+
+        <div>
+
+            <span class="uppercase tracking-[0.30em] text-[11px] text-[#B78A3B]">
+
+                Your Collection
+
+            </span>
+
+            <h2 class="brand-title text-4xl text-[#3B2D26] mt-2">
 
                 Saved Recipes
 
             </h2>
 
-            <a href="{% url 'recipes' %}"
-               class="text-orange-500 hover:underline">
-
-                Browse all →
-
-            </a>
-
         </div>
-    {% if saved_recipes %}
 
-<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <a href="{% url 'recipes' %}"
+           class="efsun-btn-outline px-6 py-3 rounded-full">
 
-    {% for item in saved_recipes %}
+            Browse Recipes
 
-    <div class="border rounded-2xl overflow-hidden bg-white">
-
-        <a href="{% url 'recipe_detail' item.recipe.id %}">
-            <picture>
-                <source
-                    srcset="{{ recipe.image_webp.url }}"
-                    type="image/webp">
-
-                <img src="{{ item.recipe.image.url }}"
-                     alt="{{ item.recipe.title }}"
-                     class="w-full h-52 object-cover" loading="lazy" decoding="async">
-            </picture>
         </a>
-
-        <div class="p-5">
-
-            <span class="text-sm text-gray-500">
-
-                {{ item.recipe.category.name }}
-
-            </span>
-
-            <h3 class="text-xl font-semibold mt-2">
-
-                {{ item.recipe.title }}
-
-            </h3>
-
-            <p class="text-gray-600 text-sm mt-3">
-
-                {{ item.recipe.description|truncatewords:15 }}
-
-            </p>
-
-            <div class="flex items-center justify-between mt-6">
-
-                <a href="{% url 'recipe_detail' item.recipe.id %}"
-                   class="text-orange-500 hover:underline">
-
-                    View Recipe
-
-                </a>
-
-                <form method="POST"
-                      action="{% url 'save_recipe' item.recipe.id %}">
-
-                    {% csrf_token %}
-
-                    <button type="submit"
-                            class="text-red-500 hover:text-red-600">
-
-                        <i class="fa-regular fa-trash-can mr-1"></i>
-
-                        Remove
-
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
 
     </div>
 
-    {% endfor %}
+    {% if saved_recipes %}
 
-</div>
+    <div class="space-y-10">
 
-{% else %}
+        {% for item in saved_recipes %}
 
-<div class="border rounded-2xl p-12 text-center">
+        <article class="group overflow-hidden rounded-[34px] border border-[#ECE2D7] bg-white shadow-sm hover:shadow-2xl transition duration-500">
 
-    <i class="fa-regular fa-bookmark text-5xl text-gray-300 mb-4"></i>
+            <div class="grid lg:grid-cols-2 items-center">
 
-    <h3 class="text-2xl font-semibold">
+                <!-- IMAGE -->
 
-        No saved recipes
+                <div class="overflow-hidden">
 
-    </h3>
+                    <picture>
 
-    <p class="text-gray-500 mt-3">
+                        {% if item.recipe.image_webp %}
+                        <source srcset="{{ item.recipe.image_webp.url }}" type="image/webp">
+                        {% endif %}
 
-        Save recipes you like and they'll appear here.
+                        <img src="{{ item.recipe.image.url }}"
+                             alt="{{ item.recipe.title }}"
+                             class="w-full h-[320px] lg:h-[430px] object-cover group-hover:scale-105 transition duration-700">
 
-    </p>
+                    </picture>
 
-    <a href="{% url 'recipes' %}"
-       class="inline-block mt-6 px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition">
+                </div>
 
-        Browse Recipes
+                <!-- CONTENT -->
 
-    </a>
+                <div class="p-8 lg:p-12">
 
-</div>
+                    <span class="inline-flex items-center gap-2 rounded-full bg-[#F8F3EC] border border-[#E7DAC8] px-5 py-2">
 
-{% endif %}
+                        <span class="w-2 h-2 rounded-full bg-[#B78A3B]"></span>
+
+                        <span class="uppercase tracking-[0.28em] text-[11px] text-[#B78A3B]">
+
+                            {{ item.recipe.category.name }}
+
+                        </span>
+
+                    </span>
+
+                    <h2 class="brand-title text-4xl text-[#3B2D26] mt-5">
+
+                        {{ item.recipe.title }}
+
+                    </h2>
+
+                    <p class="mt-6 text-[#6B574C] leading-8">
+
+                        {{ item.recipe.description|truncatewords:30 }}
+
+                    </p>
+
+                    <div class="flex flex-wrap gap-8 mt-8 text-[#7B675A]">
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-regular fa-heart text-[#B78A3B]"></i>
+
+                            {{ item.recipe.likes }}
+
+                        </div>
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-regular fa-comment text-[#B78A3B]"></i>
+
+                            {{ item.recipe.comments.count }}
+
+                        </div>
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-solid fa-star text-[#D4AF37]"></i>
+
+                            {{ item.recipe.average_rating }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 mt-10">
+
+                        <a href="{% url 'recipe_detail' item.recipe.id %}"
+                           class="efsun-btn">
+
+                            View Recipe
+
+                        </a>
+
+                        <form method="POST"
+                              action="{% url 'save_recipe' item.recipe.id %}">
+
+                            {% csrf_token %}
+
+                            <button type="submit"
+                                    class="efsun-btn-outline px-6 py-3 rounded-full">
+
+                                <i class="fa-regular fa-trash-can mr-2"></i>
+
+                                Remove
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="rounded-[34px] bg-[#F8F3EC] py-24 text-center">
+
+        <i class="fa-regular fa-bookmark text-6xl text-[#B78A3B] mb-8"></i>
+
+        <h2 class="brand-title text-4xl text-[#3B2D26]">
+
+            No Saved Recipes
+
+        </h2>
+
+        <p class="mt-5 text-[#6B574C]">
+
+            Start saving your favorite desserts to build your personal collection.
+
+        </p>
+
+        <a href="{% url 'recipes' %}"
+           class="efsun-btn inline-block mt-8">
+
+            Explore Recipes
+
+        </a>
+
+    </div>
+
+    {% endif %}
 
 </section>
 
 
 <!-- Favorite Recipes -->
 
-<section>
+<!-- Favorite Recipes -->
 
-    <div class="flex items-center justify-between mb-6">
+<section class="mb-20">
 
-        <h2 class="text-2xl font-bold">
+    <div class="flex items-center justify-between mb-10">
 
-            Favorite Recipes
+        <div>
 
-        </h2>
+            <span class="uppercase tracking-[0.30em] text-[11px] text-[#B78A3B]">
 
-        <span class="text-gray-500">
-
-            {{ favorite_count }} recipes
-
-        </span>
-
-    </div>
-{% if favorite_recipes %}
-
-<div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-
-    {% for item in favorite_recipes %}
-
-    <div class="border rounded-2xl overflow-hidden bg-white">
-
-        <a href="{% url 'recipe_detail' item.recipe.id %}">
-            <picture>
-                <source
-                    srcset="{{ recipe.image_webp.url }}"
-                    type="image/webp">
-
-                <img src="{{ item.recipe.image.url }}"
-                     alt="{{ item.recipe.title }}"
-                     class="w-full h-52 object-cover" loading="lazy" decoding="async">
-            </picture>
-
-        </a>
-
-        <div class="p-5">
-
-            <span class="text-sm text-gray-500">
-
-                {{ item.recipe.category.name }}
+                Your Favorites
 
             </span>
 
-            <h3 class="text-xl font-semibold mt-2">
+            <h2 class="brand-title text-4xl text-[#3B2D26] mt-2">
 
-                {{ item.recipe.title }}
+                Favorite Recipes
 
-            </h3>
+            </h2>
 
-            <p class="text-gray-600 text-sm mt-3">
+        </div>
 
-                {{ item.recipe.description|truncatewords:15 }}
+        <div class="text-[#6B574C]">
 
-            </p>
-
-            <div class="flex items-center justify-between mt-6">
-
-                <a href="{% url 'recipe_detail' item.recipe.id %}"
-                   class="text-orange-500 hover:underline">
-
-                    View Recipe
-
-                </a>
-
-                <form method="POST"
-                      action="{% url 'favorite' item.recipe.id %}">
-
-                    {% csrf_token %}
-
-                    <input type="hidden"
-                           name="next"
-                           value="{% url 'dashboard' %}">
-
-                    <button type="submit"
-                            class="text-red-500 hover:text-red-600">
-
-                        <i class="fa-solid fa-heart-crack mr-1"></i>
-
-                        Remove
-
-                    </button>
-
-                </form>
-
-            </div>
+            {{ favorite_count }} saved
 
         </div>
 
     </div>
 
-    {% endfor %}
+    {% if favorite_recipes %}
 
-</div>
+    <div class="space-y-10">
 
-{% else %}
+        {% for item in favorite_recipes %}
 
-<div class="border rounded-2xl p-12 text-center">
+        <article class="group overflow-hidden rounded-[34px] border border-[#ECE2D7] bg-white shadow-sm hover:shadow-2xl transition duration-500">
 
-    <i class="fa-regular fa-heart text-5xl text-gray-300 mb-4"></i>
+            <div class="grid lg:grid-cols-2 items-center">
 
-    <h3 class="text-2xl font-semibold">
+                <!-- TEXT -->
 
-        No favorite recipes
+                <div class="order-2 lg:order-1 p-8 lg:p-12">
 
-    </h3>
+                    <span class="inline-flex items-center gap-2 rounded-full bg-[#F8F3EC] border border-[#E7DAC8] px-5 py-2">
 
-    <p class="text-gray-500 mt-3">
+                        <span class="w-2 h-2 rounded-full bg-[#B78A3B]"></span>
 
-        Your favorite recipes will appear here.
+                        <span class="uppercase tracking-[0.28em] text-[11px] text-[#B78A3B]">
 
-    </p>
+                            {{ item.recipe.category.name }}
 
-    <a href="{% url 'recipes' %}"
-       class="inline-block mt-6 px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition">
+                        </span>
 
-        Browse Recipes
+                    </span>
 
-    </a>
+                    <h2 class="brand-title text-4xl text-[#3B2D26] mt-5">
 
-</div>
+                        {{ item.recipe.title }}
 
-{% endif %}
+                    </h2>
+
+                    <p class="mt-6 text-[#6B574C] leading-8">
+
+                        {{ item.recipe.description|truncatewords:30 }}
+
+                    </p>
+
+                    <div class="flex flex-wrap gap-8 mt-8 text-[#7B675A]">
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-regular fa-heart text-[#B78A3B]"></i>
+
+                            {{ item.recipe.likes }}
+
+                        </div>
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-regular fa-comment text-[#B78A3B]"></i>
+
+                            {{ item.recipe.comments.count }}
+
+                        </div>
+
+                        <div class="flex items-center gap-2">
+
+                            <i class="fa-solid fa-star text-[#D4AF37]"></i>
+
+                            {{ item.recipe.average_rating }}
+
+                        </div>
+
+                    </div>
+
+                    <div class="flex flex-wrap gap-4 mt-10">
+
+                        <a href="{% url 'recipe_detail' item.recipe.id %}"
+                           class="efsun-btn">
+
+                            View Recipe
+
+                        </a>
+
+                        <form method="POST"
+                              action="{% url 'favorite' item.recipe.id %}">
+
+                            {% csrf_token %}
+
+                            <input type="hidden"
+                                   name="next"
+                                   value="{% url 'dashboard' %}">
+
+                            <button type="submit"
+                                    class="efsun-btn-outline px-6 py-3 rounded-full">
+
+                                <i class="fa-regular fa-heart mr-2"></i>
+
+                                Remove
+
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <!-- IMAGE -->
+
+                <div class="order-1 lg:order-2 overflow-hidden">
+
+                    <picture>
+
+                        {% if item.recipe.image_webp %}
+                        <source srcset="{{ item.recipe.image_webp.url }}" type="image/webp">
+                        {% endif %}
+
+                        <img src="{{ item.recipe.image.url }}"
+                             alt="{{ item.recipe.title }}"
+                             class="w-full h-[320px] lg:h-[430px] object-cover group-hover:scale-105 transition duration-700">
+
+                    </picture>
+
+                </div>
+
+            </div>
+
+        </article>
+
+        {% endfor %}
+
+    </div>
+
+    {% else %}
+
+    <div class="rounded-[34px] bg-[#F8F3EC] py-24 text-center">
+
+        <i class="fa-regular fa-heart text-6xl text-[#B78A3B] mb-8"></i>
+
+        <h2 class="brand-title text-4xl text-[#3B2D26]">
+
+            No Favorite Recipes
+
+        </h2>
+
+        <p class="mt-5 text-[#6B574C]">
+
+            Mark recipes as favorites and they'll appear here.
+
+        </p>
+
+        <a href="{% url 'recipes' %}"
+           class="efsun-btn inline-block mt-8">
+
+            Browse Recipes
+
+        </a>
+
+    </div>
+
+    {% endif %}
 
 </section>
 

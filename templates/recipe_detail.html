@@ -333,21 +333,35 @@ article
 
         <div class="flex flex-wrap gap-4 mt-12">
 
-            <button
-                onclick="likeRecipe({{ recipe.id }})"
+            <button type="button" id="like-btn" data-id="{{ recipe.id }}"
                 class="efsun-btn-outline flex items-center gap-3">
 
-                ❤ Like
+                <i id="like-icon" class="fa-regular fa-thumbs-up"></i>
+
+                <span id="like-count">
+
+                    {{ recipe.likes }}
+
+                </span>
 
             </button>
 
-            <button
-                onclick="toggleFavorite({{ recipe.id }})"
-                class="efsun-btn-outline flex items-center gap-3">
+                <button type="button" id="favorite-btn" data-id="{{ recipe.id }}"
+                    class="efsun-btn-outline flex items-center gap-3">
 
-                ♥ Favorite
+                    <i id="favorite-icon"
+                       class="{% if recipe.id in favorite_recipes_ids %}fa-solid{% else %}fa-regular{% endif %} fa-heart">
+                    </i>
 
-            </button>
+                    <span id="favorite-text">
+                        {% if recipe.id in favorite_recipes_ids %}
+                            Saved
+                        {% else %}
+                            Favorite
+                        {% endif %}
+                    </span>
+
+                </button>
 
             <form
                 action="{% url 'save_recipe' recipe.id %}"
@@ -958,6 +972,119 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 });
+
+</script>
+
+
+<script>
+
+function getCookie(name) {
+
+    let cookieValue = null;
+
+    if (document.cookie && document.cookie !== "") {
+
+        const cookies = document.cookie.split(";");
+
+        for (let cookie of cookies) {
+
+            cookie = cookie.trim();
+
+            if (cookie.startsWith(name + "=")) {
+
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+
+                break;
+
+            }
+        }
+    }
+
+    return cookieValue;
+}
+
+// LIKE
+
+const likeBtn = document.getElementById("like-btn");
+
+if (likeBtn) {
+
+    likeBtn.addEventListener("click", function () {
+
+        fetch(`/recipe/${this.dataset.id}/like/`, {
+
+            method: "POST",
+
+            headers: {
+
+                "X-CSRFToken": getCookie("csrftoken"),
+
+            },
+
+        })
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            document.getElementById("like-count").textContent = data.likes;
+
+            const icon = document.getElementById("like-icon");
+
+            icon.classList.remove("fa-regular");
+            icon.classList.add("fa-solid");
+
+        });
+
+    });
+
+}
+
+const favoriteBtn = document.getElementById("favorite-btn");
+
+if (favoriteBtn) {
+
+    favoriteBtn.addEventListener("click", function () {
+
+        fetch(`/favorite/${this.dataset.id}/`, {
+
+            method: "POST",
+
+            headers: {
+
+                "X-CSRFToken": getCookie("csrftoken"),
+
+            },
+
+        })
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            const icon = document.getElementById("favorite-icon");
+            const text = document.getElementById("favorite-text");
+
+            if (data.favorite) {
+
+                icon.classList.remove("fa-regular");
+                icon.classList.add("fa-solid");
+
+                text.innerHTML = "Saved";
+
+            } else {
+
+                icon.classList.remove("fa-solid");
+                icon.classList.add("fa-regular");
+
+                text.innerHTML = "Favorite";
+            }
+
+        });
+
+    });
+
+}
 
 </script>
 
