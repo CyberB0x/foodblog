@@ -73,3 +73,33 @@ class ProfileForm(forms.ModelForm):
                 'class': 'w-full p-3 rounded-xl border'
             }),
         }
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            "class": "w-full rounded-xl border-gray-300 focus:ring-orange-500 focus:border-orange-500",
+            "placeholder": "Your name"
+        })
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            "class": "w-full rounded-xl border-gray-300 focus:ring-orange-500 focus:border-orange-500",
+            "placeholder": "Your email"
+        })
+    )
+    subject = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            "class": "w-full rounded-xl border-gray-300 focus:ring-orange-500 focus:border-orange-500",
+            "placeholder": "Subject"
+        })
+    )
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={
+            "rows": 6,
+            "class": "w-full rounded-xl border-gray-300 focus:ring-orange-500 focus:border-orange-500",
+            "placeholder": "Your message"
+        })
+    )

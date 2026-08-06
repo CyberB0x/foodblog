@@ -8,8 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django_ratelimit.decorators import ratelimit
 from django.db.models import Avg
 from django.db.models import F
-
-from core.forms import ProfileForm
+from django.shortcuts import render,redirect
+from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
+from core.forms import ProfileForm, ContactForm
 from recipes.models import Profile
 
 from .models import (
@@ -498,3 +501,51 @@ def privacy_policy(request):
 # cookie policy
 def cookie_policy(request):
     return render(request, "cookie_policy.html")
+
+
+# Contact Form
+def contact(request):
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            subject = form.cleaned_data["subject"]
+            message = form.cleaned_data["message"]
+
+            full_message = f"""
+New Contact Message from MAISON EFSUN website
+
+Name: {name}
+Email: {email}
+
+Message:
+{message}
+"""
+
+            send_mail(
+                subject=f"Contact Form: {subject}",
+                message=full_message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[settings.DEFAULT_FROM_EMAIL],
+                fail_silently=False,
+            )
+
+            messages.success(
+                request,
+                "Your message has been sent successfully. We will contact you soon."
+            )
+
+            return redirect("contact")
+
+    else:
+        form = ContactForm()
+
+    return render(
+        request,
+        "contact.html",
+        {
+            "form": form,
+        }
+    )

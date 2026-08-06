@@ -29,6 +29,7 @@ urlpatterns = [
 
     path("privacy-policy/", views.privacy_policy, name="privacy_policy"),
     path("cookie-policy/", views.cookie_policy, name="cookie_policy"),
+    path("contact/", views.contact, name="contact"),
 ]
 if settings.DEBUG:
     urlpatterns += static(
